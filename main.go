@@ -112,5 +112,36 @@ func updater() {
 	if err != nil {
 		fmt.Errorf("Can't save TWD rates: %w", err)
 	}
+
+	_, err = client.CHFQuote.Create().SetPrice(result.CurrentPrice["chf"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save CHF rates: %w", err)
+	}
+
+	_, err = client.CZKQuote.Create().SetPrice(result.CurrentPrice["czk"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save CZK rates: %w", err)
+	}
+
+	_, err = client.HUFQuote.Create().SetPrice(result.CurrentPrice["huf"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save HUF rates: %w", err)
+	}
+
+	_, err = client.NOKQuote.Create().SetPrice(result.CurrentPrice["nok"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save NOK rates: %w", err)
+	}
+
+	_, err = client.PLNQuote.Create().SetPrice(result.CurrentPrice["pln"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save PLN rates: %w", err)
+	}
+
+	_, err = client.SEKQuote.Create().SetPrice(result.CurrentPrice["sek"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save SEK rates: %w", err)
+	}
+
 	log.Info("Rates successfully updated")
 }

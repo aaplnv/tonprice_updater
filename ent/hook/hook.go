@@ -21,6 +21,19 @@ func (f AUDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return f(ctx, mv)
 }
 
+// The CHFQuoteFunc type is an adapter to allow the use of ordinary
+// function as CHFQuote mutator.
+type CHFQuoteFunc func(context.Context, *ent.CHFQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CHFQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.CHFQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CHFQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The CNYQuoteFunc type is an adapter to allow the use of ordinary
 // function as CNYQuote mutator.
 type CNYQuoteFunc func(context.Context, *ent.CNYQuoteMutation) (ent.Value, error)
@@ -30,6 +43,19 @@ func (f CNYQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.CNYQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CNYQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The CZKQuoteFunc type is an adapter to allow the use of ordinary
+// function as CZKQuote mutator.
+type CZKQuoteFunc func(context.Context, *ent.CZKQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CZKQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.CZKQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CZKQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }
@@ -73,6 +99,19 @@ func (f HKDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return f(ctx, mv)
 }
 
+// The HUFQuoteFunc type is an adapter to allow the use of ordinary
+// function as HUFQuote mutator.
+type HUFQuoteFunc func(context.Context, *ent.HUFQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f HUFQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.HUFQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HUFQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The INRQuoteFunc type is an adapter to allow the use of ordinary
 // function as INRQuote mutator.
 type INRQuoteFunc func(context.Context, *ent.INRQuoteMutation) (ent.Value, error)
@@ -82,6 +121,19 @@ func (f INRQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.INRQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.INRQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The NOKQuoteFunc type is an adapter to allow the use of ordinary
+// function as NOKQuote mutator.
+type NOKQuoteFunc func(context.Context, *ent.NOKQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NOKQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.NOKQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NOKQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }
@@ -112,6 +164,19 @@ func (f PKRQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return f(ctx, mv)
 }
 
+// The PLNQuoteFunc type is an adapter to allow the use of ordinary
+// function as PLNQuote mutator.
+type PLNQuoteFunc func(context.Context, *ent.PLNQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PLNQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.PLNQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PLNQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The RUBQuoteFunc type is an adapter to allow the use of ordinary
 // function as RUBQuote mutator.
 type RUBQuoteFunc func(context.Context, *ent.RUBQuoteMutation) (ent.Value, error)
@@ -121,6 +186,19 @@ func (f RUBQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.RUBQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RUBQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The SEKQuoteFunc type is an adapter to allow the use of ordinary
+// function as SEKQuote mutator.
+type SEKQuoteFunc func(context.Context, *ent.SEKQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SEKQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.SEKQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SEKQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }

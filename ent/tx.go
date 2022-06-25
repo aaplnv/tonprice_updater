@@ -14,22 +14,34 @@ type Tx struct {
 	config
 	// AUDQuote is the client for interacting with the AUDQuote builders.
 	AUDQuote *AUDQuoteClient
+	// CHFQuote is the client for interacting with the CHFQuote builders.
+	CHFQuote *CHFQuoteClient
 	// CNYQuote is the client for interacting with the CNYQuote builders.
 	CNYQuote *CNYQuoteClient
+	// CZKQuote is the client for interacting with the CZKQuote builders.
+	CZKQuote *CZKQuoteClient
 	// EUROQuote is the client for interacting with the EUROQuote builders.
 	EUROQuote *EUROQuoteClient
 	// GBPQuote is the client for interacting with the GBPQuote builders.
 	GBPQuote *GBPQuoteClient
 	// HKDQuote is the client for interacting with the HKDQuote builders.
 	HKDQuote *HKDQuoteClient
+	// HUFQuote is the client for interacting with the HUFQuote builders.
+	HUFQuote *HUFQuoteClient
 	// INRQuote is the client for interacting with the INRQuote builders.
 	INRQuote *INRQuoteClient
+	// NOKQuote is the client for interacting with the NOKQuote builders.
+	NOKQuote *NOKQuoteClient
 	// NZDQuote is the client for interacting with the NZDQuote builders.
 	NZDQuote *NZDQuoteClient
 	// PKRQuote is the client for interacting with the PKRQuote builders.
 	PKRQuote *PKRQuoteClient
+	// PLNQuote is the client for interacting with the PLNQuote builders.
+	PLNQuote *PLNQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
+	// SEKQuote is the client for interacting with the SEKQuote builders.
+	SEKQuote *SEKQuoteClient
 	// TWDQuote is the client for interacting with the TWDQuote builders.
 	TWDQuote *TWDQuoteClient
 	// UAHQuote is the client for interacting with the UAHQuote builders.
@@ -174,14 +186,20 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.AUDQuote = NewAUDQuoteClient(tx.config)
+	tx.CHFQuote = NewCHFQuoteClient(tx.config)
 	tx.CNYQuote = NewCNYQuoteClient(tx.config)
+	tx.CZKQuote = NewCZKQuoteClient(tx.config)
 	tx.EUROQuote = NewEUROQuoteClient(tx.config)
 	tx.GBPQuote = NewGBPQuoteClient(tx.config)
 	tx.HKDQuote = NewHKDQuoteClient(tx.config)
+	tx.HUFQuote = NewHUFQuoteClient(tx.config)
 	tx.INRQuote = NewINRQuoteClient(tx.config)
+	tx.NOKQuote = NewNOKQuoteClient(tx.config)
 	tx.NZDQuote = NewNZDQuoteClient(tx.config)
 	tx.PKRQuote = NewPKRQuoteClient(tx.config)
+	tx.PLNQuote = NewPLNQuoteClient(tx.config)
 	tx.RUBQuote = NewRUBQuoteClient(tx.config)
+	tx.SEKQuote = NewSEKQuoteClient(tx.config)
 	tx.TWDQuote = NewTWDQuoteClient(tx.config)
 	tx.UAHQuote = NewUAHQuoteClient(tx.config)
 	tx.USDQuote = NewUSDQuoteClient(tx.config)

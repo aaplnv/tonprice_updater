@@ -21,6 +21,18 @@ var (
 		Columns:    AUDColumns,
 		PrimaryKey: []*schema.Column{AUDColumns[0]},
 	}
+	// CHFColumns holds the columns for the "CHF" table.
+	CHFColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// CHFTable holds the schema information for the "CHF" table.
+	CHFTable = &schema.Table{
+		Name:       "CHF",
+		Columns:    CHFColumns,
+		PrimaryKey: []*schema.Column{CHFColumns[0]},
+	}
 	// CNYColumns holds the columns for the "CNY" table.
 	CNYColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -32,6 +44,18 @@ var (
 		Name:       "CNY",
 		Columns:    CNYColumns,
 		PrimaryKey: []*schema.Column{CNYColumns[0]},
+	}
+	// CZKColumns holds the columns for the "CZK" table.
+	CZKColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// CZKTable holds the schema information for the "CZK" table.
+	CZKTable = &schema.Table{
+		Name:       "CZK",
+		Columns:    CZKColumns,
+		PrimaryKey: []*schema.Column{CZKColumns[0]},
 	}
 	// EUROColumns holds the columns for the "EURO" table.
 	EUROColumns = []*schema.Column{
@@ -69,6 +93,18 @@ var (
 		Columns:    HKDColumns,
 		PrimaryKey: []*schema.Column{HKDColumns[0]},
 	}
+	// HUFColumns holds the columns for the "HUF" table.
+	HUFColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// HUFTable holds the schema information for the "HUF" table.
+	HUFTable = &schema.Table{
+		Name:       "HUF",
+		Columns:    HUFColumns,
+		PrimaryKey: []*schema.Column{HUFColumns[0]},
+	}
 	// INRColumns holds the columns for the "INR" table.
 	INRColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -80,6 +116,18 @@ var (
 		Name:       "INR",
 		Columns:    INRColumns,
 		PrimaryKey: []*schema.Column{INRColumns[0]},
+	}
+	// NOKColumns holds the columns for the "NOK" table.
+	NOKColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// NOKTable holds the schema information for the "NOK" table.
+	NOKTable = &schema.Table{
+		Name:       "NOK",
+		Columns:    NOKColumns,
+		PrimaryKey: []*schema.Column{NOKColumns[0]},
 	}
 	// NZDColumns holds the columns for the "NZD" table.
 	NZDColumns = []*schema.Column{
@@ -105,6 +153,18 @@ var (
 		Columns:    PKRColumns,
 		PrimaryKey: []*schema.Column{PKRColumns[0]},
 	}
+	// PLNColumns holds the columns for the "PLN" table.
+	PLNColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// PLNTable holds the schema information for the "PLN" table.
+	PLNTable = &schema.Table{
+		Name:       "PLN",
+		Columns:    PLNColumns,
+		PrimaryKey: []*schema.Column{PLNColumns[0]},
+	}
 	// RUBColumns holds the columns for the "RUB" table.
 	RUBColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -116,6 +176,18 @@ var (
 		Name:       "RUB",
 		Columns:    RUBColumns,
 		PrimaryKey: []*schema.Column{RUBColumns[0]},
+	}
+	// SEKColumns holds the columns for the "SEK" table.
+	SEKColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// SEKTable holds the schema information for the "SEK" table.
+	SEKTable = &schema.Table{
+		Name:       "SEK",
+		Columns:    SEKColumns,
+		PrimaryKey: []*schema.Column{SEKColumns[0]},
 	}
 	// TWDColumns holds the columns for the "TWD" table.
 	TWDColumns = []*schema.Column{
@@ -168,14 +240,20 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AUDTable,
+		CHFTable,
 		CNYTable,
+		CZKTable,
 		EUROTable,
 		GBPTable,
 		HKDTable,
+		HUFTable,
 		INRTable,
+		NOKTable,
 		NZDTable,
 		PKRTable,
+		PLNTable,
 		RUBTable,
+		SEKTable,
 		TWDTable,
 		UAHTable,
 		USDTable,
@@ -187,8 +265,14 @@ func init() {
 	AUDTable.Annotation = &entsql.Annotation{
 		Table: "AUD",
 	}
+	CHFTable.Annotation = &entsql.Annotation{
+		Table: "CHF",
+	}
 	CNYTable.Annotation = &entsql.Annotation{
 		Table: "CNY",
+	}
+	CZKTable.Annotation = &entsql.Annotation{
+		Table: "CZK",
 	}
 	EUROTable.Annotation = &entsql.Annotation{
 		Table: "EURO",
@@ -199,8 +283,14 @@ func init() {
 	HKDTable.Annotation = &entsql.Annotation{
 		Table: "HKD",
 	}
+	HUFTable.Annotation = &entsql.Annotation{
+		Table: "HUF",
+	}
 	INRTable.Annotation = &entsql.Annotation{
 		Table: "INR",
+	}
+	NOKTable.Annotation = &entsql.Annotation{
+		Table: "NOK",
 	}
 	NZDTable.Annotation = &entsql.Annotation{
 		Table: "NZD",
@@ -208,8 +298,14 @@ func init() {
 	PKRTable.Annotation = &entsql.Annotation{
 		Table: "PKR",
 	}
+	PLNTable.Annotation = &entsql.Annotation{
+		Table: "PLN",
+	}
 	RUBTable.Annotation = &entsql.Annotation{
 		Table: "RUB",
+	}
+	SEKTable.Annotation = &entsql.Annotation{
+		Table: "SEK",
 	}
 	TWDTable.Annotation = &entsql.Annotation{
 		Table: "TWD",

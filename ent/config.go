@@ -25,14 +25,20 @@ type config struct {
 // hooks per client, for fast access.
 type hooks struct {
 	AUDQuote  []ent.Hook
+	CHFQuote  []ent.Hook
 	CNYQuote  []ent.Hook
+	CZKQuote  []ent.Hook
 	EUROQuote []ent.Hook
 	GBPQuote  []ent.Hook
 	HKDQuote  []ent.Hook
+	HUFQuote  []ent.Hook
 	INRQuote  []ent.Hook
+	NOKQuote  []ent.Hook
 	NZDQuote  []ent.Hook
 	PKRQuote  []ent.Hook
+	PLNQuote  []ent.Hook
 	RUBQuote  []ent.Hook
+	SEKQuote  []ent.Hook
 	TWDQuote  []ent.Hook
 	UAHQuote  []ent.Hook
 	USDQuote  []ent.Hook

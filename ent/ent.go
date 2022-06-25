@@ -6,14 +6,20 @@ import (
 	"errors"
 	"fmt"
 	"main/ent/audquote"
+	"main/ent/chfquote"
 	"main/ent/cnyquote"
+	"main/ent/czkquote"
 	"main/ent/euroquote"
 	"main/ent/gbpquote"
 	"main/ent/hkdquote"
+	"main/ent/hufquote"
 	"main/ent/inrquote"
+	"main/ent/nokquote"
 	"main/ent/nzdquote"
 	"main/ent/pkrquote"
+	"main/ent/plnquote"
 	"main/ent/rubquote"
+	"main/ent/sekquote"
 	"main/ent/twdquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
@@ -42,14 +48,20 @@ type OrderFunc func(*sql.Selector)
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		audquote.Table:  audquote.ValidColumn,
+		chfquote.Table:  chfquote.ValidColumn,
 		cnyquote.Table:  cnyquote.ValidColumn,
+		czkquote.Table:  czkquote.ValidColumn,
 		euroquote.Table: euroquote.ValidColumn,
 		gbpquote.Table:  gbpquote.ValidColumn,
 		hkdquote.Table:  hkdquote.ValidColumn,
+		hufquote.Table:  hufquote.ValidColumn,
 		inrquote.Table:  inrquote.ValidColumn,
+		nokquote.Table:  nokquote.ValidColumn,
 		nzdquote.Table:  nzdquote.ValidColumn,
 		pkrquote.Table:  pkrquote.ValidColumn,
+		plnquote.Table:  plnquote.ValidColumn,
 		rubquote.Table:  rubquote.ValidColumn,
+		sekquote.Table:  sekquote.ValidColumn,
 		twdquote.Table:  twdquote.ValidColumn,
 		uahquote.Table:  uahquote.ValidColumn,
 		usdquote.Table:  usdquote.ValidColumn,
