@@ -9,5 +9,6 @@ func ChartModel() []ent.Field {
 	return []ent.Field{
 		field.Int("id").Unique(),
 		field.Float("price"),
+		field.Time("Timestamp"),
 	}
 }

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func GetAllWithCoinGecko() (marketdata *types.MarketDataItem, err error) {
+func GetAllWithCoinGecko() (*types.MarketDataItem, error) {
 	httpClient := &http.Client{
 		Timeout: time.Second * 10,
 	}

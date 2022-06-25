@@ -10,6 +10,7 @@ import (
 	"main/ent/rubchart"
 	"main/ent/usdchart"
 	"sync"
+	"time"
 
 	"entgo.io/ent"
 )
@@ -35,6 +36,7 @@ type RUBChartMutation struct {
 	id            *int
 	price         *float64
 	addprice      *float64
+	_Timestamp    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*RUBChart, error)
@@ -201,6 +203,42 @@ func (m *RUBChartMutation) ResetPrice() {
 	m.addprice = nil
 }
 
+// SetTimestamp sets the "Timestamp" field.
+func (m *RUBChartMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *RUBChartMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the RUBChart entity.
+// If the RUBChart object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RUBChartMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *RUBChartMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
 // Where appends a list predicates to the RUBChartMutation builder.
 func (m *RUBChartMutation) Where(ps ...predicate.RUBChart) {
 	m.predicates = append(m.predicates, ps...)
@@ -220,9 +258,12 @@ func (m *RUBChartMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RUBChartMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.price != nil {
 		fields = append(fields, rubchart.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, rubchart.FieldTimestamp)
 	}
 	return fields
 }
@@ -234,6 +275,8 @@ func (m *RUBChartMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case rubchart.FieldPrice:
 		return m.Price()
+	case rubchart.FieldTimestamp:
+		return m.Timestamp()
 	}
 	return nil, false
 }
@@ -245,6 +288,8 @@ func (m *RUBChartMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case rubchart.FieldPrice:
 		return m.OldPrice(ctx)
+	case rubchart.FieldTimestamp:
+		return m.OldTimestamp(ctx)
 	}
 	return nil, fmt.Errorf("unknown RUBChart field %s", name)
 }
@@ -260,6 +305,13 @@ func (m *RUBChartMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPrice(v)
+		return nil
+	case rubchart.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
 		return nil
 	}
 	return fmt.Errorf("unknown RUBChart field %s", name)
@@ -328,6 +380,9 @@ func (m *RUBChartMutation) ResetField(name string) error {
 	case rubchart.FieldPrice:
 		m.ResetPrice()
 		return nil
+	case rubchart.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
 	}
 	return fmt.Errorf("unknown RUBChart field %s", name)
 }
@@ -388,6 +443,7 @@ type USDChartMutation struct {
 	id            *int
 	price         *float64
 	addprice      *float64
+	_Timestamp    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*USDChart, error)
@@ -554,6 +610,42 @@ func (m *USDChartMutation) ResetPrice() {
 	m.addprice = nil
 }
 
+// SetTimestamp sets the "Timestamp" field.
+func (m *USDChartMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *USDChartMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the USDChart entity.
+// If the USDChart object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *USDChartMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *USDChartMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
 // Where appends a list predicates to the USDChartMutation builder.
 func (m *USDChartMutation) Where(ps ...predicate.USDChart) {
 	m.predicates = append(m.predicates, ps...)
@@ -573,9 +665,12 @@ func (m *USDChartMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *USDChartMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.price != nil {
 		fields = append(fields, usdchart.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, usdchart.FieldTimestamp)
 	}
 	return fields
 }
@@ -587,6 +682,8 @@ func (m *USDChartMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case usdchart.FieldPrice:
 		return m.Price()
+	case usdchart.FieldTimestamp:
+		return m.Timestamp()
 	}
 	return nil, false
 }
@@ -598,6 +695,8 @@ func (m *USDChartMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case usdchart.FieldPrice:
 		return m.OldPrice(ctx)
+	case usdchart.FieldTimestamp:
+		return m.OldTimestamp(ctx)
 	}
 	return nil, fmt.Errorf("unknown USDChart field %s", name)
 }
@@ -613,6 +712,13 @@ func (m *USDChartMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPrice(v)
+		return nil
+	case usdchart.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
 		return nil
 	}
 	return fmt.Errorf("unknown USDChart field %s", name)
@@ -680,6 +786,9 @@ func (m *USDChartMutation) ResetField(name string) error {
 	switch name {
 	case usdchart.FieldPrice:
 		m.ResetPrice()
+		return nil
+	case usdchart.FieldTimestamp:
+		m.ResetTimestamp()
 		return nil
 	}
 	return fmt.Errorf("unknown USDChart field %s", name)

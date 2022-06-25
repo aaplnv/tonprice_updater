@@ -13,6 +13,7 @@ var (
 	RUBColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
 	}
 	// RUBTable holds the schema information for the "RUB" table.
 	RUBTable = &schema.Table{
@@ -24,6 +25,7 @@ var (
 	USDColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
 	}
 	// USDTable holds the schema information for the "USD" table.
 	USDTable = &schema.Table{

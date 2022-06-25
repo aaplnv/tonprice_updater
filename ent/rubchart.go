@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"main/ent/rubchart"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -17,6 +18,8 @@ type RUBChart struct {
 	ID int `json:"id,omitempty"`
 	// Price holds the value of the "price" field.
 	Price float64 `json:"price,omitempty"`
+	// Timestamp holds the value of the "Timestamp" field.
+	Timestamp time.Time `json:"Timestamp,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -28,6 +31,8 @@ func (*RUBChart) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullFloat64)
 		case rubchart.FieldID:
 			values[i] = new(sql.NullInt64)
+		case rubchart.FieldTimestamp:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type RUBChart", columns[i])
 		}
@@ -54,6 +59,12 @@ func (rc *RUBChart) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				rc.Price = value.Float64
+			}
+		case rubchart.FieldTimestamp:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field Timestamp", values[i])
+			} else if value.Valid {
+				rc.Timestamp = value.Time
 			}
 		}
 	}
@@ -85,6 +96,8 @@ func (rc *RUBChart) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", rc.ID))
 	builder.WriteString(", price=")
 	builder.WriteString(fmt.Sprintf("%v", rc.Price))
+	builder.WriteString(", Timestamp=")
+	builder.WriteString(rc.Timestamp.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

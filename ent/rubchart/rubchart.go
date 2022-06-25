@@ -9,6 +9,8 @@ const (
 	FieldID = "id"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
+	// FieldTimestamp holds the string denoting the timestamp field in the database.
+	FieldTimestamp = "timestamp"
 	// Table holds the table name of the rubchart in the database.
 	Table = "RUB"
 )
@@ -17,6 +19,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldPrice,
+	FieldTimestamp,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

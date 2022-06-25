@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"main/ent/rubchart"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -22,6 +23,12 @@ type RUBChartCreate struct {
 // SetPrice sets the "price" field.
 func (rcc *RUBChartCreate) SetPrice(f float64) *RUBChartCreate {
 	rcc.mutation.SetPrice(f)
+	return rcc
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (rcc *RUBChartCreate) SetTimestamp(t time.Time) *RUBChartCreate {
+	rcc.mutation.SetTimestamp(t)
 	return rcc
 }
 
@@ -104,6 +111,9 @@ func (rcc *RUBChartCreate) check() error {
 	if _, ok := rcc.mutation.Price(); !ok {
 		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "RUBChart.price"`)}
 	}
+	if _, ok := rcc.mutation.Timestamp(); !ok {
+		return &ValidationError{Name: "Timestamp", err: errors.New(`ent: missing required field "RUBChart.Timestamp"`)}
+	}
 	return nil
 }
 
@@ -144,6 +154,14 @@ func (rcc *RUBChartCreate) createSpec() (*RUBChart, *sqlgraph.CreateSpec) {
 			Column: rubchart.FieldPrice,
 		})
 		_node.Price = value
+	}
+	if value, ok := rcc.mutation.Timestamp(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: rubchart.FieldTimestamp,
+		})
+		_node.Timestamp = value
 	}
 	return _node, _spec
 }

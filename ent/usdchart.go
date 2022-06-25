@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"main/ent/usdchart"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -17,6 +18,8 @@ type USDChart struct {
 	ID int `json:"id,omitempty"`
 	// Price holds the value of the "price" field.
 	Price float64 `json:"price,omitempty"`
+	// Timestamp holds the value of the "Timestamp" field.
+	Timestamp time.Time `json:"Timestamp,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -28,6 +31,8 @@ func (*USDChart) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullFloat64)
 		case usdchart.FieldID:
 			values[i] = new(sql.NullInt64)
+		case usdchart.FieldTimestamp:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type USDChart", columns[i])
 		}
@@ -54,6 +59,12 @@ func (uc *USDChart) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				uc.Price = value.Float64
+			}
+		case usdchart.FieldTimestamp:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field Timestamp", values[i])
+			} else if value.Valid {
+				uc.Timestamp = value.Time
 			}
 		}
 	}
@@ -85,6 +96,8 @@ func (uc *USDChart) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", uc.ID))
 	builder.WriteString(", price=")
 	builder.WriteString(fmt.Sprintf("%v", uc.Price))
+	builder.WriteString(", Timestamp=")
+	builder.WriteString(uc.Timestamp.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

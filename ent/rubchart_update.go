@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"main/ent/predicate"
 	"main/ent/rubchart"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -37,6 +38,12 @@ func (rcu *RUBChartUpdate) SetPrice(f float64) *RUBChartUpdate {
 // AddPrice adds f to the "price" field.
 func (rcu *RUBChartUpdate) AddPrice(f float64) *RUBChartUpdate {
 	rcu.mutation.AddPrice(f)
+	return rcu
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (rcu *RUBChartUpdate) SetTimestamp(t time.Time) *RUBChartUpdate {
+	rcu.mutation.SetTimestamp(t)
 	return rcu
 }
 
@@ -131,6 +138,13 @@ func (rcu *RUBChartUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: rubchart.FieldPrice,
 		})
 	}
+	if value, ok := rcu.mutation.Timestamp(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: rubchart.FieldTimestamp,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, rcu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{rubchart.Label}
@@ -160,6 +174,12 @@ func (rcuo *RUBChartUpdateOne) SetPrice(f float64) *RUBChartUpdateOne {
 // AddPrice adds f to the "price" field.
 func (rcuo *RUBChartUpdateOne) AddPrice(f float64) *RUBChartUpdateOne {
 	rcuo.mutation.AddPrice(f)
+	return rcuo
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (rcuo *RUBChartUpdateOne) SetTimestamp(t time.Time) *RUBChartUpdateOne {
+	rcuo.mutation.SetTimestamp(t)
 	return rcuo
 }
 
@@ -276,6 +296,13 @@ func (rcuo *RUBChartUpdateOne) sqlSave(ctx context.Context) (_node *RUBChart, er
 			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: rubchart.FieldPrice,
+		})
+	}
+	if value, ok := rcuo.mutation.Timestamp(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: rubchart.FieldTimestamp,
 		})
 	}
 	_node = &RUBChart{config: rcuo.config}

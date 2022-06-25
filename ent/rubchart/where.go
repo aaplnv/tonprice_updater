@@ -4,6 +4,7 @@ package rubchart
 
 import (
 	"main/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -98,6 +99,13 @@ func Price(v float64) predicate.RUBChart {
 	})
 }
 
+// Timestamp applies equality check predicate on the "Timestamp" field. It's identical to TimestampEQ.
+func Timestamp(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTimestamp), v))
+	})
+}
+
 // PriceEQ applies the EQ predicate on the "price" field.
 func PriceEQ(v float64) predicate.RUBChart {
 	return predicate.RUBChart(func(s *sql.Selector) {
@@ -171,6 +179,82 @@ func PriceLT(v float64) predicate.RUBChart {
 func PriceLTE(v float64) predicate.RUBChart {
 	return predicate.RUBChart(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldPrice), v))
+	})
+}
+
+// TimestampEQ applies the EQ predicate on the "Timestamp" field.
+func TimestampEQ(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTimestamp), v))
+	})
+}
+
+// TimestampNEQ applies the NEQ predicate on the "Timestamp" field.
+func TimestampNEQ(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldTimestamp), v))
+	})
+}
+
+// TimestampIn applies the In predicate on the "Timestamp" field.
+func TimestampIn(vs ...time.Time) predicate.RUBChart {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RUBChart(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldTimestamp), v...))
+	})
+}
+
+// TimestampNotIn applies the NotIn predicate on the "Timestamp" field.
+func TimestampNotIn(vs ...time.Time) predicate.RUBChart {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RUBChart(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldTimestamp), v...))
+	})
+}
+
+// TimestampGT applies the GT predicate on the "Timestamp" field.
+func TimestampGT(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldTimestamp), v))
+	})
+}
+
+// TimestampGTE applies the GTE predicate on the "Timestamp" field.
+func TimestampGTE(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldTimestamp), v))
+	})
+}
+
+// TimestampLT applies the LT predicate on the "Timestamp" field.
+func TimestampLT(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldTimestamp), v))
+	})
+}
+
+// TimestampLTE applies the LTE predicate on the "Timestamp" field.
+func TimestampLTE(v time.Time) predicate.RUBChart {
+	return predicate.RUBChart(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldTimestamp), v))
 	})
 }
 

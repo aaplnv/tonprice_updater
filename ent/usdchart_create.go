@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"main/ent/usdchart"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -22,6 +23,12 @@ type USDChartCreate struct {
 // SetPrice sets the "price" field.
 func (ucc *USDChartCreate) SetPrice(f float64) *USDChartCreate {
 	ucc.mutation.SetPrice(f)
+	return ucc
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (ucc *USDChartCreate) SetTimestamp(t time.Time) *USDChartCreate {
+	ucc.mutation.SetTimestamp(t)
 	return ucc
 }
 
@@ -104,6 +111,9 @@ func (ucc *USDChartCreate) check() error {
 	if _, ok := ucc.mutation.Price(); !ok {
 		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "USDChart.price"`)}
 	}
+	if _, ok := ucc.mutation.Timestamp(); !ok {
+		return &ValidationError{Name: "Timestamp", err: errors.New(`ent: missing required field "USDChart.Timestamp"`)}
+	}
 	return nil
 }
 
@@ -144,6 +154,14 @@ func (ucc *USDChartCreate) createSpec() (*USDChart, *sqlgraph.CreateSpec) {
 			Column: usdchart.FieldPrice,
 		})
 		_node.Price = value
+	}
+	if value, ok := ucc.mutation.Timestamp(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: usdchart.FieldTimestamp,
+		})
+		_node.Timestamp = value
 	}
 	return _node, _spec
 }

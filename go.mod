@@ -5,7 +5,9 @@ go 1.18
 require (
 	entgo.io/ent v0.10.1
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/jasonlvhit/gocron v0.0.1
 	github.com/joho/godotenv v1.4.0
+	github.com/sirupsen/logrus v1.4.2
 	github.com/superoo7/go-gecko v1.0.0
 )
 
@@ -18,7 +20,7 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.10.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/jasonlvhit/gocron v0.0.1 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.1 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect

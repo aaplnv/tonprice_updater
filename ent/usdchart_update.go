@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"main/ent/predicate"
 	"main/ent/usdchart"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -37,6 +38,12 @@ func (ucu *USDChartUpdate) SetPrice(f float64) *USDChartUpdate {
 // AddPrice adds f to the "price" field.
 func (ucu *USDChartUpdate) AddPrice(f float64) *USDChartUpdate {
 	ucu.mutation.AddPrice(f)
+	return ucu
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (ucu *USDChartUpdate) SetTimestamp(t time.Time) *USDChartUpdate {
+	ucu.mutation.SetTimestamp(t)
 	return ucu
 }
 
@@ -131,6 +138,13 @@ func (ucu *USDChartUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: usdchart.FieldPrice,
 		})
 	}
+	if value, ok := ucu.mutation.Timestamp(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: usdchart.FieldTimestamp,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ucu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{usdchart.Label}
@@ -160,6 +174,12 @@ func (ucuo *USDChartUpdateOne) SetPrice(f float64) *USDChartUpdateOne {
 // AddPrice adds f to the "price" field.
 func (ucuo *USDChartUpdateOne) AddPrice(f float64) *USDChartUpdateOne {
 	ucuo.mutation.AddPrice(f)
+	return ucuo
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (ucuo *USDChartUpdateOne) SetTimestamp(t time.Time) *USDChartUpdateOne {
+	ucuo.mutation.SetTimestamp(t)
 	return ucuo
 }
 
@@ -276,6 +296,13 @@ func (ucuo *USDChartUpdateOne) sqlSave(ctx context.Context) (_node *USDChart, er
 			Type:   field.TypeFloat64,
 			Value:  value,
 			Column: usdchart.FieldPrice,
+		})
+	}
+	if value, ok := ucuo.mutation.Timestamp(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: usdchart.FieldTimestamp,
 		})
 	}
 	_node = &USDChart{config: ucuo.config}
