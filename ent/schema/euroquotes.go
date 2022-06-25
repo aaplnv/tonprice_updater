@@ -7,22 +7,22 @@ import (
 )
 
 // ChartItem holds the schema definition for the ChartItem entity.
-type USDChart struct {
+type EUROQuote struct {
 	ent.Schema
 }
 
-func (USDChart) Annotations() []schema.Annotation {
+func (EUROQuote) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: "USD"},
+		entsql.Annotation{Table: "EURO"},
 	}
 }
 
 // Fields of the ChartItem.
-func (USDChart) Fields() []ent.Field {
+func (EUROQuote) Fields() []ent.Field {
 	return ChartModel()
 }
 
 // Edges of the ChartItem.
-func (USDChart) Edges() []ent.Edge {
+func (EUROQuote) Edges() []ent.Edge {
 	return nil
 }

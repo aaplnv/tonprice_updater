@@ -6,9 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"main/ent/euroquote"
 	"main/ent/predicate"
-	"main/ent/rubchart"
-	"main/ent/usdchart"
+	"main/ent/rubquote"
+	"main/ent/uahquote"
+	"main/ent/usdquote"
 	"sync"
 	"time"
 
@@ -24,12 +26,14 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeRUBChart = "RUBChart"
-	TypeUSDChart = "USDChart"
+	TypeEUROQuote = "EUROQuote"
+	TypeRUBQuote  = "RUBQuote"
+	TypeUAHQuote  = "UAHQuote"
+	TypeUSDQuote  = "USDQuote"
 )
 
-// RUBChartMutation represents an operation that mutates the RUBChart nodes in the graph.
-type RUBChartMutation struct {
+// EUROQuoteMutation represents an operation that mutates the EUROQuote nodes in the graph.
+type EUROQuoteMutation struct {
 	config
 	op            Op
 	typ           string
@@ -39,21 +43,21 @@ type RUBChartMutation struct {
 	_Timestamp    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*RUBChart, error)
-	predicates    []predicate.RUBChart
+	oldValue      func(context.Context) (*EUROQuote, error)
+	predicates    []predicate.EUROQuote
 }
 
-var _ ent.Mutation = (*RUBChartMutation)(nil)
+var _ ent.Mutation = (*EUROQuoteMutation)(nil)
 
-// rubchartOption allows management of the mutation configuration using functional options.
-type rubchartOption func(*RUBChartMutation)
+// euroquoteOption allows management of the mutation configuration using functional options.
+type euroquoteOption func(*EUROQuoteMutation)
 
-// newRUBChartMutation creates new mutation for the RUBChart entity.
-func newRUBChartMutation(c config, op Op, opts ...rubchartOption) *RUBChartMutation {
-	m := &RUBChartMutation{
+// newEUROQuoteMutation creates new mutation for the EUROQuote entity.
+func newEUROQuoteMutation(c config, op Op, opts ...euroquoteOption) *EUROQuoteMutation {
+	m := &EUROQuoteMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeRUBChart,
+		typ:           TypeEUROQuote,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -62,20 +66,20 @@ func newRUBChartMutation(c config, op Op, opts ...rubchartOption) *RUBChartMutat
 	return m
 }
 
-// withRUBChartID sets the ID field of the mutation.
-func withRUBChartID(id int) rubchartOption {
-	return func(m *RUBChartMutation) {
+// withEUROQuoteID sets the ID field of the mutation.
+func withEUROQuoteID(id int) euroquoteOption {
+	return func(m *EUROQuoteMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *RUBChart
+			value *EUROQuote
 		)
-		m.oldValue = func(ctx context.Context) (*RUBChart, error) {
+		m.oldValue = func(ctx context.Context) (*EUROQuote, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().RUBChart.Get(ctx, id)
+					value, err = m.Client().EUROQuote.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -84,10 +88,10 @@ func withRUBChartID(id int) rubchartOption {
 	}
 }
 
-// withRUBChart sets the old RUBChart of the mutation.
-func withRUBChart(node *RUBChart) rubchartOption {
-	return func(m *RUBChartMutation) {
-		m.oldValue = func(context.Context) (*RUBChart, error) {
+// withEUROQuote sets the old EUROQuote of the mutation.
+func withEUROQuote(node *EUROQuote) euroquoteOption {
+	return func(m *EUROQuoteMutation) {
+		m.oldValue = func(context.Context) (*EUROQuote, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -96,7 +100,7 @@ func withRUBChart(node *RUBChart) rubchartOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m RUBChartMutation) Client() *Client {
+func (m EUROQuoteMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -104,7 +108,7 @@ func (m RUBChartMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m RUBChartMutation) Tx() (*Tx, error) {
+func (m EUROQuoteMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -114,14 +118,14 @@ func (m RUBChartMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of RUBChart entities.
-func (m *RUBChartMutation) SetID(id int) {
+// operation is only accepted on creation of EUROQuote entities.
+func (m *EUROQuoteMutation) SetID(id int) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *RUBChartMutation) ID() (id int, exists bool) {
+func (m *EUROQuoteMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -132,7 +136,7 @@ func (m *RUBChartMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *RUBChartMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *EUROQuoteMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -141,20 +145,20 @@ func (m *RUBChartMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().RUBChart.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().EUROQuote.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetPrice sets the "price" field.
-func (m *RUBChartMutation) SetPrice(f float64) {
+func (m *EUROQuoteMutation) SetPrice(f float64) {
 	m.price = &f
 	m.addprice = nil
 }
 
 // Price returns the value of the "price" field in the mutation.
-func (m *RUBChartMutation) Price() (r float64, exists bool) {
+func (m *EUROQuoteMutation) Price() (r float64, exists bool) {
 	v := m.price
 	if v == nil {
 		return
@@ -162,10 +166,10 @@ func (m *RUBChartMutation) Price() (r float64, exists bool) {
 	return *v, true
 }
 
-// OldPrice returns the old "price" field's value of the RUBChart entity.
-// If the RUBChart object wasn't provided to the builder, the object is fetched from the database.
+// OldPrice returns the old "price" field's value of the EUROQuote entity.
+// If the EUROQuote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RUBChartMutation) OldPrice(ctx context.Context) (v float64, err error) {
+func (m *EUROQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
 	}
@@ -180,7 +184,7 @@ func (m *RUBChartMutation) OldPrice(ctx context.Context) (v float64, err error) 
 }
 
 // AddPrice adds f to the "price" field.
-func (m *RUBChartMutation) AddPrice(f float64) {
+func (m *EUROQuoteMutation) AddPrice(f float64) {
 	if m.addprice != nil {
 		*m.addprice += f
 	} else {
@@ -189,7 +193,7 @@ func (m *RUBChartMutation) AddPrice(f float64) {
 }
 
 // AddedPrice returns the value that was added to the "price" field in this mutation.
-func (m *RUBChartMutation) AddedPrice() (r float64, exists bool) {
+func (m *EUROQuoteMutation) AddedPrice() (r float64, exists bool) {
 	v := m.addprice
 	if v == nil {
 		return
@@ -198,18 +202,18 @@ func (m *RUBChartMutation) AddedPrice() (r float64, exists bool) {
 }
 
 // ResetPrice resets all changes to the "price" field.
-func (m *RUBChartMutation) ResetPrice() {
+func (m *EUROQuoteMutation) ResetPrice() {
 	m.price = nil
 	m.addprice = nil
 }
 
 // SetTimestamp sets the "Timestamp" field.
-func (m *RUBChartMutation) SetTimestamp(t time.Time) {
+func (m *EUROQuoteMutation) SetTimestamp(t time.Time) {
 	m._Timestamp = &t
 }
 
 // Timestamp returns the value of the "Timestamp" field in the mutation.
-func (m *RUBChartMutation) Timestamp() (r time.Time, exists bool) {
+func (m *EUROQuoteMutation) Timestamp() (r time.Time, exists bool) {
 	v := m._Timestamp
 	if v == nil {
 		return
@@ -217,10 +221,10 @@ func (m *RUBChartMutation) Timestamp() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldTimestamp returns the old "Timestamp" field's value of the RUBChart entity.
-// If the RUBChart object wasn't provided to the builder, the object is fetched from the database.
+// OldTimestamp returns the old "Timestamp" field's value of the EUROQuote entity.
+// If the EUROQuote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RUBChartMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+func (m *EUROQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
 	}
@@ -235,35 +239,35 @@ func (m *RUBChartMutation) OldTimestamp(ctx context.Context) (v time.Time, err e
 }
 
 // ResetTimestamp resets all changes to the "Timestamp" field.
-func (m *RUBChartMutation) ResetTimestamp() {
+func (m *EUROQuoteMutation) ResetTimestamp() {
 	m._Timestamp = nil
 }
 
-// Where appends a list predicates to the RUBChartMutation builder.
-func (m *RUBChartMutation) Where(ps ...predicate.RUBChart) {
+// Where appends a list predicates to the EUROQuoteMutation builder.
+func (m *EUROQuoteMutation) Where(ps ...predicate.EUROQuote) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // Op returns the operation name.
-func (m *RUBChartMutation) Op() Op {
+func (m *EUROQuoteMutation) Op() Op {
 	return m.op
 }
 
-// Type returns the node type of this mutation (RUBChart).
-func (m *RUBChartMutation) Type() string {
+// Type returns the node type of this mutation (EUROQuote).
+func (m *EUROQuoteMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *RUBChartMutation) Fields() []string {
+func (m *EUROQuoteMutation) Fields() []string {
 	fields := make([]string, 0, 2)
 	if m.price != nil {
-		fields = append(fields, rubchart.FieldPrice)
+		fields = append(fields, euroquote.FieldPrice)
 	}
 	if m._Timestamp != nil {
-		fields = append(fields, rubchart.FieldTimestamp)
+		fields = append(fields, euroquote.FieldTimestamp)
 	}
 	return fields
 }
@@ -271,11 +275,11 @@ func (m *RUBChartMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *RUBChartMutation) Field(name string) (ent.Value, bool) {
+func (m *EUROQuoteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case rubchart.FieldPrice:
+	case euroquote.FieldPrice:
 		return m.Price()
-	case rubchart.FieldTimestamp:
+	case euroquote.FieldTimestamp:
 		return m.Timestamp()
 	}
 	return nil, false
@@ -284,29 +288,29 @@ func (m *RUBChartMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *RUBChartMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *EUROQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case rubchart.FieldPrice:
+	case euroquote.FieldPrice:
 		return m.OldPrice(ctx)
-	case rubchart.FieldTimestamp:
+	case euroquote.FieldTimestamp:
 		return m.OldTimestamp(ctx)
 	}
-	return nil, fmt.Errorf("unknown RUBChart field %s", name)
+	return nil, fmt.Errorf("unknown EUROQuote field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *RUBChartMutation) SetField(name string, value ent.Value) error {
+func (m *EUROQuoteMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case rubchart.FieldPrice:
+	case euroquote.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPrice(v)
 		return nil
-	case rubchart.FieldTimestamp:
+	case euroquote.FieldTimestamp:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -314,15 +318,15 @@ func (m *RUBChartMutation) SetField(name string, value ent.Value) error {
 		m.SetTimestamp(v)
 		return nil
 	}
-	return fmt.Errorf("unknown RUBChart field %s", name)
+	return fmt.Errorf("unknown EUROQuote field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *RUBChartMutation) AddedFields() []string {
+func (m *EUROQuoteMutation) AddedFields() []string {
 	var fields []string
 	if m.addprice != nil {
-		fields = append(fields, rubchart.FieldPrice)
+		fields = append(fields, euroquote.FieldPrice)
 	}
 	return fields
 }
@@ -330,9 +334,9 @@ func (m *RUBChartMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *RUBChartMutation) AddedField(name string) (ent.Value, bool) {
+func (m *EUROQuoteMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case rubchart.FieldPrice:
+	case euroquote.FieldPrice:
 		return m.AddedPrice()
 	}
 	return nil, false
@@ -341,9 +345,9 @@ func (m *RUBChartMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *RUBChartMutation) AddField(name string, value ent.Value) error {
+func (m *EUROQuoteMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case rubchart.FieldPrice:
+	case euroquote.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -351,92 +355,92 @@ func (m *RUBChartMutation) AddField(name string, value ent.Value) error {
 		m.AddPrice(v)
 		return nil
 	}
-	return fmt.Errorf("unknown RUBChart numeric field %s", name)
+	return fmt.Errorf("unknown EUROQuote numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *RUBChartMutation) ClearedFields() []string {
+func (m *EUROQuoteMutation) ClearedFields() []string {
 	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *RUBChartMutation) FieldCleared(name string) bool {
+func (m *EUROQuoteMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *RUBChartMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown RUBChart nullable field %s", name)
+func (m *EUROQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown EUROQuote nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *RUBChartMutation) ResetField(name string) error {
+func (m *EUROQuoteMutation) ResetField(name string) error {
 	switch name {
-	case rubchart.FieldPrice:
+	case euroquote.FieldPrice:
 		m.ResetPrice()
 		return nil
-	case rubchart.FieldTimestamp:
+	case euroquote.FieldTimestamp:
 		m.ResetTimestamp()
 		return nil
 	}
-	return fmt.Errorf("unknown RUBChart field %s", name)
+	return fmt.Errorf("unknown EUROQuote field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *RUBChartMutation) AddedEdges() []string {
+func (m *EUROQuoteMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *RUBChartMutation) AddedIDs(name string) []ent.Value {
+func (m *EUROQuoteMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *RUBChartMutation) RemovedEdges() []string {
+func (m *EUROQuoteMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *RUBChartMutation) RemovedIDs(name string) []ent.Value {
+func (m *EUROQuoteMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *RUBChartMutation) ClearedEdges() []string {
+func (m *EUROQuoteMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *RUBChartMutation) EdgeCleared(name string) bool {
+func (m *EUROQuoteMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *RUBChartMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown RUBChart unique edge %s", name)
+func (m *EUROQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown EUROQuote unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *RUBChartMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown RUBChart edge %s", name)
+func (m *EUROQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown EUROQuote edge %s", name)
 }
 
-// USDChartMutation represents an operation that mutates the USDChart nodes in the graph.
-type USDChartMutation struct {
+// RUBQuoteMutation represents an operation that mutates the RUBQuote nodes in the graph.
+type RUBQuoteMutation struct {
 	config
 	op            Op
 	typ           string
@@ -446,21 +450,21 @@ type USDChartMutation struct {
 	_Timestamp    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*USDChart, error)
-	predicates    []predicate.USDChart
+	oldValue      func(context.Context) (*RUBQuote, error)
+	predicates    []predicate.RUBQuote
 }
 
-var _ ent.Mutation = (*USDChartMutation)(nil)
+var _ ent.Mutation = (*RUBQuoteMutation)(nil)
 
-// usdchartOption allows management of the mutation configuration using functional options.
-type usdchartOption func(*USDChartMutation)
+// rubquoteOption allows management of the mutation configuration using functional options.
+type rubquoteOption func(*RUBQuoteMutation)
 
-// newUSDChartMutation creates new mutation for the USDChart entity.
-func newUSDChartMutation(c config, op Op, opts ...usdchartOption) *USDChartMutation {
-	m := &USDChartMutation{
+// newRUBQuoteMutation creates new mutation for the RUBQuote entity.
+func newRUBQuoteMutation(c config, op Op, opts ...rubquoteOption) *RUBQuoteMutation {
+	m := &RUBQuoteMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeUSDChart,
+		typ:           TypeRUBQuote,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -469,20 +473,20 @@ func newUSDChartMutation(c config, op Op, opts ...usdchartOption) *USDChartMutat
 	return m
 }
 
-// withUSDChartID sets the ID field of the mutation.
-func withUSDChartID(id int) usdchartOption {
-	return func(m *USDChartMutation) {
+// withRUBQuoteID sets the ID field of the mutation.
+func withRUBQuoteID(id int) rubquoteOption {
+	return func(m *RUBQuoteMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *USDChart
+			value *RUBQuote
 		)
-		m.oldValue = func(ctx context.Context) (*USDChart, error) {
+		m.oldValue = func(ctx context.Context) (*RUBQuote, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().USDChart.Get(ctx, id)
+					value, err = m.Client().RUBQuote.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -491,10 +495,10 @@ func withUSDChartID(id int) usdchartOption {
 	}
 }
 
-// withUSDChart sets the old USDChart of the mutation.
-func withUSDChart(node *USDChart) usdchartOption {
-	return func(m *USDChartMutation) {
-		m.oldValue = func(context.Context) (*USDChart, error) {
+// withRUBQuote sets the old RUBQuote of the mutation.
+func withRUBQuote(node *RUBQuote) rubquoteOption {
+	return func(m *RUBQuoteMutation) {
+		m.oldValue = func(context.Context) (*RUBQuote, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -503,7 +507,7 @@ func withUSDChart(node *USDChart) usdchartOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m USDChartMutation) Client() *Client {
+func (m RUBQuoteMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -511,7 +515,7 @@ func (m USDChartMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m USDChartMutation) Tx() (*Tx, error) {
+func (m RUBQuoteMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -521,14 +525,14 @@ func (m USDChartMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of USDChart entities.
-func (m *USDChartMutation) SetID(id int) {
+// operation is only accepted on creation of RUBQuote entities.
+func (m *RUBQuoteMutation) SetID(id int) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *USDChartMutation) ID() (id int, exists bool) {
+func (m *RUBQuoteMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -539,7 +543,7 @@ func (m *USDChartMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *USDChartMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *RUBQuoteMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -548,20 +552,20 @@ func (m *USDChartMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().USDChart.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().RUBQuote.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetPrice sets the "price" field.
-func (m *USDChartMutation) SetPrice(f float64) {
+func (m *RUBQuoteMutation) SetPrice(f float64) {
 	m.price = &f
 	m.addprice = nil
 }
 
 // Price returns the value of the "price" field in the mutation.
-func (m *USDChartMutation) Price() (r float64, exists bool) {
+func (m *RUBQuoteMutation) Price() (r float64, exists bool) {
 	v := m.price
 	if v == nil {
 		return
@@ -569,10 +573,10 @@ func (m *USDChartMutation) Price() (r float64, exists bool) {
 	return *v, true
 }
 
-// OldPrice returns the old "price" field's value of the USDChart entity.
-// If the USDChart object wasn't provided to the builder, the object is fetched from the database.
+// OldPrice returns the old "price" field's value of the RUBQuote entity.
+// If the RUBQuote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *USDChartMutation) OldPrice(ctx context.Context) (v float64, err error) {
+func (m *RUBQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
 	}
@@ -587,7 +591,7 @@ func (m *USDChartMutation) OldPrice(ctx context.Context) (v float64, err error) 
 }
 
 // AddPrice adds f to the "price" field.
-func (m *USDChartMutation) AddPrice(f float64) {
+func (m *RUBQuoteMutation) AddPrice(f float64) {
 	if m.addprice != nil {
 		*m.addprice += f
 	} else {
@@ -596,7 +600,7 @@ func (m *USDChartMutation) AddPrice(f float64) {
 }
 
 // AddedPrice returns the value that was added to the "price" field in this mutation.
-func (m *USDChartMutation) AddedPrice() (r float64, exists bool) {
+func (m *RUBQuoteMutation) AddedPrice() (r float64, exists bool) {
 	v := m.addprice
 	if v == nil {
 		return
@@ -605,18 +609,18 @@ func (m *USDChartMutation) AddedPrice() (r float64, exists bool) {
 }
 
 // ResetPrice resets all changes to the "price" field.
-func (m *USDChartMutation) ResetPrice() {
+func (m *RUBQuoteMutation) ResetPrice() {
 	m.price = nil
 	m.addprice = nil
 }
 
 // SetTimestamp sets the "Timestamp" field.
-func (m *USDChartMutation) SetTimestamp(t time.Time) {
+func (m *RUBQuoteMutation) SetTimestamp(t time.Time) {
 	m._Timestamp = &t
 }
 
 // Timestamp returns the value of the "Timestamp" field in the mutation.
-func (m *USDChartMutation) Timestamp() (r time.Time, exists bool) {
+func (m *RUBQuoteMutation) Timestamp() (r time.Time, exists bool) {
 	v := m._Timestamp
 	if v == nil {
 		return
@@ -624,10 +628,10 @@ func (m *USDChartMutation) Timestamp() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldTimestamp returns the old "Timestamp" field's value of the USDChart entity.
-// If the USDChart object wasn't provided to the builder, the object is fetched from the database.
+// OldTimestamp returns the old "Timestamp" field's value of the RUBQuote entity.
+// If the RUBQuote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *USDChartMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+func (m *RUBQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
 	}
@@ -642,35 +646,35 @@ func (m *USDChartMutation) OldTimestamp(ctx context.Context) (v time.Time, err e
 }
 
 // ResetTimestamp resets all changes to the "Timestamp" field.
-func (m *USDChartMutation) ResetTimestamp() {
+func (m *RUBQuoteMutation) ResetTimestamp() {
 	m._Timestamp = nil
 }
 
-// Where appends a list predicates to the USDChartMutation builder.
-func (m *USDChartMutation) Where(ps ...predicate.USDChart) {
+// Where appends a list predicates to the RUBQuoteMutation builder.
+func (m *RUBQuoteMutation) Where(ps ...predicate.RUBQuote) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // Op returns the operation name.
-func (m *USDChartMutation) Op() Op {
+func (m *RUBQuoteMutation) Op() Op {
 	return m.op
 }
 
-// Type returns the node type of this mutation (USDChart).
-func (m *USDChartMutation) Type() string {
+// Type returns the node type of this mutation (RUBQuote).
+func (m *RUBQuoteMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *USDChartMutation) Fields() []string {
+func (m *RUBQuoteMutation) Fields() []string {
 	fields := make([]string, 0, 2)
 	if m.price != nil {
-		fields = append(fields, usdchart.FieldPrice)
+		fields = append(fields, rubquote.FieldPrice)
 	}
 	if m._Timestamp != nil {
-		fields = append(fields, usdchart.FieldTimestamp)
+		fields = append(fields, rubquote.FieldTimestamp)
 	}
 	return fields
 }
@@ -678,11 +682,11 @@ func (m *USDChartMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *USDChartMutation) Field(name string) (ent.Value, bool) {
+func (m *RUBQuoteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case usdchart.FieldPrice:
+	case rubquote.FieldPrice:
 		return m.Price()
-	case usdchart.FieldTimestamp:
+	case rubquote.FieldTimestamp:
 		return m.Timestamp()
 	}
 	return nil, false
@@ -691,29 +695,29 @@ func (m *USDChartMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *USDChartMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *RUBQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case usdchart.FieldPrice:
+	case rubquote.FieldPrice:
 		return m.OldPrice(ctx)
-	case usdchart.FieldTimestamp:
+	case rubquote.FieldTimestamp:
 		return m.OldTimestamp(ctx)
 	}
-	return nil, fmt.Errorf("unknown USDChart field %s", name)
+	return nil, fmt.Errorf("unknown RUBQuote field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *USDChartMutation) SetField(name string, value ent.Value) error {
+func (m *RUBQuoteMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case usdchart.FieldPrice:
+	case rubquote.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPrice(v)
 		return nil
-	case usdchart.FieldTimestamp:
+	case rubquote.FieldTimestamp:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -721,15 +725,15 @@ func (m *USDChartMutation) SetField(name string, value ent.Value) error {
 		m.SetTimestamp(v)
 		return nil
 	}
-	return fmt.Errorf("unknown USDChart field %s", name)
+	return fmt.Errorf("unknown RUBQuote field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *USDChartMutation) AddedFields() []string {
+func (m *RUBQuoteMutation) AddedFields() []string {
 	var fields []string
 	if m.addprice != nil {
-		fields = append(fields, usdchart.FieldPrice)
+		fields = append(fields, rubquote.FieldPrice)
 	}
 	return fields
 }
@@ -737,9 +741,9 @@ func (m *USDChartMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *USDChartMutation) AddedField(name string) (ent.Value, bool) {
+func (m *RUBQuoteMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case usdchart.FieldPrice:
+	case rubquote.FieldPrice:
 		return m.AddedPrice()
 	}
 	return nil, false
@@ -748,9 +752,9 @@ func (m *USDChartMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *USDChartMutation) AddField(name string, value ent.Value) error {
+func (m *RUBQuoteMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case usdchart.FieldPrice:
+	case rubquote.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -758,86 +762,900 @@ func (m *USDChartMutation) AddField(name string, value ent.Value) error {
 		m.AddPrice(v)
 		return nil
 	}
-	return fmt.Errorf("unknown USDChart numeric field %s", name)
+	return fmt.Errorf("unknown RUBQuote numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *USDChartMutation) ClearedFields() []string {
+func (m *RUBQuoteMutation) ClearedFields() []string {
 	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *USDChartMutation) FieldCleared(name string) bool {
+func (m *RUBQuoteMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *USDChartMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown USDChart nullable field %s", name)
+func (m *RUBQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown RUBQuote nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *USDChartMutation) ResetField(name string) error {
+func (m *RUBQuoteMutation) ResetField(name string) error {
 	switch name {
-	case usdchart.FieldPrice:
+	case rubquote.FieldPrice:
 		m.ResetPrice()
 		return nil
-	case usdchart.FieldTimestamp:
+	case rubquote.FieldTimestamp:
 		m.ResetTimestamp()
 		return nil
 	}
-	return fmt.Errorf("unknown USDChart field %s", name)
+	return fmt.Errorf("unknown RUBQuote field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *USDChartMutation) AddedEdges() []string {
+func (m *RUBQuoteMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *USDChartMutation) AddedIDs(name string) []ent.Value {
+func (m *RUBQuoteMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *USDChartMutation) RemovedEdges() []string {
+func (m *RUBQuoteMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *USDChartMutation) RemovedIDs(name string) []ent.Value {
+func (m *RUBQuoteMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *USDChartMutation) ClearedEdges() []string {
+func (m *RUBQuoteMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *USDChartMutation) EdgeCleared(name string) bool {
+func (m *RUBQuoteMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *USDChartMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown USDChart unique edge %s", name)
+func (m *RUBQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown RUBQuote unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *USDChartMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown USDChart edge %s", name)
+func (m *RUBQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown RUBQuote edge %s", name)
+}
+
+// UAHQuoteMutation represents an operation that mutates the UAHQuote nodes in the graph.
+type UAHQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*UAHQuote, error)
+	predicates    []predicate.UAHQuote
+}
+
+var _ ent.Mutation = (*UAHQuoteMutation)(nil)
+
+// uahquoteOption allows management of the mutation configuration using functional options.
+type uahquoteOption func(*UAHQuoteMutation)
+
+// newUAHQuoteMutation creates new mutation for the UAHQuote entity.
+func newUAHQuoteMutation(c config, op Op, opts ...uahquoteOption) *UAHQuoteMutation {
+	m := &UAHQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeUAHQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withUAHQuoteID sets the ID field of the mutation.
+func withUAHQuoteID(id int) uahquoteOption {
+	return func(m *UAHQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *UAHQuote
+		)
+		m.oldValue = func(ctx context.Context) (*UAHQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().UAHQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withUAHQuote sets the old UAHQuote of the mutation.
+func withUAHQuote(node *UAHQuote) uahquoteOption {
+	return func(m *UAHQuoteMutation) {
+		m.oldValue = func(context.Context) (*UAHQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m UAHQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m UAHQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of UAHQuote entities.
+func (m *UAHQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *UAHQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *UAHQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().UAHQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *UAHQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *UAHQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the UAHQuote entity.
+// If the UAHQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UAHQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *UAHQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *UAHQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *UAHQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *UAHQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *UAHQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the UAHQuote entity.
+// If the UAHQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UAHQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *UAHQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the UAHQuoteMutation builder.
+func (m *UAHQuoteMutation) Where(ps ...predicate.UAHQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *UAHQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (UAHQuote).
+func (m *UAHQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *UAHQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, uahquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, uahquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *UAHQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case uahquote.FieldPrice:
+		return m.Price()
+	case uahquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *UAHQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case uahquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case uahquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown UAHQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UAHQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case uahquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case uahquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown UAHQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *UAHQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, uahquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *UAHQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case uahquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UAHQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case uahquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown UAHQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *UAHQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *UAHQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *UAHQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown UAHQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *UAHQuoteMutation) ResetField(name string) error {
+	switch name {
+	case uahquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case uahquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown UAHQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *UAHQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *UAHQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *UAHQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *UAHQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *UAHQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *UAHQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *UAHQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown UAHQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *UAHQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown UAHQuote edge %s", name)
+}
+
+// USDQuoteMutation represents an operation that mutates the USDQuote nodes in the graph.
+type USDQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*USDQuote, error)
+	predicates    []predicate.USDQuote
+}
+
+var _ ent.Mutation = (*USDQuoteMutation)(nil)
+
+// usdquoteOption allows management of the mutation configuration using functional options.
+type usdquoteOption func(*USDQuoteMutation)
+
+// newUSDQuoteMutation creates new mutation for the USDQuote entity.
+func newUSDQuoteMutation(c config, op Op, opts ...usdquoteOption) *USDQuoteMutation {
+	m := &USDQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeUSDQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withUSDQuoteID sets the ID field of the mutation.
+func withUSDQuoteID(id int) usdquoteOption {
+	return func(m *USDQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *USDQuote
+		)
+		m.oldValue = func(ctx context.Context) (*USDQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().USDQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withUSDQuote sets the old USDQuote of the mutation.
+func withUSDQuote(node *USDQuote) usdquoteOption {
+	return func(m *USDQuoteMutation) {
+		m.oldValue = func(context.Context) (*USDQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m USDQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m USDQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of USDQuote entities.
+func (m *USDQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *USDQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *USDQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().USDQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *USDQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *USDQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the USDQuote entity.
+// If the USDQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *USDQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *USDQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *USDQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *USDQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *USDQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *USDQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the USDQuote entity.
+// If the USDQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *USDQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *USDQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the USDQuoteMutation builder.
+func (m *USDQuoteMutation) Where(ps ...predicate.USDQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *USDQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (USDQuote).
+func (m *USDQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *USDQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, usdquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, usdquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *USDQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case usdquote.FieldPrice:
+		return m.Price()
+	case usdquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *USDQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case usdquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case usdquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown USDQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *USDQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case usdquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case usdquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown USDQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *USDQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, usdquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *USDQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case usdquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *USDQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case usdquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown USDQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *USDQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *USDQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *USDQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown USDQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *USDQuoteMutation) ResetField(name string) error {
+	switch name {
+	case usdquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case usdquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown USDQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *USDQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *USDQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *USDQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *USDQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *USDQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *USDQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *USDQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown USDQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *USDQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown USDQuote edge %s", name)
 }

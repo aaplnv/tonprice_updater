@@ -4,15 +4,15 @@ package ent
 
 import (
 	"fmt"
-	"main/ent/usdchart"
+	"main/ent/euroquote"
 	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
 
-// USDChart is the model entity for the USDChart schema.
-type USDChart struct {
+// EUROQuote is the model entity for the EUROQuote schema.
+type EUROQuote struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -23,90 +23,90 @@ type USDChart struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*USDChart) scanValues(columns []string) ([]interface{}, error) {
+func (*EUROQuote) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case usdchart.FieldPrice:
+		case euroquote.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case usdchart.FieldID:
+		case euroquote.FieldID:
 			values[i] = new(sql.NullInt64)
-		case usdchart.FieldTimestamp:
+		case euroquote.FieldTimestamp:
 			values[i] = new(sql.NullTime)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type USDChart", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type EUROQuote", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the USDChart fields.
-func (uc *USDChart) assignValues(columns []string, values []interface{}) error {
+// to the EUROQuote fields.
+func (eq *EUROQuote) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case usdchart.FieldID:
+		case euroquote.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			uc.ID = int(value.Int64)
-		case usdchart.FieldPrice:
+			eq.ID = int(value.Int64)
+		case euroquote.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				uc.Price = value.Float64
+				eq.Price = value.Float64
 			}
-		case usdchart.FieldTimestamp:
+		case euroquote.FieldTimestamp:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field Timestamp", values[i])
 			} else if value.Valid {
-				uc.Timestamp = value.Time
+				eq.Timestamp = value.Time
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this USDChart.
-// Note that you need to call USDChart.Unwrap() before calling this method if this USDChart
+// Update returns a builder for updating this EUROQuote.
+// Note that you need to call EUROQuote.Unwrap() before calling this method if this EUROQuote
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (uc *USDChart) Update() *USDChartUpdateOne {
-	return (&USDChartClient{config: uc.config}).UpdateOne(uc)
+func (eq *EUROQuote) Update() *EUROQuoteUpdateOne {
+	return (&EUROQuoteClient{config: eq.config}).UpdateOne(eq)
 }
 
-// Unwrap unwraps the USDChart entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the EUROQuote entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (uc *USDChart) Unwrap() *USDChart {
-	tx, ok := uc.config.driver.(*txDriver)
+func (eq *EUROQuote) Unwrap() *EUROQuote {
+	tx, ok := eq.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: USDChart is not a transactional entity")
+		panic("ent: EUROQuote is not a transactional entity")
 	}
-	uc.config.driver = tx.drv
-	return uc
+	eq.config.driver = tx.drv
+	return eq
 }
 
 // String implements the fmt.Stringer.
-func (uc *USDChart) String() string {
+func (eq *EUROQuote) String() string {
 	var builder strings.Builder
-	builder.WriteString("USDChart(")
-	builder.WriteString(fmt.Sprintf("id=%v", uc.ID))
+	builder.WriteString("EUROQuote(")
+	builder.WriteString(fmt.Sprintf("id=%v", eq.ID))
 	builder.WriteString(", price=")
-	builder.WriteString(fmt.Sprintf("%v", uc.Price))
+	builder.WriteString(fmt.Sprintf("%v", eq.Price))
 	builder.WriteString(", Timestamp=")
-	builder.WriteString(uc.Timestamp.Format(time.ANSIC))
+	builder.WriteString(eq.Timestamp.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// USDCharts is a parsable slice of USDChart.
-type USDCharts []*USDChart
+// EUROQuotes is a parsable slice of EUROQuote.
+type EUROQuotes []*EUROQuote
 
-func (uc USDCharts) config(cfg config) {
-	for _i := range uc {
-		uc[_i].config = cfg
+func (eq EUROQuotes) config(cfg config) {
+	for _i := range eq {
+		eq[_i].config = cfg
 	}
 }

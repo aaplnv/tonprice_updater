@@ -24,8 +24,10 @@ type config struct {
 
 // hooks per client, for fast access.
 type hooks struct {
-	RUBChart []ent.Hook
-	USDChart []ent.Hook
+	EUROQuote []ent.Hook
+	RUBQuote  []ent.Hook
+	UAHQuote  []ent.Hook
+	USDQuote  []ent.Hook
 }
 
 // Options applies the options on the config object.

@@ -48,14 +48,24 @@ func updater() {
 		return
 	}
 
-	_, err = client.USDChart.Create().SetPrice(result.CurrentPrice["usd"]).SetTimestamp(time.Now()).Save(context.Background())
+	_, err = client.USDQuote.Create().SetPrice(result.CurrentPrice["usd"]).SetTimestamp(time.Now()).Save(context.Background())
 	if err != nil {
 		fmt.Errorf("Can't save USD rates: %w", err)
 	}
 
-	_, err = client.RUBChart.Create().SetPrice(result.CurrentPrice["rub"]).SetTimestamp(time.Now()).Save(context.Background())
+	_, err = client.RUBQuote.Create().SetPrice(result.CurrentPrice["rub"]).SetTimestamp(time.Now()).Save(context.Background())
 	if err != nil {
 		fmt.Errorf("Can't save RUB rates: %w", err)
+	}
+
+	_, err = client.EUROQuote.Create().SetPrice(result.CurrentPrice["eur"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save EUR rates: %w", err)
+	}
+
+	_, err = client.UAHQuote.Create().SetPrice(result.CurrentPrice["uah"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save UAH rates: %w", err)
 	}
 	log.Info("Rates successfully updated")
 }

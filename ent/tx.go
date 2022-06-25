@@ -12,10 +12,14 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// RUBChart is the client for interacting with the RUBChart builders.
-	RUBChart *RUBChartClient
-	// USDChart is the client for interacting with the USDChart builders.
-	USDChart *USDChartClient
+	// EUROQuote is the client for interacting with the EUROQuote builders.
+	EUROQuote *EUROQuoteClient
+	// RUBQuote is the client for interacting with the RUBQuote builders.
+	RUBQuote *RUBQuoteClient
+	// UAHQuote is the client for interacting with the UAHQuote builders.
+	UAHQuote *UAHQuoteClient
+	// USDQuote is the client for interacting with the USDQuote builders.
+	USDQuote *USDQuoteClient
 
 	// lazily loaded.
 	client     *Client
@@ -151,8 +155,10 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.RUBChart = NewRUBChartClient(tx.config)
-	tx.USDChart = NewUSDChartClient(tx.config)
+	tx.EUROQuote = NewEUROQuoteClient(tx.config)
+	tx.RUBQuote = NewRUBQuoteClient(tx.config)
+	tx.UAHQuote = NewUAHQuoteClient(tx.config)
+	tx.USDQuote = NewUSDQuoteClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -162,7 +168,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: RUBChart.QueryXXX(), the query will be executed
+// applies a query, for example: EUROQuote.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

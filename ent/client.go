@@ -9,8 +9,10 @@ import (
 
 	"main/ent/migrate"
 
-	"main/ent/rubchart"
-	"main/ent/usdchart"
+	"main/ent/euroquote"
+	"main/ent/rubquote"
+	"main/ent/uahquote"
+	"main/ent/usdquote"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -21,10 +23,14 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// RUBChart is the client for interacting with the RUBChart builders.
-	RUBChart *RUBChartClient
-	// USDChart is the client for interacting with the USDChart builders.
-	USDChart *USDChartClient
+	// EUROQuote is the client for interacting with the EUROQuote builders.
+	EUROQuote *EUROQuoteClient
+	// RUBQuote is the client for interacting with the RUBQuote builders.
+	RUBQuote *RUBQuoteClient
+	// UAHQuote is the client for interacting with the UAHQuote builders.
+	UAHQuote *UAHQuoteClient
+	// USDQuote is the client for interacting with the USDQuote builders.
+	USDQuote *USDQuoteClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -38,8 +44,10 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.RUBChart = NewRUBChartClient(c.config)
-	c.USDChart = NewUSDChartClient(c.config)
+	c.EUROQuote = NewEUROQuoteClient(c.config)
+	c.RUBQuote = NewRUBQuoteClient(c.config)
+	c.UAHQuote = NewUAHQuoteClient(c.config)
+	c.USDQuote = NewUSDQuoteClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -71,10 +79,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:      ctx,
-		config:   cfg,
-		RUBChart: NewRUBChartClient(cfg),
-		USDChart: NewUSDChartClient(cfg),
+		ctx:       ctx,
+		config:    cfg,
+		EUROQuote: NewEUROQuoteClient(cfg),
+		RUBQuote:  NewRUBQuoteClient(cfg),
+		UAHQuote:  NewUAHQuoteClient(cfg),
+		USDQuote:  NewUSDQuoteClient(cfg),
 	}, nil
 }
 
@@ -92,17 +102,19 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:      ctx,
-		config:   cfg,
-		RUBChart: NewRUBChartClient(cfg),
-		USDChart: NewUSDChartClient(cfg),
+		ctx:       ctx,
+		config:    cfg,
+		EUROQuote: NewEUROQuoteClient(cfg),
+		RUBQuote:  NewRUBQuoteClient(cfg),
+		UAHQuote:  NewUAHQuoteClient(cfg),
+		USDQuote:  NewUSDQuoteClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		RUBChart.
+//		EUROQuote.
 //		Query().
 //		Count(ctx)
 //
@@ -125,88 +137,90 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.RUBChart.Use(hooks...)
-	c.USDChart.Use(hooks...)
+	c.EUROQuote.Use(hooks...)
+	c.RUBQuote.Use(hooks...)
+	c.UAHQuote.Use(hooks...)
+	c.USDQuote.Use(hooks...)
 }
 
-// RUBChartClient is a client for the RUBChart schema.
-type RUBChartClient struct {
+// EUROQuoteClient is a client for the EUROQuote schema.
+type EUROQuoteClient struct {
 	config
 }
 
-// NewRUBChartClient returns a client for the RUBChart from the given config.
-func NewRUBChartClient(c config) *RUBChartClient {
-	return &RUBChartClient{config: c}
+// NewEUROQuoteClient returns a client for the EUROQuote from the given config.
+func NewEUROQuoteClient(c config) *EUROQuoteClient {
+	return &EUROQuoteClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `rubchart.Hooks(f(g(h())))`.
-func (c *RUBChartClient) Use(hooks ...Hook) {
-	c.hooks.RUBChart = append(c.hooks.RUBChart, hooks...)
+// A call to `Use(f, g, h)` equals to `euroquote.Hooks(f(g(h())))`.
+func (c *EUROQuoteClient) Use(hooks ...Hook) {
+	c.hooks.EUROQuote = append(c.hooks.EUROQuote, hooks...)
 }
 
-// Create returns a create builder for RUBChart.
-func (c *RUBChartClient) Create() *RUBChartCreate {
-	mutation := newRUBChartMutation(c.config, OpCreate)
-	return &RUBChartCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for EUROQuote.
+func (c *EUROQuoteClient) Create() *EUROQuoteCreate {
+	mutation := newEUROQuoteMutation(c.config, OpCreate)
+	return &EUROQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of RUBChart entities.
-func (c *RUBChartClient) CreateBulk(builders ...*RUBChartCreate) *RUBChartCreateBulk {
-	return &RUBChartCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of EUROQuote entities.
+func (c *EUROQuoteClient) CreateBulk(builders ...*EUROQuoteCreate) *EUROQuoteCreateBulk {
+	return &EUROQuoteCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for RUBChart.
-func (c *RUBChartClient) Update() *RUBChartUpdate {
-	mutation := newRUBChartMutation(c.config, OpUpdate)
-	return &RUBChartUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for EUROQuote.
+func (c *EUROQuoteClient) Update() *EUROQuoteUpdate {
+	mutation := newEUROQuoteMutation(c.config, OpUpdate)
+	return &EUROQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *RUBChartClient) UpdateOne(rc *RUBChart) *RUBChartUpdateOne {
-	mutation := newRUBChartMutation(c.config, OpUpdateOne, withRUBChart(rc))
-	return &RUBChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *EUROQuoteClient) UpdateOne(eq *EUROQuote) *EUROQuoteUpdateOne {
+	mutation := newEUROQuoteMutation(c.config, OpUpdateOne, withEUROQuote(eq))
+	return &EUROQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *RUBChartClient) UpdateOneID(id int) *RUBChartUpdateOne {
-	mutation := newRUBChartMutation(c.config, OpUpdateOne, withRUBChartID(id))
-	return &RUBChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *EUROQuoteClient) UpdateOneID(id int) *EUROQuoteUpdateOne {
+	mutation := newEUROQuoteMutation(c.config, OpUpdateOne, withEUROQuoteID(id))
+	return &EUROQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for RUBChart.
-func (c *RUBChartClient) Delete() *RUBChartDelete {
-	mutation := newRUBChartMutation(c.config, OpDelete)
-	return &RUBChartDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for EUROQuote.
+func (c *EUROQuoteClient) Delete() *EUROQuoteDelete {
+	mutation := newEUROQuoteMutation(c.config, OpDelete)
+	return &EUROQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *RUBChartClient) DeleteOne(rc *RUBChart) *RUBChartDeleteOne {
-	return c.DeleteOneID(rc.ID)
+func (c *EUROQuoteClient) DeleteOne(eq *EUROQuote) *EUROQuoteDeleteOne {
+	return c.DeleteOneID(eq.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *RUBChartClient) DeleteOneID(id int) *RUBChartDeleteOne {
-	builder := c.Delete().Where(rubchart.ID(id))
+func (c *EUROQuoteClient) DeleteOneID(id int) *EUROQuoteDeleteOne {
+	builder := c.Delete().Where(euroquote.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &RUBChartDeleteOne{builder}
+	return &EUROQuoteDeleteOne{builder}
 }
 
-// Query returns a query builder for RUBChart.
-func (c *RUBChartClient) Query() *RUBChartQuery {
-	return &RUBChartQuery{
+// Query returns a query builder for EUROQuote.
+func (c *EUROQuoteClient) Query() *EUROQuoteQuery {
+	return &EUROQuoteQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a RUBChart entity by its id.
-func (c *RUBChartClient) Get(ctx context.Context, id int) (*RUBChart, error) {
-	return c.Query().Where(rubchart.ID(id)).Only(ctx)
+// Get returns a EUROQuote entity by its id.
+func (c *EUROQuoteClient) Get(ctx context.Context, id int) (*EUROQuote, error) {
+	return c.Query().Where(euroquote.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *RUBChartClient) GetX(ctx context.Context, id int) *RUBChart {
+func (c *EUROQuoteClient) GetX(ctx context.Context, id int) *EUROQuote {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -215,88 +229,88 @@ func (c *RUBChartClient) GetX(ctx context.Context, id int) *RUBChart {
 }
 
 // Hooks returns the client hooks.
-func (c *RUBChartClient) Hooks() []Hook {
-	return c.hooks.RUBChart
+func (c *EUROQuoteClient) Hooks() []Hook {
+	return c.hooks.EUROQuote
 }
 
-// USDChartClient is a client for the USDChart schema.
-type USDChartClient struct {
+// RUBQuoteClient is a client for the RUBQuote schema.
+type RUBQuoteClient struct {
 	config
 }
 
-// NewUSDChartClient returns a client for the USDChart from the given config.
-func NewUSDChartClient(c config) *USDChartClient {
-	return &USDChartClient{config: c}
+// NewRUBQuoteClient returns a client for the RUBQuote from the given config.
+func NewRUBQuoteClient(c config) *RUBQuoteClient {
+	return &RUBQuoteClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `usdchart.Hooks(f(g(h())))`.
-func (c *USDChartClient) Use(hooks ...Hook) {
-	c.hooks.USDChart = append(c.hooks.USDChart, hooks...)
+// A call to `Use(f, g, h)` equals to `rubquote.Hooks(f(g(h())))`.
+func (c *RUBQuoteClient) Use(hooks ...Hook) {
+	c.hooks.RUBQuote = append(c.hooks.RUBQuote, hooks...)
 }
 
-// Create returns a create builder for USDChart.
-func (c *USDChartClient) Create() *USDChartCreate {
-	mutation := newUSDChartMutation(c.config, OpCreate)
-	return &USDChartCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for RUBQuote.
+func (c *RUBQuoteClient) Create() *RUBQuoteCreate {
+	mutation := newRUBQuoteMutation(c.config, OpCreate)
+	return &RUBQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of USDChart entities.
-func (c *USDChartClient) CreateBulk(builders ...*USDChartCreate) *USDChartCreateBulk {
-	return &USDChartCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of RUBQuote entities.
+func (c *RUBQuoteClient) CreateBulk(builders ...*RUBQuoteCreate) *RUBQuoteCreateBulk {
+	return &RUBQuoteCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for USDChart.
-func (c *USDChartClient) Update() *USDChartUpdate {
-	mutation := newUSDChartMutation(c.config, OpUpdate)
-	return &USDChartUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for RUBQuote.
+func (c *RUBQuoteClient) Update() *RUBQuoteUpdate {
+	mutation := newRUBQuoteMutation(c.config, OpUpdate)
+	return &RUBQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *USDChartClient) UpdateOne(uc *USDChart) *USDChartUpdateOne {
-	mutation := newUSDChartMutation(c.config, OpUpdateOne, withUSDChart(uc))
-	return &USDChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *RUBQuoteClient) UpdateOne(rq *RUBQuote) *RUBQuoteUpdateOne {
+	mutation := newRUBQuoteMutation(c.config, OpUpdateOne, withRUBQuote(rq))
+	return &RUBQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *USDChartClient) UpdateOneID(id int) *USDChartUpdateOne {
-	mutation := newUSDChartMutation(c.config, OpUpdateOne, withUSDChartID(id))
-	return &USDChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *RUBQuoteClient) UpdateOneID(id int) *RUBQuoteUpdateOne {
+	mutation := newRUBQuoteMutation(c.config, OpUpdateOne, withRUBQuoteID(id))
+	return &RUBQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for USDChart.
-func (c *USDChartClient) Delete() *USDChartDelete {
-	mutation := newUSDChartMutation(c.config, OpDelete)
-	return &USDChartDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for RUBQuote.
+func (c *RUBQuoteClient) Delete() *RUBQuoteDelete {
+	mutation := newRUBQuoteMutation(c.config, OpDelete)
+	return &RUBQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *USDChartClient) DeleteOne(uc *USDChart) *USDChartDeleteOne {
-	return c.DeleteOneID(uc.ID)
+func (c *RUBQuoteClient) DeleteOne(rq *RUBQuote) *RUBQuoteDeleteOne {
+	return c.DeleteOneID(rq.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *USDChartClient) DeleteOneID(id int) *USDChartDeleteOne {
-	builder := c.Delete().Where(usdchart.ID(id))
+func (c *RUBQuoteClient) DeleteOneID(id int) *RUBQuoteDeleteOne {
+	builder := c.Delete().Where(rubquote.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &USDChartDeleteOne{builder}
+	return &RUBQuoteDeleteOne{builder}
 }
 
-// Query returns a query builder for USDChart.
-func (c *USDChartClient) Query() *USDChartQuery {
-	return &USDChartQuery{
+// Query returns a query builder for RUBQuote.
+func (c *RUBQuoteClient) Query() *RUBQuoteQuery {
+	return &RUBQuoteQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a USDChart entity by its id.
-func (c *USDChartClient) Get(ctx context.Context, id int) (*USDChart, error) {
-	return c.Query().Where(usdchart.ID(id)).Only(ctx)
+// Get returns a RUBQuote entity by its id.
+func (c *RUBQuoteClient) Get(ctx context.Context, id int) (*RUBQuote, error) {
+	return c.Query().Where(rubquote.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *USDChartClient) GetX(ctx context.Context, id int) *USDChart {
+func (c *RUBQuoteClient) GetX(ctx context.Context, id int) *RUBQuote {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -305,6 +319,186 @@ func (c *USDChartClient) GetX(ctx context.Context, id int) *USDChart {
 }
 
 // Hooks returns the client hooks.
-func (c *USDChartClient) Hooks() []Hook {
-	return c.hooks.USDChart
+func (c *RUBQuoteClient) Hooks() []Hook {
+	return c.hooks.RUBQuote
+}
+
+// UAHQuoteClient is a client for the UAHQuote schema.
+type UAHQuoteClient struct {
+	config
+}
+
+// NewUAHQuoteClient returns a client for the UAHQuote from the given config.
+func NewUAHQuoteClient(c config) *UAHQuoteClient {
+	return &UAHQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `uahquote.Hooks(f(g(h())))`.
+func (c *UAHQuoteClient) Use(hooks ...Hook) {
+	c.hooks.UAHQuote = append(c.hooks.UAHQuote, hooks...)
+}
+
+// Create returns a create builder for UAHQuote.
+func (c *UAHQuoteClient) Create() *UAHQuoteCreate {
+	mutation := newUAHQuoteMutation(c.config, OpCreate)
+	return &UAHQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UAHQuote entities.
+func (c *UAHQuoteClient) CreateBulk(builders ...*UAHQuoteCreate) *UAHQuoteCreateBulk {
+	return &UAHQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UAHQuote.
+func (c *UAHQuoteClient) Update() *UAHQuoteUpdate {
+	mutation := newUAHQuoteMutation(c.config, OpUpdate)
+	return &UAHQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UAHQuoteClient) UpdateOne(uq *UAHQuote) *UAHQuoteUpdateOne {
+	mutation := newUAHQuoteMutation(c.config, OpUpdateOne, withUAHQuote(uq))
+	return &UAHQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UAHQuoteClient) UpdateOneID(id int) *UAHQuoteUpdateOne {
+	mutation := newUAHQuoteMutation(c.config, OpUpdateOne, withUAHQuoteID(id))
+	return &UAHQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UAHQuote.
+func (c *UAHQuoteClient) Delete() *UAHQuoteDelete {
+	mutation := newUAHQuoteMutation(c.config, OpDelete)
+	return &UAHQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *UAHQuoteClient) DeleteOne(uq *UAHQuote) *UAHQuoteDeleteOne {
+	return c.DeleteOneID(uq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *UAHQuoteClient) DeleteOneID(id int) *UAHQuoteDeleteOne {
+	builder := c.Delete().Where(uahquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UAHQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for UAHQuote.
+func (c *UAHQuoteClient) Query() *UAHQuoteQuery {
+	return &UAHQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a UAHQuote entity by its id.
+func (c *UAHQuoteClient) Get(ctx context.Context, id int) (*UAHQuote, error) {
+	return c.Query().Where(uahquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UAHQuoteClient) GetX(ctx context.Context, id int) *UAHQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *UAHQuoteClient) Hooks() []Hook {
+	return c.hooks.UAHQuote
+}
+
+// USDQuoteClient is a client for the USDQuote schema.
+type USDQuoteClient struct {
+	config
+}
+
+// NewUSDQuoteClient returns a client for the USDQuote from the given config.
+func NewUSDQuoteClient(c config) *USDQuoteClient {
+	return &USDQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usdquote.Hooks(f(g(h())))`.
+func (c *USDQuoteClient) Use(hooks ...Hook) {
+	c.hooks.USDQuote = append(c.hooks.USDQuote, hooks...)
+}
+
+// Create returns a create builder for USDQuote.
+func (c *USDQuoteClient) Create() *USDQuoteCreate {
+	mutation := newUSDQuoteMutation(c.config, OpCreate)
+	return &USDQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of USDQuote entities.
+func (c *USDQuoteClient) CreateBulk(builders ...*USDQuoteCreate) *USDQuoteCreateBulk {
+	return &USDQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for USDQuote.
+func (c *USDQuoteClient) Update() *USDQuoteUpdate {
+	mutation := newUSDQuoteMutation(c.config, OpUpdate)
+	return &USDQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *USDQuoteClient) UpdateOne(uq *USDQuote) *USDQuoteUpdateOne {
+	mutation := newUSDQuoteMutation(c.config, OpUpdateOne, withUSDQuote(uq))
+	return &USDQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *USDQuoteClient) UpdateOneID(id int) *USDQuoteUpdateOne {
+	mutation := newUSDQuoteMutation(c.config, OpUpdateOne, withUSDQuoteID(id))
+	return &USDQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for USDQuote.
+func (c *USDQuoteClient) Delete() *USDQuoteDelete {
+	mutation := newUSDQuoteMutation(c.config, OpDelete)
+	return &USDQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *USDQuoteClient) DeleteOne(uq *USDQuote) *USDQuoteDeleteOne {
+	return c.DeleteOneID(uq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *USDQuoteClient) DeleteOneID(id int) *USDQuoteDeleteOne {
+	builder := c.Delete().Where(usdquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &USDQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for USDQuote.
+func (c *USDQuoteClient) Query() *USDQuoteQuery {
+	return &USDQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a USDQuote entity by its id.
+func (c *USDQuoteClient) Get(ctx context.Context, id int) (*USDQuote, error) {
+	return c.Query().Where(usdquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *USDQuoteClient) GetX(ctx context.Context, id int) *USDQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *USDQuoteClient) Hooks() []Hook {
+	return c.hooks.USDQuote
 }

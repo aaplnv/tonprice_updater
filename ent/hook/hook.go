@@ -8,28 +8,54 @@ import (
 	"main/ent"
 )
 
-// The RUBChartFunc type is an adapter to allow the use of ordinary
-// function as RUBChart mutator.
-type RUBChartFunc func(context.Context, *ent.RUBChartMutation) (ent.Value, error)
+// The EUROQuoteFunc type is an adapter to allow the use of ordinary
+// function as EUROQuote mutator.
+type EUROQuoteFunc func(context.Context, *ent.EUROQuoteMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f RUBChartFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.RUBChartMutation)
+func (f EUROQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.EUROQuoteMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RUBChartMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EUROQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }
 
-// The USDChartFunc type is an adapter to allow the use of ordinary
-// function as USDChart mutator.
-type USDChartFunc func(context.Context, *ent.USDChartMutation) (ent.Value, error)
+// The RUBQuoteFunc type is an adapter to allow the use of ordinary
+// function as RUBQuote mutator.
+type RUBQuoteFunc func(context.Context, *ent.RUBQuoteMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f USDChartFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.USDChartMutation)
+func (f RUBQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.RUBQuoteMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.USDChartMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RUBQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The UAHQuoteFunc type is an adapter to allow the use of ordinary
+// function as UAHQuote mutator.
+type UAHQuoteFunc func(context.Context, *ent.UAHQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f UAHQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.UAHQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UAHQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The USDQuoteFunc type is an adapter to allow the use of ordinary
+// function as USDQuote mutator.
+type USDQuoteFunc func(context.Context, *ent.USDQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f USDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.USDQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.USDQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }

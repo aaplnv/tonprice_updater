@@ -6,8 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// RUBChart is the predicate function for rubchart builders.
-type RUBChart func(*sql.Selector)
+// EUROQuote is the predicate function for euroquote builders.
+type EUROQuote func(*sql.Selector)
 
-// USDChart is the predicate function for usdchart builders.
-type USDChart func(*sql.Selector)
+// RUBQuote is the predicate function for rubquote builders.
+type RUBQuote func(*sql.Selector)
+
+// UAHQuote is the predicate function for uahquote builders.
+type UAHQuote func(*sql.Selector)
+
+// USDQuote is the predicate function for usdquote builders.
+type USDQuote func(*sql.Selector)

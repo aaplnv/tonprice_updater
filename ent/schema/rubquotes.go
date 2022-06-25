@@ -6,23 +6,22 @@ import (
 	"entgo.io/ent/schema"
 )
 
-// ChartItem holds the schema definition for the ChartItem entity.
-type RUBChart struct {
+type RUBQuote struct {
 	ent.Schema
 }
 
-func (RUBChart) Annotations() []schema.Annotation {
+func (RUBQuote) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Table: "RUB"},
 	}
 }
 
 // Fields of the ChartItem.
-func (RUBChart) Fields() []ent.Field {
+func (RUBQuote) Fields() []ent.Field {
 	return ChartModel()
 }
 
 // Edges of the ChartItem.
-func (RUBChart) Edges() []ent.Edge {
+func (RUBQuote) Edges() []ent.Edge {
 	return nil
 }
