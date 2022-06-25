@@ -14,6 +14,9 @@ import (
 )
 
 func init() {
+	// Set up logging level here
+	log.SetLevel(log.InfoLevel)
+
 	err := godotenv.Load("settings.env")
 	if err != nil {
 		log.Fatal(err)
@@ -54,5 +57,5 @@ func updater() {
 	if err != nil {
 		fmt.Errorf("Can't save RUB rates: %w", err)
 	}
-	fmt.Println("Rates successfully updated")
+	log.Info("Rates successfully updated")
 }
