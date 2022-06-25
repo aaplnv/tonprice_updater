@@ -67,5 +67,35 @@ func updater() {
 	if err != nil {
 		fmt.Errorf("Can't save UAH rates: %w", err)
 	}
+
+	_, err = client.AUDQuote.Create().SetPrice(result.CurrentPrice["aud"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save AUD rates: %w", err)
+	}
+
+	_, err = client.GBPQuote.Create().SetPrice(result.CurrentPrice["gbp"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save GBP rates: %w", err)
+	}
+
+	_, err = client.INRQuote.Create().SetPrice(result.CurrentPrice["inr"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save INR rates: %w", err)
+	}
+
+	_, err = client.NZDQuote.Create().SetPrice(result.CurrentPrice["nzd"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save NZD rates: %w", err)
+	}
+
+	_, err = client.ZARQuote.Create().SetPrice(result.CurrentPrice["zar"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save ZAR rates: %w", err)
+	}
+
+	_, err = client.PKRQuote.Create().SetPrice(result.CurrentPrice["pkr"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save PKR rates: %w", err)
+	}
 	log.Info("Rates successfully updated")
 }

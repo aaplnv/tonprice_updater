@@ -9,10 +9,16 @@ import (
 
 	"main/ent/migrate"
 
+	"main/ent/audquote"
 	"main/ent/euroquote"
+	"main/ent/gbpquote"
+	"main/ent/inrquote"
+	"main/ent/nzdquote"
+	"main/ent/pkrquote"
 	"main/ent/rubquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
+	"main/ent/zarquote"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -23,14 +29,26 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// AUDQuote is the client for interacting with the AUDQuote builders.
+	AUDQuote *AUDQuoteClient
 	// EUROQuote is the client for interacting with the EUROQuote builders.
 	EUROQuote *EUROQuoteClient
+	// GBPQuote is the client for interacting with the GBPQuote builders.
+	GBPQuote *GBPQuoteClient
+	// INRQuote is the client for interacting with the INRQuote builders.
+	INRQuote *INRQuoteClient
+	// NZDQuote is the client for interacting with the NZDQuote builders.
+	NZDQuote *NZDQuoteClient
+	// PKRQuote is the client for interacting with the PKRQuote builders.
+	PKRQuote *PKRQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
 	// UAHQuote is the client for interacting with the UAHQuote builders.
 	UAHQuote *UAHQuoteClient
 	// USDQuote is the client for interacting with the USDQuote builders.
 	USDQuote *USDQuoteClient
+	// ZARQuote is the client for interacting with the ZARQuote builders.
+	ZARQuote *ZARQuoteClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -44,10 +62,16 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.AUDQuote = NewAUDQuoteClient(c.config)
 	c.EUROQuote = NewEUROQuoteClient(c.config)
+	c.GBPQuote = NewGBPQuoteClient(c.config)
+	c.INRQuote = NewINRQuoteClient(c.config)
+	c.NZDQuote = NewNZDQuoteClient(c.config)
+	c.PKRQuote = NewPKRQuoteClient(c.config)
 	c.RUBQuote = NewRUBQuoteClient(c.config)
 	c.UAHQuote = NewUAHQuoteClient(c.config)
 	c.USDQuote = NewUSDQuoteClient(c.config)
+	c.ZARQuote = NewZARQuoteClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -81,10 +105,16 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:       ctx,
 		config:    cfg,
+		AUDQuote:  NewAUDQuoteClient(cfg),
 		EUROQuote: NewEUROQuoteClient(cfg),
+		GBPQuote:  NewGBPQuoteClient(cfg),
+		INRQuote:  NewINRQuoteClient(cfg),
+		NZDQuote:  NewNZDQuoteClient(cfg),
+		PKRQuote:  NewPKRQuoteClient(cfg),
 		RUBQuote:  NewRUBQuoteClient(cfg),
 		UAHQuote:  NewUAHQuoteClient(cfg),
 		USDQuote:  NewUSDQuoteClient(cfg),
+		ZARQuote:  NewZARQuoteClient(cfg),
 	}, nil
 }
 
@@ -104,17 +134,23 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:       ctx,
 		config:    cfg,
+		AUDQuote:  NewAUDQuoteClient(cfg),
 		EUROQuote: NewEUROQuoteClient(cfg),
+		GBPQuote:  NewGBPQuoteClient(cfg),
+		INRQuote:  NewINRQuoteClient(cfg),
+		NZDQuote:  NewNZDQuoteClient(cfg),
+		PKRQuote:  NewPKRQuoteClient(cfg),
 		RUBQuote:  NewRUBQuoteClient(cfg),
 		UAHQuote:  NewUAHQuoteClient(cfg),
 		USDQuote:  NewUSDQuoteClient(cfg),
+		ZARQuote:  NewZARQuoteClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		EUROQuote.
+//		AUDQuote.
 //		Query().
 //		Count(ctx)
 //
@@ -137,10 +173,106 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.AUDQuote.Use(hooks...)
 	c.EUROQuote.Use(hooks...)
+	c.GBPQuote.Use(hooks...)
+	c.INRQuote.Use(hooks...)
+	c.NZDQuote.Use(hooks...)
+	c.PKRQuote.Use(hooks...)
 	c.RUBQuote.Use(hooks...)
 	c.UAHQuote.Use(hooks...)
 	c.USDQuote.Use(hooks...)
+	c.ZARQuote.Use(hooks...)
+}
+
+// AUDQuoteClient is a client for the AUDQuote schema.
+type AUDQuoteClient struct {
+	config
+}
+
+// NewAUDQuoteClient returns a client for the AUDQuote from the given config.
+func NewAUDQuoteClient(c config) *AUDQuoteClient {
+	return &AUDQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `audquote.Hooks(f(g(h())))`.
+func (c *AUDQuoteClient) Use(hooks ...Hook) {
+	c.hooks.AUDQuote = append(c.hooks.AUDQuote, hooks...)
+}
+
+// Create returns a create builder for AUDQuote.
+func (c *AUDQuoteClient) Create() *AUDQuoteCreate {
+	mutation := newAUDQuoteMutation(c.config, OpCreate)
+	return &AUDQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AUDQuote entities.
+func (c *AUDQuoteClient) CreateBulk(builders ...*AUDQuoteCreate) *AUDQuoteCreateBulk {
+	return &AUDQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AUDQuote.
+func (c *AUDQuoteClient) Update() *AUDQuoteUpdate {
+	mutation := newAUDQuoteMutation(c.config, OpUpdate)
+	return &AUDQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AUDQuoteClient) UpdateOne(aq *AUDQuote) *AUDQuoteUpdateOne {
+	mutation := newAUDQuoteMutation(c.config, OpUpdateOne, withAUDQuote(aq))
+	return &AUDQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AUDQuoteClient) UpdateOneID(id int) *AUDQuoteUpdateOne {
+	mutation := newAUDQuoteMutation(c.config, OpUpdateOne, withAUDQuoteID(id))
+	return &AUDQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AUDQuote.
+func (c *AUDQuoteClient) Delete() *AUDQuoteDelete {
+	mutation := newAUDQuoteMutation(c.config, OpDelete)
+	return &AUDQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *AUDQuoteClient) DeleteOne(aq *AUDQuote) *AUDQuoteDeleteOne {
+	return c.DeleteOneID(aq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *AUDQuoteClient) DeleteOneID(id int) *AUDQuoteDeleteOne {
+	builder := c.Delete().Where(audquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AUDQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for AUDQuote.
+func (c *AUDQuoteClient) Query() *AUDQuoteQuery {
+	return &AUDQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a AUDQuote entity by its id.
+func (c *AUDQuoteClient) Get(ctx context.Context, id int) (*AUDQuote, error) {
+	return c.Query().Where(audquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AUDQuoteClient) GetX(ctx context.Context, id int) *AUDQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AUDQuoteClient) Hooks() []Hook {
+	return c.hooks.AUDQuote
 }
 
 // EUROQuoteClient is a client for the EUROQuote schema.
@@ -231,6 +363,366 @@ func (c *EUROQuoteClient) GetX(ctx context.Context, id int) *EUROQuote {
 // Hooks returns the client hooks.
 func (c *EUROQuoteClient) Hooks() []Hook {
 	return c.hooks.EUROQuote
+}
+
+// GBPQuoteClient is a client for the GBPQuote schema.
+type GBPQuoteClient struct {
+	config
+}
+
+// NewGBPQuoteClient returns a client for the GBPQuote from the given config.
+func NewGBPQuoteClient(c config) *GBPQuoteClient {
+	return &GBPQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `gbpquote.Hooks(f(g(h())))`.
+func (c *GBPQuoteClient) Use(hooks ...Hook) {
+	c.hooks.GBPQuote = append(c.hooks.GBPQuote, hooks...)
+}
+
+// Create returns a create builder for GBPQuote.
+func (c *GBPQuoteClient) Create() *GBPQuoteCreate {
+	mutation := newGBPQuoteMutation(c.config, OpCreate)
+	return &GBPQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of GBPQuote entities.
+func (c *GBPQuoteClient) CreateBulk(builders ...*GBPQuoteCreate) *GBPQuoteCreateBulk {
+	return &GBPQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for GBPQuote.
+func (c *GBPQuoteClient) Update() *GBPQuoteUpdate {
+	mutation := newGBPQuoteMutation(c.config, OpUpdate)
+	return &GBPQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *GBPQuoteClient) UpdateOne(gq *GBPQuote) *GBPQuoteUpdateOne {
+	mutation := newGBPQuoteMutation(c.config, OpUpdateOne, withGBPQuote(gq))
+	return &GBPQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *GBPQuoteClient) UpdateOneID(id int) *GBPQuoteUpdateOne {
+	mutation := newGBPQuoteMutation(c.config, OpUpdateOne, withGBPQuoteID(id))
+	return &GBPQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for GBPQuote.
+func (c *GBPQuoteClient) Delete() *GBPQuoteDelete {
+	mutation := newGBPQuoteMutation(c.config, OpDelete)
+	return &GBPQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *GBPQuoteClient) DeleteOne(gq *GBPQuote) *GBPQuoteDeleteOne {
+	return c.DeleteOneID(gq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *GBPQuoteClient) DeleteOneID(id int) *GBPQuoteDeleteOne {
+	builder := c.Delete().Where(gbpquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &GBPQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for GBPQuote.
+func (c *GBPQuoteClient) Query() *GBPQuoteQuery {
+	return &GBPQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a GBPQuote entity by its id.
+func (c *GBPQuoteClient) Get(ctx context.Context, id int) (*GBPQuote, error) {
+	return c.Query().Where(gbpquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *GBPQuoteClient) GetX(ctx context.Context, id int) *GBPQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *GBPQuoteClient) Hooks() []Hook {
+	return c.hooks.GBPQuote
+}
+
+// INRQuoteClient is a client for the INRQuote schema.
+type INRQuoteClient struct {
+	config
+}
+
+// NewINRQuoteClient returns a client for the INRQuote from the given config.
+func NewINRQuoteClient(c config) *INRQuoteClient {
+	return &INRQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `inrquote.Hooks(f(g(h())))`.
+func (c *INRQuoteClient) Use(hooks ...Hook) {
+	c.hooks.INRQuote = append(c.hooks.INRQuote, hooks...)
+}
+
+// Create returns a create builder for INRQuote.
+func (c *INRQuoteClient) Create() *INRQuoteCreate {
+	mutation := newINRQuoteMutation(c.config, OpCreate)
+	return &INRQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of INRQuote entities.
+func (c *INRQuoteClient) CreateBulk(builders ...*INRQuoteCreate) *INRQuoteCreateBulk {
+	return &INRQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for INRQuote.
+func (c *INRQuoteClient) Update() *INRQuoteUpdate {
+	mutation := newINRQuoteMutation(c.config, OpUpdate)
+	return &INRQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *INRQuoteClient) UpdateOne(iq *INRQuote) *INRQuoteUpdateOne {
+	mutation := newINRQuoteMutation(c.config, OpUpdateOne, withINRQuote(iq))
+	return &INRQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *INRQuoteClient) UpdateOneID(id int) *INRQuoteUpdateOne {
+	mutation := newINRQuoteMutation(c.config, OpUpdateOne, withINRQuoteID(id))
+	return &INRQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for INRQuote.
+func (c *INRQuoteClient) Delete() *INRQuoteDelete {
+	mutation := newINRQuoteMutation(c.config, OpDelete)
+	return &INRQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *INRQuoteClient) DeleteOne(iq *INRQuote) *INRQuoteDeleteOne {
+	return c.DeleteOneID(iq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *INRQuoteClient) DeleteOneID(id int) *INRQuoteDeleteOne {
+	builder := c.Delete().Where(inrquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &INRQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for INRQuote.
+func (c *INRQuoteClient) Query() *INRQuoteQuery {
+	return &INRQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a INRQuote entity by its id.
+func (c *INRQuoteClient) Get(ctx context.Context, id int) (*INRQuote, error) {
+	return c.Query().Where(inrquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *INRQuoteClient) GetX(ctx context.Context, id int) *INRQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *INRQuoteClient) Hooks() []Hook {
+	return c.hooks.INRQuote
+}
+
+// NZDQuoteClient is a client for the NZDQuote schema.
+type NZDQuoteClient struct {
+	config
+}
+
+// NewNZDQuoteClient returns a client for the NZDQuote from the given config.
+func NewNZDQuoteClient(c config) *NZDQuoteClient {
+	return &NZDQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `nzdquote.Hooks(f(g(h())))`.
+func (c *NZDQuoteClient) Use(hooks ...Hook) {
+	c.hooks.NZDQuote = append(c.hooks.NZDQuote, hooks...)
+}
+
+// Create returns a create builder for NZDQuote.
+func (c *NZDQuoteClient) Create() *NZDQuoteCreate {
+	mutation := newNZDQuoteMutation(c.config, OpCreate)
+	return &NZDQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of NZDQuote entities.
+func (c *NZDQuoteClient) CreateBulk(builders ...*NZDQuoteCreate) *NZDQuoteCreateBulk {
+	return &NZDQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for NZDQuote.
+func (c *NZDQuoteClient) Update() *NZDQuoteUpdate {
+	mutation := newNZDQuoteMutation(c.config, OpUpdate)
+	return &NZDQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NZDQuoteClient) UpdateOne(nq *NZDQuote) *NZDQuoteUpdateOne {
+	mutation := newNZDQuoteMutation(c.config, OpUpdateOne, withNZDQuote(nq))
+	return &NZDQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NZDQuoteClient) UpdateOneID(id int) *NZDQuoteUpdateOne {
+	mutation := newNZDQuoteMutation(c.config, OpUpdateOne, withNZDQuoteID(id))
+	return &NZDQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for NZDQuote.
+func (c *NZDQuoteClient) Delete() *NZDQuoteDelete {
+	mutation := newNZDQuoteMutation(c.config, OpDelete)
+	return &NZDQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *NZDQuoteClient) DeleteOne(nq *NZDQuote) *NZDQuoteDeleteOne {
+	return c.DeleteOneID(nq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *NZDQuoteClient) DeleteOneID(id int) *NZDQuoteDeleteOne {
+	builder := c.Delete().Where(nzdquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NZDQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for NZDQuote.
+func (c *NZDQuoteClient) Query() *NZDQuoteQuery {
+	return &NZDQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a NZDQuote entity by its id.
+func (c *NZDQuoteClient) Get(ctx context.Context, id int) (*NZDQuote, error) {
+	return c.Query().Where(nzdquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NZDQuoteClient) GetX(ctx context.Context, id int) *NZDQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *NZDQuoteClient) Hooks() []Hook {
+	return c.hooks.NZDQuote
+}
+
+// PKRQuoteClient is a client for the PKRQuote schema.
+type PKRQuoteClient struct {
+	config
+}
+
+// NewPKRQuoteClient returns a client for the PKRQuote from the given config.
+func NewPKRQuoteClient(c config) *PKRQuoteClient {
+	return &PKRQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `pkrquote.Hooks(f(g(h())))`.
+func (c *PKRQuoteClient) Use(hooks ...Hook) {
+	c.hooks.PKRQuote = append(c.hooks.PKRQuote, hooks...)
+}
+
+// Create returns a create builder for PKRQuote.
+func (c *PKRQuoteClient) Create() *PKRQuoteCreate {
+	mutation := newPKRQuoteMutation(c.config, OpCreate)
+	return &PKRQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PKRQuote entities.
+func (c *PKRQuoteClient) CreateBulk(builders ...*PKRQuoteCreate) *PKRQuoteCreateBulk {
+	return &PKRQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PKRQuote.
+func (c *PKRQuoteClient) Update() *PKRQuoteUpdate {
+	mutation := newPKRQuoteMutation(c.config, OpUpdate)
+	return &PKRQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PKRQuoteClient) UpdateOne(pq *PKRQuote) *PKRQuoteUpdateOne {
+	mutation := newPKRQuoteMutation(c.config, OpUpdateOne, withPKRQuote(pq))
+	return &PKRQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PKRQuoteClient) UpdateOneID(id int) *PKRQuoteUpdateOne {
+	mutation := newPKRQuoteMutation(c.config, OpUpdateOne, withPKRQuoteID(id))
+	return &PKRQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PKRQuote.
+func (c *PKRQuoteClient) Delete() *PKRQuoteDelete {
+	mutation := newPKRQuoteMutation(c.config, OpDelete)
+	return &PKRQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *PKRQuoteClient) DeleteOne(pq *PKRQuote) *PKRQuoteDeleteOne {
+	return c.DeleteOneID(pq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *PKRQuoteClient) DeleteOneID(id int) *PKRQuoteDeleteOne {
+	builder := c.Delete().Where(pkrquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PKRQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for PKRQuote.
+func (c *PKRQuoteClient) Query() *PKRQuoteQuery {
+	return &PKRQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a PKRQuote entity by its id.
+func (c *PKRQuoteClient) Get(ctx context.Context, id int) (*PKRQuote, error) {
+	return c.Query().Where(pkrquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PKRQuoteClient) GetX(ctx context.Context, id int) *PKRQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *PKRQuoteClient) Hooks() []Hook {
+	return c.hooks.PKRQuote
 }
 
 // RUBQuoteClient is a client for the RUBQuote schema.
@@ -501,4 +993,94 @@ func (c *USDQuoteClient) GetX(ctx context.Context, id int) *USDQuote {
 // Hooks returns the client hooks.
 func (c *USDQuoteClient) Hooks() []Hook {
 	return c.hooks.USDQuote
+}
+
+// ZARQuoteClient is a client for the ZARQuote schema.
+type ZARQuoteClient struct {
+	config
+}
+
+// NewZARQuoteClient returns a client for the ZARQuote from the given config.
+func NewZARQuoteClient(c config) *ZARQuoteClient {
+	return &ZARQuoteClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `zarquote.Hooks(f(g(h())))`.
+func (c *ZARQuoteClient) Use(hooks ...Hook) {
+	c.hooks.ZARQuote = append(c.hooks.ZARQuote, hooks...)
+}
+
+// Create returns a create builder for ZARQuote.
+func (c *ZARQuoteClient) Create() *ZARQuoteCreate {
+	mutation := newZARQuoteMutation(c.config, OpCreate)
+	return &ZARQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ZARQuote entities.
+func (c *ZARQuoteClient) CreateBulk(builders ...*ZARQuoteCreate) *ZARQuoteCreateBulk {
+	return &ZARQuoteCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ZARQuote.
+func (c *ZARQuoteClient) Update() *ZARQuoteUpdate {
+	mutation := newZARQuoteMutation(c.config, OpUpdate)
+	return &ZARQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ZARQuoteClient) UpdateOne(zq *ZARQuote) *ZARQuoteUpdateOne {
+	mutation := newZARQuoteMutation(c.config, OpUpdateOne, withZARQuote(zq))
+	return &ZARQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ZARQuoteClient) UpdateOneID(id int) *ZARQuoteUpdateOne {
+	mutation := newZARQuoteMutation(c.config, OpUpdateOne, withZARQuoteID(id))
+	return &ZARQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ZARQuote.
+func (c *ZARQuoteClient) Delete() *ZARQuoteDelete {
+	mutation := newZARQuoteMutation(c.config, OpDelete)
+	return &ZARQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ZARQuoteClient) DeleteOne(zq *ZARQuote) *ZARQuoteDeleteOne {
+	return c.DeleteOneID(zq.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ZARQuoteClient) DeleteOneID(id int) *ZARQuoteDeleteOne {
+	builder := c.Delete().Where(zarquote.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ZARQuoteDeleteOne{builder}
+}
+
+// Query returns a query builder for ZARQuote.
+func (c *ZARQuoteClient) Query() *ZARQuoteQuery {
+	return &ZARQuoteQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ZARQuote entity by its id.
+func (c *ZARQuoteClient) Get(ctx context.Context, id int) (*ZARQuote, error) {
+	return c.Query().Where(zarquote.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ZARQuoteClient) GetX(ctx context.Context, id int) *ZARQuote {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ZARQuoteClient) Hooks() []Hook {
+	return c.hooks.ZARQuote
 }

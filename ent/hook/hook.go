@@ -8,6 +8,19 @@ import (
 	"main/ent"
 )
 
+// The AUDQuoteFunc type is an adapter to allow the use of ordinary
+// function as AUDQuote mutator.
+type AUDQuoteFunc func(context.Context, *ent.AUDQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AUDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.AUDQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AUDQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The EUROQuoteFunc type is an adapter to allow the use of ordinary
 // function as EUROQuote mutator.
 type EUROQuoteFunc func(context.Context, *ent.EUROQuoteMutation) (ent.Value, error)
@@ -17,6 +30,58 @@ func (f EUROQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 	mv, ok := m.(*ent.EUROQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EUROQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The GBPQuoteFunc type is an adapter to allow the use of ordinary
+// function as GBPQuote mutator.
+type GBPQuoteFunc func(context.Context, *ent.GBPQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f GBPQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.GBPQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GBPQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The INRQuoteFunc type is an adapter to allow the use of ordinary
+// function as INRQuote mutator.
+type INRQuoteFunc func(context.Context, *ent.INRQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f INRQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.INRQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.INRQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The NZDQuoteFunc type is an adapter to allow the use of ordinary
+// function as NZDQuote mutator.
+type NZDQuoteFunc func(context.Context, *ent.NZDQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NZDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.NZDQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NZDQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The PKRQuoteFunc type is an adapter to allow the use of ordinary
+// function as PKRQuote mutator.
+type PKRQuoteFunc func(context.Context, *ent.PKRQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PKRQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.PKRQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PKRQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }
@@ -56,6 +121,19 @@ func (f USDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.USDQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.USDQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ZARQuoteFunc type is an adapter to allow the use of ordinary
+// function as ZARQuote mutator.
+type ZARQuoteFunc func(context.Context, *ent.ZARQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ZARQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ZARQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ZARQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }

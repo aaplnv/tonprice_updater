@@ -12,14 +12,26 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// AUDQuote is the client for interacting with the AUDQuote builders.
+	AUDQuote *AUDQuoteClient
 	// EUROQuote is the client for interacting with the EUROQuote builders.
 	EUROQuote *EUROQuoteClient
+	// GBPQuote is the client for interacting with the GBPQuote builders.
+	GBPQuote *GBPQuoteClient
+	// INRQuote is the client for interacting with the INRQuote builders.
+	INRQuote *INRQuoteClient
+	// NZDQuote is the client for interacting with the NZDQuote builders.
+	NZDQuote *NZDQuoteClient
+	// PKRQuote is the client for interacting with the PKRQuote builders.
+	PKRQuote *PKRQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
 	// UAHQuote is the client for interacting with the UAHQuote builders.
 	UAHQuote *UAHQuoteClient
 	// USDQuote is the client for interacting with the USDQuote builders.
 	USDQuote *USDQuoteClient
+	// ZARQuote is the client for interacting with the ZARQuote builders.
+	ZARQuote *ZARQuoteClient
 
 	// lazily loaded.
 	client     *Client
@@ -155,10 +167,16 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.AUDQuote = NewAUDQuoteClient(tx.config)
 	tx.EUROQuote = NewEUROQuoteClient(tx.config)
+	tx.GBPQuote = NewGBPQuoteClient(tx.config)
+	tx.INRQuote = NewINRQuoteClient(tx.config)
+	tx.NZDQuote = NewNZDQuoteClient(tx.config)
+	tx.PKRQuote = NewPKRQuoteClient(tx.config)
 	tx.RUBQuote = NewRUBQuoteClient(tx.config)
 	tx.UAHQuote = NewUAHQuoteClient(tx.config)
 	tx.USDQuote = NewUSDQuoteClient(tx.config)
+	tx.ZARQuote = NewZARQuoteClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -168,7 +186,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: EUROQuote.QueryXXX(), the query will be executed
+// applies a query, for example: AUDQuote.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

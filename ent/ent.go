@@ -5,10 +5,16 @@ package ent
 import (
 	"errors"
 	"fmt"
+	"main/ent/audquote"
 	"main/ent/euroquote"
+	"main/ent/gbpquote"
+	"main/ent/inrquote"
+	"main/ent/nzdquote"
+	"main/ent/pkrquote"
 	"main/ent/rubquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
+	"main/ent/zarquote"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -32,10 +38,16 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
+		audquote.Table:  audquote.ValidColumn,
 		euroquote.Table: euroquote.ValidColumn,
+		gbpquote.Table:  gbpquote.ValidColumn,
+		inrquote.Table:  inrquote.ValidColumn,
+		nzdquote.Table:  nzdquote.ValidColumn,
+		pkrquote.Table:  pkrquote.ValidColumn,
 		rubquote.Table:  rubquote.ValidColumn,
 		uahquote.Table:  uahquote.ValidColumn,
 		usdquote.Table:  usdquote.ValidColumn,
+		zarquote.Table:  zarquote.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

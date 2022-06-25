@@ -9,6 +9,18 @@ import (
 )
 
 var (
+	// AUDColumns holds the columns for the "AUD" table.
+	AUDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// AUDTable holds the schema information for the "AUD" table.
+	AUDTable = &schema.Table{
+		Name:       "AUD",
+		Columns:    AUDColumns,
+		PrimaryKey: []*schema.Column{AUDColumns[0]},
+	}
 	// EUROColumns holds the columns for the "EURO" table.
 	EUROColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -20,6 +32,54 @@ var (
 		Name:       "EURO",
 		Columns:    EUROColumns,
 		PrimaryKey: []*schema.Column{EUROColumns[0]},
+	}
+	// GBPColumns holds the columns for the "GBP" table.
+	GBPColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// GBPTable holds the schema information for the "GBP" table.
+	GBPTable = &schema.Table{
+		Name:       "GBP",
+		Columns:    GBPColumns,
+		PrimaryKey: []*schema.Column{GBPColumns[0]},
+	}
+	// INRColumns holds the columns for the "INR" table.
+	INRColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// INRTable holds the schema information for the "INR" table.
+	INRTable = &schema.Table{
+		Name:       "INR",
+		Columns:    INRColumns,
+		PrimaryKey: []*schema.Column{INRColumns[0]},
+	}
+	// NZDColumns holds the columns for the "NZD" table.
+	NZDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// NZDTable holds the schema information for the "NZD" table.
+	NZDTable = &schema.Table{
+		Name:       "NZD",
+		Columns:    NZDColumns,
+		PrimaryKey: []*schema.Column{NZDColumns[0]},
+	}
+	// PKRColumns holds the columns for the "PKR" table.
+	PKRColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// PKRTable holds the schema information for the "PKR" table.
+	PKRTable = &schema.Table{
+		Name:       "PKR",
+		Columns:    PKRColumns,
+		PrimaryKey: []*schema.Column{PKRColumns[0]},
 	}
 	// RUBColumns holds the columns for the "RUB" table.
 	RUBColumns = []*schema.Column{
@@ -57,18 +117,51 @@ var (
 		Columns:    USDColumns,
 		PrimaryKey: []*schema.Column{USDColumns[0]},
 	}
+	// ZARColumns holds the columns for the "ZAR" table.
+	ZARColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// ZARTable holds the schema information for the "ZAR" table.
+	ZARTable = &schema.Table{
+		Name:       "ZAR",
+		Columns:    ZARColumns,
+		PrimaryKey: []*schema.Column{ZARColumns[0]},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AUDTable,
 		EUROTable,
+		GBPTable,
+		INRTable,
+		NZDTable,
+		PKRTable,
 		RUBTable,
 		UAHTable,
 		USDTable,
+		ZARTable,
 	}
 )
 
 func init() {
+	AUDTable.Annotation = &entsql.Annotation{
+		Table: "AUD",
+	}
 	EUROTable.Annotation = &entsql.Annotation{
 		Table: "EURO",
+	}
+	GBPTable.Annotation = &entsql.Annotation{
+		Table: "GBP",
+	}
+	INRTable.Annotation = &entsql.Annotation{
+		Table: "INR",
+	}
+	NZDTable.Annotation = &entsql.Annotation{
+		Table: "NZD",
+	}
+	PKRTable.Annotation = &entsql.Annotation{
+		Table: "PKR",
 	}
 	RUBTable.Annotation = &entsql.Annotation{
 		Table: "RUB",
@@ -78,5 +171,8 @@ func init() {
 	}
 	USDTable.Annotation = &entsql.Annotation{
 		Table: "USD",
+	}
+	ZARTable.Annotation = &entsql.Annotation{
+		Table: "ZAR",
 	}
 }
