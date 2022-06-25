@@ -37,9 +37,14 @@ func main() {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	ci, err := client.ChartItem.Create().SetPrice(result).Save(context.Background())
+	ci, err := client.USDChart.Create().SetPrice(result).Save(context.Background())
 	if err != nil {
 		fmt.Errorf("failed creating user: %w", err)
 	}
 	log.Println("user was created: ", ci)
+	cd, err := client.RUBChart.Create().SetPrice(result).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("failed creating user: %w", err)
+	}
+	log.Println("user was created: ", cd)
 }

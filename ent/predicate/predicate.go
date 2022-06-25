@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// ChartItem is the predicate function for chartitem builders.
-type ChartItem func(*sql.Selector)
+// RUBChart is the predicate function for rubchart builders.
+type RUBChart func(*sql.Selector)
+
+// USDChart is the predicate function for usdchart builders.
+type USDChart func(*sql.Selector)

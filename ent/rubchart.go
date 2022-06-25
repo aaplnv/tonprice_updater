@@ -4,14 +4,14 @@ package ent
 
 import (
 	"fmt"
-	"main/ent/chartitem"
+	"main/ent/rubchart"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
 )
 
-// ChartItem is the model entity for the ChartItem schema.
-type ChartItem struct {
+// RUBChart is the model entity for the RUBChart schema.
+type RUBChart struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -20,80 +20,80 @@ type ChartItem struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*ChartItem) scanValues(columns []string) ([]interface{}, error) {
+func (*RUBChart) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case chartitem.FieldPrice:
+		case rubchart.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case chartitem.FieldID:
+		case rubchart.FieldID:
 			values[i] = new(sql.NullInt64)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type ChartItem", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type RUBChart", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the ChartItem fields.
-func (ci *ChartItem) assignValues(columns []string, values []interface{}) error {
+// to the RUBChart fields.
+func (rc *RUBChart) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case chartitem.FieldID:
+		case rubchart.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			ci.ID = int(value.Int64)
-		case chartitem.FieldPrice:
+			rc.ID = int(value.Int64)
+		case rubchart.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				ci.Price = value.Float64
+				rc.Price = value.Float64
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this ChartItem.
-// Note that you need to call ChartItem.Unwrap() before calling this method if this ChartItem
+// Update returns a builder for updating this RUBChart.
+// Note that you need to call RUBChart.Unwrap() before calling this method if this RUBChart
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ci *ChartItem) Update() *ChartItemUpdateOne {
-	return (&ChartItemClient{config: ci.config}).UpdateOne(ci)
+func (rc *RUBChart) Update() *RUBChartUpdateOne {
+	return (&RUBChartClient{config: rc.config}).UpdateOne(rc)
 }
 
-// Unwrap unwraps the ChartItem entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the RUBChart entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ci *ChartItem) Unwrap() *ChartItem {
-	tx, ok := ci.config.driver.(*txDriver)
+func (rc *RUBChart) Unwrap() *RUBChart {
+	tx, ok := rc.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: ChartItem is not a transactional entity")
+		panic("ent: RUBChart is not a transactional entity")
 	}
-	ci.config.driver = tx.drv
-	return ci
+	rc.config.driver = tx.drv
+	return rc
 }
 
 // String implements the fmt.Stringer.
-func (ci *ChartItem) String() string {
+func (rc *RUBChart) String() string {
 	var builder strings.Builder
-	builder.WriteString("ChartItem(")
-	builder.WriteString(fmt.Sprintf("id=%v", ci.ID))
+	builder.WriteString("RUBChart(")
+	builder.WriteString(fmt.Sprintf("id=%v", rc.ID))
 	builder.WriteString(", price=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Price))
+	builder.WriteString(fmt.Sprintf("%v", rc.Price))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// ChartItems is a parsable slice of ChartItem.
-type ChartItems []*ChartItem
+// RUBCharts is a parsable slice of RUBChart.
+type RUBCharts []*RUBChart
 
-func (ci ChartItems) config(cfg config) {
-	for _i := range ci {
-		ci[_i].config = cfg
+func (rc RUBCharts) config(cfg config) {
+	for _i := range rc {
+		rc[_i].config = cfg
 	}
 }

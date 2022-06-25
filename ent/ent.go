@@ -5,7 +5,8 @@ package ent
 import (
 	"errors"
 	"fmt"
-	"main/ent/chartitem"
+	"main/ent/rubchart"
+	"main/ent/usdchart"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -29,7 +30,8 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		chartitem.Table: chartitem.ValidColumn,
+		rubchart.Table: rubchart.ValidColumn,
+		usdchart.Table: usdchart.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

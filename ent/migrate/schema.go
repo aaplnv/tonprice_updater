@@ -3,27 +3,46 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
-	// ChartItemsColumns holds the columns for the "chart_items" table.
-	ChartItemsColumns = []*schema.Column{
+	// RUBColumns holds the columns for the "RUB" table.
+	RUBColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "price", Type: field.TypeFloat64},
 	}
-	// ChartItemsTable holds the schema information for the "chart_items" table.
-	ChartItemsTable = &schema.Table{
-		Name:       "chart_items",
-		Columns:    ChartItemsColumns,
-		PrimaryKey: []*schema.Column{ChartItemsColumns[0]},
+	// RUBTable holds the schema information for the "RUB" table.
+	RUBTable = &schema.Table{
+		Name:       "RUB",
+		Columns:    RUBColumns,
+		PrimaryKey: []*schema.Column{RUBColumns[0]},
+	}
+	// USDColumns holds the columns for the "USD" table.
+	USDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+	}
+	// USDTable holds the schema information for the "USD" table.
+	USDTable = &schema.Table{
+		Name:       "USD",
+		Columns:    USDColumns,
+		PrimaryKey: []*schema.Column{USDColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		ChartItemsTable,
+		RUBTable,
+		USDTable,
 	}
 )
 
 func init() {
+	RUBTable.Annotation = &entsql.Annotation{
+		Table: "RUB",
+	}
+	USDTable.Annotation = &entsql.Annotation{
+		Table: "USD",
+	}
 }

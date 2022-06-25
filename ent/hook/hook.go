@@ -8,15 +8,28 @@ import (
 	"main/ent"
 )
 
-// The ChartItemFunc type is an adapter to allow the use of ordinary
-// function as ChartItem mutator.
-type ChartItemFunc func(context.Context, *ent.ChartItemMutation) (ent.Value, error)
+// The RUBChartFunc type is an adapter to allow the use of ordinary
+// function as RUBChart mutator.
+type RUBChartFunc func(context.Context, *ent.RUBChartMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f ChartItemFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.ChartItemMutation)
+func (f RUBChartFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.RUBChartMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ChartItemMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RUBChartMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The USDChartFunc type is an adapter to allow the use of ordinary
+// function as USDChart mutator.
+type USDChartFunc func(context.Context, *ent.USDChartMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f USDChartFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.USDChartMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.USDChartMutation", m)
 	}
 	return f(ctx, mv)
 }

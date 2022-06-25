@@ -9,7 +9,8 @@ import (
 
 	"main/ent/migrate"
 
-	"main/ent/chartitem"
+	"main/ent/rubchart"
+	"main/ent/usdchart"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -20,8 +21,10 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// ChartItem is the client for interacting with the ChartItem builders.
-	ChartItem *ChartItemClient
+	// RUBChart is the client for interacting with the RUBChart builders.
+	RUBChart *RUBChartClient
+	// USDChart is the client for interacting with the USDChart builders.
+	USDChart *USDChartClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -35,7 +38,8 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.ChartItem = NewChartItemClient(c.config)
+	c.RUBChart = NewRUBChartClient(c.config)
+	c.USDChart = NewUSDChartClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -67,9 +71,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:       ctx,
-		config:    cfg,
-		ChartItem: NewChartItemClient(cfg),
+		ctx:      ctx,
+		config:   cfg,
+		RUBChart: NewRUBChartClient(cfg),
+		USDChart: NewUSDChartClient(cfg),
 	}, nil
 }
 
@@ -87,16 +92,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:       ctx,
-		config:    cfg,
-		ChartItem: NewChartItemClient(cfg),
+		ctx:      ctx,
+		config:   cfg,
+		RUBChart: NewRUBChartClient(cfg),
+		USDChart: NewUSDChartClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		ChartItem.
+//		RUBChart.
 //		Query().
 //		Count(ctx)
 //
@@ -119,87 +125,88 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.ChartItem.Use(hooks...)
+	c.RUBChart.Use(hooks...)
+	c.USDChart.Use(hooks...)
 }
 
-// ChartItemClient is a client for the ChartItem schema.
-type ChartItemClient struct {
+// RUBChartClient is a client for the RUBChart schema.
+type RUBChartClient struct {
 	config
 }
 
-// NewChartItemClient returns a client for the ChartItem from the given config.
-func NewChartItemClient(c config) *ChartItemClient {
-	return &ChartItemClient{config: c}
+// NewRUBChartClient returns a client for the RUBChart from the given config.
+func NewRUBChartClient(c config) *RUBChartClient {
+	return &RUBChartClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `chartitem.Hooks(f(g(h())))`.
-func (c *ChartItemClient) Use(hooks ...Hook) {
-	c.hooks.ChartItem = append(c.hooks.ChartItem, hooks...)
+// A call to `Use(f, g, h)` equals to `rubchart.Hooks(f(g(h())))`.
+func (c *RUBChartClient) Use(hooks ...Hook) {
+	c.hooks.RUBChart = append(c.hooks.RUBChart, hooks...)
 }
 
-// Create returns a create builder for ChartItem.
-func (c *ChartItemClient) Create() *ChartItemCreate {
-	mutation := newChartItemMutation(c.config, OpCreate)
-	return &ChartItemCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for RUBChart.
+func (c *RUBChartClient) Create() *RUBChartCreate {
+	mutation := newRUBChartMutation(c.config, OpCreate)
+	return &RUBChartCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of ChartItem entities.
-func (c *ChartItemClient) CreateBulk(builders ...*ChartItemCreate) *ChartItemCreateBulk {
-	return &ChartItemCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of RUBChart entities.
+func (c *RUBChartClient) CreateBulk(builders ...*RUBChartCreate) *RUBChartCreateBulk {
+	return &RUBChartCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for ChartItem.
-func (c *ChartItemClient) Update() *ChartItemUpdate {
-	mutation := newChartItemMutation(c.config, OpUpdate)
-	return &ChartItemUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for RUBChart.
+func (c *RUBChartClient) Update() *RUBChartUpdate {
+	mutation := newRUBChartMutation(c.config, OpUpdate)
+	return &RUBChartUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ChartItemClient) UpdateOne(ci *ChartItem) *ChartItemUpdateOne {
-	mutation := newChartItemMutation(c.config, OpUpdateOne, withChartItem(ci))
-	return &ChartItemUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *RUBChartClient) UpdateOne(rc *RUBChart) *RUBChartUpdateOne {
+	mutation := newRUBChartMutation(c.config, OpUpdateOne, withRUBChart(rc))
+	return &RUBChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ChartItemClient) UpdateOneID(id int) *ChartItemUpdateOne {
-	mutation := newChartItemMutation(c.config, OpUpdateOne, withChartItemID(id))
-	return &ChartItemUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *RUBChartClient) UpdateOneID(id int) *RUBChartUpdateOne {
+	mutation := newRUBChartMutation(c.config, OpUpdateOne, withRUBChartID(id))
+	return &RUBChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for ChartItem.
-func (c *ChartItemClient) Delete() *ChartItemDelete {
-	mutation := newChartItemMutation(c.config, OpDelete)
-	return &ChartItemDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for RUBChart.
+func (c *RUBChartClient) Delete() *RUBChartDelete {
+	mutation := newRUBChartMutation(c.config, OpDelete)
+	return &RUBChartDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *ChartItemClient) DeleteOne(ci *ChartItem) *ChartItemDeleteOne {
-	return c.DeleteOneID(ci.ID)
+func (c *RUBChartClient) DeleteOne(rc *RUBChart) *RUBChartDeleteOne {
+	return c.DeleteOneID(rc.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *ChartItemClient) DeleteOneID(id int) *ChartItemDeleteOne {
-	builder := c.Delete().Where(chartitem.ID(id))
+func (c *RUBChartClient) DeleteOneID(id int) *RUBChartDeleteOne {
+	builder := c.Delete().Where(rubchart.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &ChartItemDeleteOne{builder}
+	return &RUBChartDeleteOne{builder}
 }
 
-// Query returns a query builder for ChartItem.
-func (c *ChartItemClient) Query() *ChartItemQuery {
-	return &ChartItemQuery{
+// Query returns a query builder for RUBChart.
+func (c *RUBChartClient) Query() *RUBChartQuery {
+	return &RUBChartQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a ChartItem entity by its id.
-func (c *ChartItemClient) Get(ctx context.Context, id int) (*ChartItem, error) {
-	return c.Query().Where(chartitem.ID(id)).Only(ctx)
+// Get returns a RUBChart entity by its id.
+func (c *RUBChartClient) Get(ctx context.Context, id int) (*RUBChart, error) {
+	return c.Query().Where(rubchart.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ChartItemClient) GetX(ctx context.Context, id int) *ChartItem {
+func (c *RUBChartClient) GetX(ctx context.Context, id int) *RUBChart {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -208,6 +215,96 @@ func (c *ChartItemClient) GetX(ctx context.Context, id int) *ChartItem {
 }
 
 // Hooks returns the client hooks.
-func (c *ChartItemClient) Hooks() []Hook {
-	return c.hooks.ChartItem
+func (c *RUBChartClient) Hooks() []Hook {
+	return c.hooks.RUBChart
+}
+
+// USDChartClient is a client for the USDChart schema.
+type USDChartClient struct {
+	config
+}
+
+// NewUSDChartClient returns a client for the USDChart from the given config.
+func NewUSDChartClient(c config) *USDChartClient {
+	return &USDChartClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usdchart.Hooks(f(g(h())))`.
+func (c *USDChartClient) Use(hooks ...Hook) {
+	c.hooks.USDChart = append(c.hooks.USDChart, hooks...)
+}
+
+// Create returns a create builder for USDChart.
+func (c *USDChartClient) Create() *USDChartCreate {
+	mutation := newUSDChartMutation(c.config, OpCreate)
+	return &USDChartCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of USDChart entities.
+func (c *USDChartClient) CreateBulk(builders ...*USDChartCreate) *USDChartCreateBulk {
+	return &USDChartCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for USDChart.
+func (c *USDChartClient) Update() *USDChartUpdate {
+	mutation := newUSDChartMutation(c.config, OpUpdate)
+	return &USDChartUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *USDChartClient) UpdateOne(uc *USDChart) *USDChartUpdateOne {
+	mutation := newUSDChartMutation(c.config, OpUpdateOne, withUSDChart(uc))
+	return &USDChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *USDChartClient) UpdateOneID(id int) *USDChartUpdateOne {
+	mutation := newUSDChartMutation(c.config, OpUpdateOne, withUSDChartID(id))
+	return &USDChartUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for USDChart.
+func (c *USDChartClient) Delete() *USDChartDelete {
+	mutation := newUSDChartMutation(c.config, OpDelete)
+	return &USDChartDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *USDChartClient) DeleteOne(uc *USDChart) *USDChartDeleteOne {
+	return c.DeleteOneID(uc.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *USDChartClient) DeleteOneID(id int) *USDChartDeleteOne {
+	builder := c.Delete().Where(usdchart.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &USDChartDeleteOne{builder}
+}
+
+// Query returns a query builder for USDChart.
+func (c *USDChartClient) Query() *USDChartQuery {
+	return &USDChartQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a USDChart entity by its id.
+func (c *USDChartClient) Get(ctx context.Context, id int) (*USDChart, error) {
+	return c.Query().Where(usdchart.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *USDChartClient) GetX(ctx context.Context, id int) *USDChart {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *USDChartClient) Hooks() []Hook {
+	return c.hooks.USDChart
 }
