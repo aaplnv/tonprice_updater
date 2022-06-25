@@ -21,6 +21,18 @@ var (
 		Columns:    AUDColumns,
 		PrimaryKey: []*schema.Column{AUDColumns[0]},
 	}
+	// CNYColumns holds the columns for the "CNY" table.
+	CNYColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// CNYTable holds the schema information for the "CNY" table.
+	CNYTable = &schema.Table{
+		Name:       "CNY",
+		Columns:    CNYColumns,
+		PrimaryKey: []*schema.Column{CNYColumns[0]},
+	}
 	// EUROColumns holds the columns for the "EURO" table.
 	EUROColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -44,6 +56,18 @@ var (
 		Name:       "GBP",
 		Columns:    GBPColumns,
 		PrimaryKey: []*schema.Column{GBPColumns[0]},
+	}
+	// HKDColumns holds the columns for the "HKD" table.
+	HKDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// HKDTable holds the schema information for the "HKD" table.
+	HKDTable = &schema.Table{
+		Name:       "HKD",
+		Columns:    HKDColumns,
+		PrimaryKey: []*schema.Column{HKDColumns[0]},
 	}
 	// INRColumns holds the columns for the "INR" table.
 	INRColumns = []*schema.Column{
@@ -93,6 +117,18 @@ var (
 		Columns:    RUBColumns,
 		PrimaryKey: []*schema.Column{RUBColumns[0]},
 	}
+	// TWDColumns holds the columns for the "TWD" table.
+	TWDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// TWDTable holds the schema information for the "TWD" table.
+	TWDTable = &schema.Table{
+		Name:       "TWD",
+		Columns:    TWDColumns,
+		PrimaryKey: []*schema.Column{TWDColumns[0]},
+	}
 	// UAHColumns holds the columns for the "UAH" table.
 	UAHColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -132,12 +168,15 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AUDTable,
+		CNYTable,
 		EUROTable,
 		GBPTable,
+		HKDTable,
 		INRTable,
 		NZDTable,
 		PKRTable,
 		RUBTable,
+		TWDTable,
 		UAHTable,
 		USDTable,
 		ZARTable,
@@ -148,11 +187,17 @@ func init() {
 	AUDTable.Annotation = &entsql.Annotation{
 		Table: "AUD",
 	}
+	CNYTable.Annotation = &entsql.Annotation{
+		Table: "CNY",
+	}
 	EUROTable.Annotation = &entsql.Annotation{
 		Table: "EURO",
 	}
 	GBPTable.Annotation = &entsql.Annotation{
 		Table: "GBP",
+	}
+	HKDTable.Annotation = &entsql.Annotation{
+		Table: "HKD",
 	}
 	INRTable.Annotation = &entsql.Annotation{
 		Table: "INR",
@@ -165,6 +210,9 @@ func init() {
 	}
 	RUBTable.Annotation = &entsql.Annotation{
 		Table: "RUB",
+	}
+	TWDTable.Annotation = &entsql.Annotation{
+		Table: "TWD",
 	}
 	UAHTable.Annotation = &entsql.Annotation{
 		Table: "UAH",

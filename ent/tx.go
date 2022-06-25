@@ -14,10 +14,14 @@ type Tx struct {
 	config
 	// AUDQuote is the client for interacting with the AUDQuote builders.
 	AUDQuote *AUDQuoteClient
+	// CNYQuote is the client for interacting with the CNYQuote builders.
+	CNYQuote *CNYQuoteClient
 	// EUROQuote is the client for interacting with the EUROQuote builders.
 	EUROQuote *EUROQuoteClient
 	// GBPQuote is the client for interacting with the GBPQuote builders.
 	GBPQuote *GBPQuoteClient
+	// HKDQuote is the client for interacting with the HKDQuote builders.
+	HKDQuote *HKDQuoteClient
 	// INRQuote is the client for interacting with the INRQuote builders.
 	INRQuote *INRQuoteClient
 	// NZDQuote is the client for interacting with the NZDQuote builders.
@@ -26,6 +30,8 @@ type Tx struct {
 	PKRQuote *PKRQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
+	// TWDQuote is the client for interacting with the TWDQuote builders.
+	TWDQuote *TWDQuoteClient
 	// UAHQuote is the client for interacting with the UAHQuote builders.
 	UAHQuote *UAHQuoteClient
 	// USDQuote is the client for interacting with the USDQuote builders.
@@ -168,12 +174,15 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.AUDQuote = NewAUDQuoteClient(tx.config)
+	tx.CNYQuote = NewCNYQuoteClient(tx.config)
 	tx.EUROQuote = NewEUROQuoteClient(tx.config)
 	tx.GBPQuote = NewGBPQuoteClient(tx.config)
+	tx.HKDQuote = NewHKDQuoteClient(tx.config)
 	tx.INRQuote = NewINRQuoteClient(tx.config)
 	tx.NZDQuote = NewNZDQuoteClient(tx.config)
 	tx.PKRQuote = NewPKRQuoteClient(tx.config)
 	tx.RUBQuote = NewRUBQuoteClient(tx.config)
+	tx.TWDQuote = NewTWDQuoteClient(tx.config)
 	tx.UAHQuote = NewUAHQuoteClient(tx.config)
 	tx.USDQuote = NewUSDQuoteClient(tx.config)
 	tx.ZARQuote = NewZARQuoteClient(tx.config)

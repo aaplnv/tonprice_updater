@@ -97,5 +97,20 @@ func updater() {
 	if err != nil {
 		fmt.Errorf("Can't save PKR rates: %w", err)
 	}
+
+	_, err = client.CNYQuote.Create().SetPrice(result.CurrentPrice["cny"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save CNY rates: %w", err)
+	}
+
+	_, err = client.HKDQuote.Create().SetPrice(result.CurrentPrice["hkd"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save HKD rates: %w", err)
+	}
+
+	_, err = client.TWDQuote.Create().SetPrice(result.CurrentPrice["twd"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save TWD rates: %w", err)
+	}
 	log.Info("Rates successfully updated")
 }

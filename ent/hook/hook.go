@@ -21,6 +21,19 @@ func (f AUDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return f(ctx, mv)
 }
 
+// The CNYQuoteFunc type is an adapter to allow the use of ordinary
+// function as CNYQuote mutator.
+type CNYQuoteFunc func(context.Context, *ent.CNYQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CNYQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.CNYQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CNYQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The EUROQuoteFunc type is an adapter to allow the use of ordinary
 // function as EUROQuote mutator.
 type EUROQuoteFunc func(context.Context, *ent.EUROQuoteMutation) (ent.Value, error)
@@ -43,6 +56,19 @@ func (f GBPQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.GBPQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GBPQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The HKDQuoteFunc type is an adapter to allow the use of ordinary
+// function as HKDQuote mutator.
+type HKDQuoteFunc func(context.Context, *ent.HKDQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f HKDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.HKDQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HKDQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }
@@ -95,6 +121,19 @@ func (f RUBQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.RUBQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RUBQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The TWDQuoteFunc type is an adapter to allow the use of ordinary
+// function as TWDQuote mutator.
+type TWDQuoteFunc func(context.Context, *ent.TWDQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TWDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.TWDQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TWDQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }

@@ -9,11 +9,17 @@ import (
 // AUDQuote is the predicate function for audquote builders.
 type AUDQuote func(*sql.Selector)
 
+// CNYQuote is the predicate function for cnyquote builders.
+type CNYQuote func(*sql.Selector)
+
 // EUROQuote is the predicate function for euroquote builders.
 type EUROQuote func(*sql.Selector)
 
 // GBPQuote is the predicate function for gbpquote builders.
 type GBPQuote func(*sql.Selector)
+
+// HKDQuote is the predicate function for hkdquote builders.
+type HKDQuote func(*sql.Selector)
 
 // INRQuote is the predicate function for inrquote builders.
 type INRQuote func(*sql.Selector)
@@ -26,6 +32,9 @@ type PKRQuote func(*sql.Selector)
 
 // RUBQuote is the predicate function for rubquote builders.
 type RUBQuote func(*sql.Selector)
+
+// TWDQuote is the predicate function for twdquote builders.
+type TWDQuote func(*sql.Selector)
 
 // UAHQuote is the predicate function for uahquote builders.
 type UAHQuote func(*sql.Selector)
