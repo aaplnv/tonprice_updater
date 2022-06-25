@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jasonlvhit/gocron"
 	"github.com/joho/godotenv"
 	"log"
 	"main/ent"
 	"main/markets"
 	"os"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
@@ -20,12 +20,16 @@ func init() {
 }
 
 func main() {
-	result, err := markets.GetAllWithCoinGecko()
+	gocron.Every(1).Minutes().At("now").Do(updater)
+	<-gocron.Start()
+}
 
+func updater() {
+	fmt.Println("RUN")
+	result, err := markets.GetAllWithCoinGecko()
 	if err != nil {
 		fmt.Println("Can't make request: ", err)
 	}
-	fmt.Println("Current ton price: ", result)
 
 	client, err := ent.Open("mysql", fmt.Sprint(os.Getenv("MDB_LOGIN"), ":", os.Getenv("MDB_PASSWORD"), "@tcp(", os.Getenv("MDB_HOST"), ":", os.Getenv("MDB_PORT"), ")/charts?parseTime=True"))
 	if err != nil {
@@ -37,14 +41,14 @@ func main() {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	ci, err := client.USDChart.Create().SetPrice(result).Save(context.Background())
+	_, err = client.USDChart.Create().SetPrice(result.CurrentPrice["usd"]).Save(context.Background())
 	if err != nil {
 		fmt.Errorf("failed creating user: %w", err)
 	}
-	log.Println("user was created: ", ci)
-	cd, err := client.RUBChart.Create().SetPrice(result).Save(context.Background())
+
+	_, err = client.RUBChart.Create().SetPrice(result.CurrentPrice["rub"]).Save(context.Background())
 	if err != nil {
 		fmt.Errorf("failed creating user: %w", err)
 	}
-	log.Println("user was created: ", cd)
+	fmt.Println("DONE")
 }
