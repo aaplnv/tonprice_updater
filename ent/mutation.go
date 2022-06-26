@@ -6,8 +6,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"main/ent/aedquote"
 	"main/ent/arsquote"
 	"main/ent/audquote"
+	"main/ent/bhdquote"
 	"main/ent/brlquote"
 	"main/ent/btcquote"
 	"main/ent/cadquote"
@@ -19,7 +21,10 @@ import (
 	"main/ent/gbpquote"
 	"main/ent/hkdquote"
 	"main/ent/hufquote"
+	"main/ent/idrquote"
+	"main/ent/ilsquote"
 	"main/ent/inrquote"
+	"main/ent/jpyquote"
 	"main/ent/mxnquote"
 	"main/ent/nokquote"
 	"main/ent/nzdquote"
@@ -27,7 +32,9 @@ import (
 	"main/ent/plnquote"
 	"main/ent/predicate"
 	"main/ent/rubquote"
+	"main/ent/sadquote"
 	"main/ent/sekquote"
+	"main/ent/tryquote"
 	"main/ent/twdquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
@@ -47,8 +54,10 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
+	TypeAEDQuote  = "AEDQuote"
 	TypeARSQuote  = "ARSQuote"
 	TypeAUDQuote  = "AUDQuote"
+	TypeBHDQuote  = "BHDQuote"
 	TypeBRLQuote  = "BRLQuote"
 	TypeBTCQuote  = "BTCQuote"
 	TypeCADQuote  = "CADQuote"
@@ -60,19 +69,431 @@ const (
 	TypeGBPQuote  = "GBPQuote"
 	TypeHKDQuote  = "HKDQuote"
 	TypeHUFQuote  = "HUFQuote"
+	TypeIDRQuote  = "IDRQuote"
+	TypeILSQuote  = "ILSQuote"
 	TypeINRQuote  = "INRQuote"
+	TypeJPYQuote  = "JPYQuote"
 	TypeMXNQuote  = "MXNQuote"
 	TypeNOKQuote  = "NOKQuote"
 	TypeNZDQuote  = "NZDQuote"
 	TypePKRQuote  = "PKRQuote"
 	TypePLNQuote  = "PLNQuote"
 	TypeRUBQuote  = "RUBQuote"
+	TypeSADQuote  = "SADQuote"
 	TypeSEKQuote  = "SEKQuote"
+	TypeTRYQuote  = "TRYQuote"
 	TypeTWDQuote  = "TWDQuote"
 	TypeUAHQuote  = "UAHQuote"
 	TypeUSDQuote  = "USDQuote"
 	TypeZARQuote  = "ZARQuote"
 )
+
+// AEDQuoteMutation represents an operation that mutates the AEDQuote nodes in the graph.
+type AEDQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*AEDQuote, error)
+	predicates    []predicate.AEDQuote
+}
+
+var _ ent.Mutation = (*AEDQuoteMutation)(nil)
+
+// aedquoteOption allows management of the mutation configuration using functional options.
+type aedquoteOption func(*AEDQuoteMutation)
+
+// newAEDQuoteMutation creates new mutation for the AEDQuote entity.
+func newAEDQuoteMutation(c config, op Op, opts ...aedquoteOption) *AEDQuoteMutation {
+	m := &AEDQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAEDQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAEDQuoteID sets the ID field of the mutation.
+func withAEDQuoteID(id int) aedquoteOption {
+	return func(m *AEDQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AEDQuote
+		)
+		m.oldValue = func(ctx context.Context) (*AEDQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AEDQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAEDQuote sets the old AEDQuote of the mutation.
+func withAEDQuote(node *AEDQuote) aedquoteOption {
+	return func(m *AEDQuoteMutation) {
+		m.oldValue = func(context.Context) (*AEDQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AEDQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AEDQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AEDQuote entities.
+func (m *AEDQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AEDQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AEDQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AEDQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *AEDQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *AEDQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the AEDQuote entity.
+// If the AEDQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AEDQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *AEDQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *AEDQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *AEDQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *AEDQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *AEDQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the AEDQuote entity.
+// If the AEDQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AEDQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *AEDQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the AEDQuoteMutation builder.
+func (m *AEDQuoteMutation) Where(ps ...predicate.AEDQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *AEDQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (AEDQuote).
+func (m *AEDQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AEDQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, aedquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, aedquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AEDQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case aedquote.FieldPrice:
+		return m.Price()
+	case aedquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AEDQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case aedquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case aedquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown AEDQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AEDQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case aedquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case aedquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AEDQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AEDQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, aedquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AEDQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case aedquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AEDQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case aedquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AEDQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AEDQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AEDQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AEDQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown AEDQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AEDQuoteMutation) ResetField(name string) error {
+	switch name {
+	case aedquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case aedquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown AEDQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AEDQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AEDQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AEDQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AEDQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AEDQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AEDQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AEDQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AEDQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AEDQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AEDQuote edge %s", name)
+}
 
 // ARSQuoteMutation represents an operation that mutates the ARSQuote nodes in the graph.
 type ARSQuoteMutation struct {
@@ -886,6 +1307,413 @@ func (m *AUDQuoteMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *AUDQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown AUDQuote edge %s", name)
+}
+
+// BHDQuoteMutation represents an operation that mutates the BHDQuote nodes in the graph.
+type BHDQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*BHDQuote, error)
+	predicates    []predicate.BHDQuote
+}
+
+var _ ent.Mutation = (*BHDQuoteMutation)(nil)
+
+// bhdquoteOption allows management of the mutation configuration using functional options.
+type bhdquoteOption func(*BHDQuoteMutation)
+
+// newBHDQuoteMutation creates new mutation for the BHDQuote entity.
+func newBHDQuoteMutation(c config, op Op, opts ...bhdquoteOption) *BHDQuoteMutation {
+	m := &BHDQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeBHDQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withBHDQuoteID sets the ID field of the mutation.
+func withBHDQuoteID(id int) bhdquoteOption {
+	return func(m *BHDQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *BHDQuote
+		)
+		m.oldValue = func(ctx context.Context) (*BHDQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().BHDQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withBHDQuote sets the old BHDQuote of the mutation.
+func withBHDQuote(node *BHDQuote) bhdquoteOption {
+	return func(m *BHDQuoteMutation) {
+		m.oldValue = func(context.Context) (*BHDQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m BHDQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m BHDQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of BHDQuote entities.
+func (m *BHDQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *BHDQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *BHDQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().BHDQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *BHDQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *BHDQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the BHDQuote entity.
+// If the BHDQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BHDQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *BHDQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *BHDQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *BHDQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *BHDQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *BHDQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the BHDQuote entity.
+// If the BHDQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BHDQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *BHDQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the BHDQuoteMutation builder.
+func (m *BHDQuoteMutation) Where(ps ...predicate.BHDQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *BHDQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (BHDQuote).
+func (m *BHDQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *BHDQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, bhdquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, bhdquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *BHDQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case bhdquote.FieldPrice:
+		return m.Price()
+	case bhdquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *BHDQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case bhdquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case bhdquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown BHDQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BHDQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case bhdquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case bhdquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown BHDQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *BHDQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, bhdquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *BHDQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case bhdquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *BHDQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case bhdquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown BHDQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *BHDQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *BHDQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *BHDQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown BHDQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *BHDQuoteMutation) ResetField(name string) error {
+	switch name {
+	case bhdquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case bhdquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown BHDQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *BHDQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *BHDQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *BHDQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *BHDQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *BHDQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *BHDQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *BHDQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown BHDQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *BHDQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown BHDQuote edge %s", name)
 }
 
 // BRLQuoteMutation represents an operation that mutates the BRLQuote nodes in the graph.
@@ -5365,6 +6193,820 @@ func (m *HUFQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown HUFQuote edge %s", name)
 }
 
+// IDRQuoteMutation represents an operation that mutates the IDRQuote nodes in the graph.
+type IDRQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*IDRQuote, error)
+	predicates    []predicate.IDRQuote
+}
+
+var _ ent.Mutation = (*IDRQuoteMutation)(nil)
+
+// idrquoteOption allows management of the mutation configuration using functional options.
+type idrquoteOption func(*IDRQuoteMutation)
+
+// newIDRQuoteMutation creates new mutation for the IDRQuote entity.
+func newIDRQuoteMutation(c config, op Op, opts ...idrquoteOption) *IDRQuoteMutation {
+	m := &IDRQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeIDRQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withIDRQuoteID sets the ID field of the mutation.
+func withIDRQuoteID(id int) idrquoteOption {
+	return func(m *IDRQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *IDRQuote
+		)
+		m.oldValue = func(ctx context.Context) (*IDRQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().IDRQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withIDRQuote sets the old IDRQuote of the mutation.
+func withIDRQuote(node *IDRQuote) idrquoteOption {
+	return func(m *IDRQuoteMutation) {
+		m.oldValue = func(context.Context) (*IDRQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m IDRQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m IDRQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of IDRQuote entities.
+func (m *IDRQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *IDRQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *IDRQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().IDRQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *IDRQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *IDRQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the IDRQuote entity.
+// If the IDRQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IDRQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *IDRQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *IDRQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *IDRQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *IDRQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *IDRQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the IDRQuote entity.
+// If the IDRQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IDRQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *IDRQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the IDRQuoteMutation builder.
+func (m *IDRQuoteMutation) Where(ps ...predicate.IDRQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *IDRQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (IDRQuote).
+func (m *IDRQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *IDRQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, idrquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, idrquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *IDRQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case idrquote.FieldPrice:
+		return m.Price()
+	case idrquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *IDRQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case idrquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case idrquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown IDRQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IDRQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case idrquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case idrquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IDRQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *IDRQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, idrquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *IDRQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case idrquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IDRQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case idrquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IDRQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *IDRQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *IDRQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *IDRQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown IDRQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *IDRQuoteMutation) ResetField(name string) error {
+	switch name {
+	case idrquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case idrquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown IDRQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *IDRQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *IDRQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *IDRQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *IDRQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *IDRQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *IDRQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *IDRQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown IDRQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *IDRQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown IDRQuote edge %s", name)
+}
+
+// ILSQuoteMutation represents an operation that mutates the ILSQuote nodes in the graph.
+type ILSQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ILSQuote, error)
+	predicates    []predicate.ILSQuote
+}
+
+var _ ent.Mutation = (*ILSQuoteMutation)(nil)
+
+// ilsquoteOption allows management of the mutation configuration using functional options.
+type ilsquoteOption func(*ILSQuoteMutation)
+
+// newILSQuoteMutation creates new mutation for the ILSQuote entity.
+func newILSQuoteMutation(c config, op Op, opts ...ilsquoteOption) *ILSQuoteMutation {
+	m := &ILSQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeILSQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withILSQuoteID sets the ID field of the mutation.
+func withILSQuoteID(id int) ilsquoteOption {
+	return func(m *ILSQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ILSQuote
+		)
+		m.oldValue = func(ctx context.Context) (*ILSQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ILSQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withILSQuote sets the old ILSQuote of the mutation.
+func withILSQuote(node *ILSQuote) ilsquoteOption {
+	return func(m *ILSQuoteMutation) {
+		m.oldValue = func(context.Context) (*ILSQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ILSQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ILSQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ILSQuote entities.
+func (m *ILSQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ILSQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ILSQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ILSQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *ILSQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *ILSQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the ILSQuote entity.
+// If the ILSQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ILSQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *ILSQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *ILSQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *ILSQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *ILSQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *ILSQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the ILSQuote entity.
+// If the ILSQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ILSQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *ILSQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the ILSQuoteMutation builder.
+func (m *ILSQuoteMutation) Where(ps ...predicate.ILSQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ILSQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ILSQuote).
+func (m *ILSQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ILSQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, ilsquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, ilsquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ILSQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case ilsquote.FieldPrice:
+		return m.Price()
+	case ilsquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ILSQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case ilsquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case ilsquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown ILSQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ILSQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case ilsquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case ilsquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ILSQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ILSQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, ilsquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ILSQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case ilsquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ILSQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case ilsquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ILSQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ILSQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ILSQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ILSQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ILSQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ILSQuoteMutation) ResetField(name string) error {
+	switch name {
+	case ilsquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case ilsquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown ILSQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ILSQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ILSQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ILSQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ILSQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ILSQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ILSQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ILSQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ILSQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ILSQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ILSQuote edge %s", name)
+}
+
 // INRQuoteMutation represents an operation that mutates the INRQuote nodes in the graph.
 type INRQuoteMutation struct {
 	config
@@ -5770,6 +7412,413 @@ func (m *INRQuoteMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *INRQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown INRQuote edge %s", name)
+}
+
+// JPYQuoteMutation represents an operation that mutates the JPYQuote nodes in the graph.
+type JPYQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*JPYQuote, error)
+	predicates    []predicate.JPYQuote
+}
+
+var _ ent.Mutation = (*JPYQuoteMutation)(nil)
+
+// jpyquoteOption allows management of the mutation configuration using functional options.
+type jpyquoteOption func(*JPYQuoteMutation)
+
+// newJPYQuoteMutation creates new mutation for the JPYQuote entity.
+func newJPYQuoteMutation(c config, op Op, opts ...jpyquoteOption) *JPYQuoteMutation {
+	m := &JPYQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeJPYQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withJPYQuoteID sets the ID field of the mutation.
+func withJPYQuoteID(id int) jpyquoteOption {
+	return func(m *JPYQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *JPYQuote
+		)
+		m.oldValue = func(ctx context.Context) (*JPYQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().JPYQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withJPYQuote sets the old JPYQuote of the mutation.
+func withJPYQuote(node *JPYQuote) jpyquoteOption {
+	return func(m *JPYQuoteMutation) {
+		m.oldValue = func(context.Context) (*JPYQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m JPYQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m JPYQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of JPYQuote entities.
+func (m *JPYQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *JPYQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *JPYQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().JPYQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *JPYQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *JPYQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the JPYQuote entity.
+// If the JPYQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *JPYQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *JPYQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *JPYQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *JPYQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *JPYQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *JPYQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the JPYQuote entity.
+// If the JPYQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *JPYQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *JPYQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the JPYQuoteMutation builder.
+func (m *JPYQuoteMutation) Where(ps ...predicate.JPYQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *JPYQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (JPYQuote).
+func (m *JPYQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *JPYQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, jpyquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, jpyquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *JPYQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case jpyquote.FieldPrice:
+		return m.Price()
+	case jpyquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *JPYQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case jpyquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case jpyquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown JPYQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *JPYQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case jpyquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case jpyquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown JPYQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *JPYQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, jpyquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *JPYQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case jpyquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *JPYQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case jpyquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown JPYQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *JPYQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *JPYQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *JPYQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown JPYQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *JPYQuoteMutation) ResetField(name string) error {
+	switch name {
+	case jpyquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case jpyquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown JPYQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *JPYQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *JPYQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *JPYQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *JPYQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *JPYQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *JPYQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *JPYQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown JPYQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *JPYQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown JPYQuote edge %s", name)
 }
 
 // MXNQuoteMutation represents an operation that mutates the MXNQuote nodes in the graph.
@@ -8214,6 +10263,413 @@ func (m *RUBQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown RUBQuote edge %s", name)
 }
 
+// SADQuoteMutation represents an operation that mutates the SADQuote nodes in the graph.
+type SADQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*SADQuote, error)
+	predicates    []predicate.SADQuote
+}
+
+var _ ent.Mutation = (*SADQuoteMutation)(nil)
+
+// sadquoteOption allows management of the mutation configuration using functional options.
+type sadquoteOption func(*SADQuoteMutation)
+
+// newSADQuoteMutation creates new mutation for the SADQuote entity.
+func newSADQuoteMutation(c config, op Op, opts ...sadquoteOption) *SADQuoteMutation {
+	m := &SADQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSADQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSADQuoteID sets the ID field of the mutation.
+func withSADQuoteID(id int) sadquoteOption {
+	return func(m *SADQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *SADQuote
+		)
+		m.oldValue = func(ctx context.Context) (*SADQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().SADQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSADQuote sets the old SADQuote of the mutation.
+func withSADQuote(node *SADQuote) sadquoteOption {
+	return func(m *SADQuoteMutation) {
+		m.oldValue = func(context.Context) (*SADQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SADQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SADQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of SADQuote entities.
+func (m *SADQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SADQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SADQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().SADQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *SADQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *SADQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the SADQuote entity.
+// If the SADQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SADQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *SADQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *SADQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *SADQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *SADQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *SADQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the SADQuote entity.
+// If the SADQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SADQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *SADQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the SADQuoteMutation builder.
+func (m *SADQuoteMutation) Where(ps ...predicate.SADQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *SADQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (SADQuote).
+func (m *SADQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SADQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, sadquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, sadquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SADQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sadquote.FieldPrice:
+		return m.Price()
+	case sadquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SADQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sadquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case sadquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown SADQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SADQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sadquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case sadquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SADQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SADQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, sadquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SADQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case sadquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SADQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case sadquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SADQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SADQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SADQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SADQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown SADQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SADQuoteMutation) ResetField(name string) error {
+	switch name {
+	case sadquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case sadquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown SADQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SADQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SADQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SADQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SADQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SADQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SADQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SADQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown SADQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SADQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown SADQuote edge %s", name)
+}
+
 // SEKQuoteMutation represents an operation that mutates the SEKQuote nodes in the graph.
 type SEKQuoteMutation struct {
 	config
@@ -8619,6 +11075,413 @@ func (m *SEKQuoteMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *SEKQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown SEKQuote edge %s", name)
+}
+
+// TRYQuoteMutation represents an operation that mutates the TRYQuote nodes in the graph.
+type TRYQuoteMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	price         *float64
+	addprice      *float64
+	_Timestamp    *time.Time
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*TRYQuote, error)
+	predicates    []predicate.TRYQuote
+}
+
+var _ ent.Mutation = (*TRYQuoteMutation)(nil)
+
+// tryquoteOption allows management of the mutation configuration using functional options.
+type tryquoteOption func(*TRYQuoteMutation)
+
+// newTRYQuoteMutation creates new mutation for the TRYQuote entity.
+func newTRYQuoteMutation(c config, op Op, opts ...tryquoteOption) *TRYQuoteMutation {
+	m := &TRYQuoteMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTRYQuote,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTRYQuoteID sets the ID field of the mutation.
+func withTRYQuoteID(id int) tryquoteOption {
+	return func(m *TRYQuoteMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *TRYQuote
+		)
+		m.oldValue = func(ctx context.Context) (*TRYQuote, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().TRYQuote.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTRYQuote sets the old TRYQuote of the mutation.
+func withTRYQuote(node *TRYQuote) tryquoteOption {
+	return func(m *TRYQuoteMutation) {
+		m.oldValue = func(context.Context) (*TRYQuote, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TRYQuoteMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TRYQuoteMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TRYQuote entities.
+func (m *TRYQuoteMutation) SetID(id int) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TRYQuoteMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TRYQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().TRYQuote.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPrice sets the "price" field.
+func (m *TRYQuoteMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *TRYQuoteMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the TRYQuote entity.
+// If the TRYQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TRYQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *TRYQuoteMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *TRYQuoteMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *TRYQuoteMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetTimestamp sets the "Timestamp" field.
+func (m *TRYQuoteMutation) SetTimestamp(t time.Time) {
+	m._Timestamp = &t
+}
+
+// Timestamp returns the value of the "Timestamp" field in the mutation.
+func (m *TRYQuoteMutation) Timestamp() (r time.Time, exists bool) {
+	v := m._Timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "Timestamp" field's value of the TRYQuote entity.
+// If the TRYQuote object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TRYQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "Timestamp" field.
+func (m *TRYQuoteMutation) ResetTimestamp() {
+	m._Timestamp = nil
+}
+
+// Where appends a list predicates to the TRYQuoteMutation builder.
+func (m *TRYQuoteMutation) Where(ps ...predicate.TRYQuote) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *TRYQuoteMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (TRYQuote).
+func (m *TRYQuoteMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TRYQuoteMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.price != nil {
+		fields = append(fields, tryquote.FieldPrice)
+	}
+	if m._Timestamp != nil {
+		fields = append(fields, tryquote.FieldTimestamp)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TRYQuoteMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case tryquote.FieldPrice:
+		return m.Price()
+	case tryquote.FieldTimestamp:
+		return m.Timestamp()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TRYQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case tryquote.FieldPrice:
+		return m.OldPrice(ctx)
+	case tryquote.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	}
+	return nil, fmt.Errorf("unknown TRYQuote field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TRYQuoteMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case tryquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case tryquote.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TRYQuote field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TRYQuoteMutation) AddedFields() []string {
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, tryquote.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TRYQuoteMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case tryquote.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TRYQuoteMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case tryquote.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TRYQuote numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TRYQuoteMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TRYQuoteMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TRYQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown TRYQuote nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TRYQuoteMutation) ResetField(name string) error {
+	switch name {
+	case tryquote.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case tryquote.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	}
+	return fmt.Errorf("unknown TRYQuote field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TRYQuoteMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TRYQuoteMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TRYQuoteMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TRYQuoteMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TRYQuoteMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TRYQuoteMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TRYQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown TRYQuote unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TRYQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown TRYQuote edge %s", name)
 }
 
 // TWDQuoteMutation represents an operation that mutates the TWDQuote nodes in the graph.

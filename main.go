@@ -172,5 +172,40 @@ func updater() {
 	if err != nil {
 		fmt.Errorf("Can't save MXN rates: %w", err)
 	}
+
+	_, err = client.AEDQuote.Create().SetPrice(result.CurrentPrice["aed"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save AED rates: %w", err)
+	}
+
+	_, err = client.BHDQuote.Create().SetPrice(result.CurrentPrice["bhd"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save BHD rates: %w", err)
+	}
+
+	_, err = client.IDRQuote.Create().SetPrice(result.CurrentPrice["idr"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save IDR rates: %w", err)
+	}
+
+	_, err = client.ILSQuote.Create().SetPrice(result.CurrentPrice["ils"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save ILS rates: %w", err)
+	}
+
+	_, err = client.JPYQuote.Create().SetPrice(result.CurrentPrice["jpy"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save JPY rates: %w", err)
+	}
+
+	_, err = client.SADQuote.Create().SetPrice(result.CurrentPrice["sad"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save SAD rates: %w", err)
+	}
+
+	_, err = client.TRYQuote.Create().SetPrice(result.CurrentPrice["try"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save TRY rates: %w", err)
+	}
 	log.Info("Rates successfully updated")
 }

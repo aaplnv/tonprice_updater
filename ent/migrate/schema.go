@@ -9,6 +9,18 @@ import (
 )
 
 var (
+	// AEDColumns holds the columns for the "AED" table.
+	AEDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// AEDTable holds the schema information for the "AED" table.
+	AEDTable = &schema.Table{
+		Name:       "AED",
+		Columns:    AEDColumns,
+		PrimaryKey: []*schema.Column{AEDColumns[0]},
+	}
 	// ARSColumns holds the columns for the "ARS" table.
 	ARSColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -32,6 +44,18 @@ var (
 		Name:       "AUD",
 		Columns:    AUDColumns,
 		PrimaryKey: []*schema.Column{AUDColumns[0]},
+	}
+	// BHDColumns holds the columns for the "BHD" table.
+	BHDColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// BHDTable holds the schema information for the "BHD" table.
+	BHDTable = &schema.Table{
+		Name:       "BHD",
+		Columns:    BHDColumns,
+		PrimaryKey: []*schema.Column{BHDColumns[0]},
 	}
 	// BRLColumns holds the columns for the "BRL" table.
 	BRLColumns = []*schema.Column{
@@ -165,6 +189,30 @@ var (
 		Columns:    HUFColumns,
 		PrimaryKey: []*schema.Column{HUFColumns[0]},
 	}
+	// IDRColumns holds the columns for the "IDR" table.
+	IDRColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// IDRTable holds the schema information for the "IDR" table.
+	IDRTable = &schema.Table{
+		Name:       "IDR",
+		Columns:    IDRColumns,
+		PrimaryKey: []*schema.Column{IDRColumns[0]},
+	}
+	// ILSColumns holds the columns for the "ILS" table.
+	ILSColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// ILSTable holds the schema information for the "ILS" table.
+	ILSTable = &schema.Table{
+		Name:       "ILS",
+		Columns:    ILSColumns,
+		PrimaryKey: []*schema.Column{ILSColumns[0]},
+	}
 	// INRColumns holds the columns for the "INR" table.
 	INRColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -176,6 +224,18 @@ var (
 		Name:       "INR",
 		Columns:    INRColumns,
 		PrimaryKey: []*schema.Column{INRColumns[0]},
+	}
+	// JPYColumns holds the columns for the "JPY" table.
+	JPYColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// JPYTable holds the schema information for the "JPY" table.
+	JPYTable = &schema.Table{
+		Name:       "JPY",
+		Columns:    JPYColumns,
+		PrimaryKey: []*schema.Column{JPYColumns[0]},
 	}
 	// MXNColumns holds the columns for the "MXN" table.
 	MXNColumns = []*schema.Column{
@@ -249,6 +309,18 @@ var (
 		Columns:    RUBColumns,
 		PrimaryKey: []*schema.Column{RUBColumns[0]},
 	}
+	// SADColumns holds the columns for the "SAD" table.
+	SADColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// SADTable holds the schema information for the "SAD" table.
+	SADTable = &schema.Table{
+		Name:       "SAD",
+		Columns:    SADColumns,
+		PrimaryKey: []*schema.Column{SADColumns[0]},
+	}
 	// SEKColumns holds the columns for the "SEK" table.
 	SEKColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -260,6 +332,18 @@ var (
 		Name:       "SEK",
 		Columns:    SEKColumns,
 		PrimaryKey: []*schema.Column{SEKColumns[0]},
+	}
+	// TRYColumns holds the columns for the "TRY" table.
+	TRYColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// TRYTable holds the schema information for the "TRY" table.
+	TRYTable = &schema.Table{
+		Name:       "TRY",
+		Columns:    TRYColumns,
+		PrimaryKey: []*schema.Column{TRYColumns[0]},
 	}
 	// TWDColumns holds the columns for the "TWD" table.
 	TWDColumns = []*schema.Column{
@@ -311,8 +395,10 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AEDTable,
 		ARSTable,
 		AUDTable,
+		BHDTable,
 		BRLTable,
 		BTCTable,
 		CADTable,
@@ -324,14 +410,19 @@ var (
 		GBPTable,
 		HKDTable,
 		HUFTable,
+		IDRTable,
+		ILSTable,
 		INRTable,
+		JPYTable,
 		MXNTable,
 		NOKTable,
 		NZDTable,
 		PKRTable,
 		PLNTable,
 		RUBTable,
+		SADTable,
 		SEKTable,
+		TRYTable,
 		TWDTable,
 		UAHTable,
 		USDTable,
@@ -340,11 +431,17 @@ var (
 )
 
 func init() {
+	AEDTable.Annotation = &entsql.Annotation{
+		Table: "AED",
+	}
 	ARSTable.Annotation = &entsql.Annotation{
 		Table: "ARS",
 	}
 	AUDTable.Annotation = &entsql.Annotation{
 		Table: "AUD",
+	}
+	BHDTable.Annotation = &entsql.Annotation{
+		Table: "BHD",
 	}
 	BRLTable.Annotation = &entsql.Annotation{
 		Table: "BRL",
@@ -379,8 +476,17 @@ func init() {
 	HUFTable.Annotation = &entsql.Annotation{
 		Table: "HUF",
 	}
+	IDRTable.Annotation = &entsql.Annotation{
+		Table: "IDR",
+	}
+	ILSTable.Annotation = &entsql.Annotation{
+		Table: "ILS",
+	}
 	INRTable.Annotation = &entsql.Annotation{
 		Table: "INR",
+	}
+	JPYTable.Annotation = &entsql.Annotation{
+		Table: "JPY",
 	}
 	MXNTable.Annotation = &entsql.Annotation{
 		Table: "MXN",
@@ -400,8 +506,14 @@ func init() {
 	RUBTable.Annotation = &entsql.Annotation{
 		Table: "RUB",
 	}
+	SADTable.Annotation = &entsql.Annotation{
+		Table: "SAD",
+	}
 	SEKTable.Annotation = &entsql.Annotation{
 		Table: "SEK",
+	}
+	TRYTable.Annotation = &entsql.Annotation{
+		Table: "TRY",
 	}
 	TWDTable.Annotation = &entsql.Annotation{
 		Table: "TWD",
