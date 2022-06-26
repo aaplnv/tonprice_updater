@@ -9,6 +9,18 @@ import (
 )
 
 var (
+	// ARSColumns holds the columns for the "ARS" table.
+	ARSColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// ARSTable holds the schema information for the "ARS" table.
+	ARSTable = &schema.Table{
+		Name:       "ARS",
+		Columns:    ARSColumns,
+		PrimaryKey: []*schema.Column{ARSColumns[0]},
+	}
 	// AUDColumns holds the columns for the "AUD" table.
 	AUDColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -21,6 +33,42 @@ var (
 		Columns:    AUDColumns,
 		PrimaryKey: []*schema.Column{AUDColumns[0]},
 	}
+	// BRLColumns holds the columns for the "BRL" table.
+	BRLColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// BRLTable holds the schema information for the "BRL" table.
+	BRLTable = &schema.Table{
+		Name:       "BRL",
+		Columns:    BRLColumns,
+		PrimaryKey: []*schema.Column{BRLColumns[0]},
+	}
+	// BTCColumns holds the columns for the "BTC" table.
+	BTCColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// BTCTable holds the schema information for the "BTC" table.
+	BTCTable = &schema.Table{
+		Name:       "BTC",
+		Columns:    BTCColumns,
+		PrimaryKey: []*schema.Column{BTCColumns[0]},
+	}
+	// CADColumns holds the columns for the "CAD" table.
+	CADColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// CADTable holds the schema information for the "CAD" table.
+	CADTable = &schema.Table{
+		Name:       "CAD",
+		Columns:    CADColumns,
+		PrimaryKey: []*schema.Column{CADColumns[0]},
+	}
 	// CHFColumns holds the columns for the "CHF" table.
 	CHFColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -32,6 +80,18 @@ var (
 		Name:       "CHF",
 		Columns:    CHFColumns,
 		PrimaryKey: []*schema.Column{CHFColumns[0]},
+	}
+	// CLPColumns holds the columns for the "CLP" table.
+	CLPColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// CLPTable holds the schema information for the "CLP" table.
+	CLPTable = &schema.Table{
+		Name:       "CLP",
+		Columns:    CLPColumns,
+		PrimaryKey: []*schema.Column{CLPColumns[0]},
 	}
 	// CNYColumns holds the columns for the "CNY" table.
 	CNYColumns = []*schema.Column{
@@ -116,6 +176,18 @@ var (
 		Name:       "INR",
 		Columns:    INRColumns,
 		PrimaryKey: []*schema.Column{INRColumns[0]},
+	}
+	// MXNColumns holds the columns for the "MXN" table.
+	MXNColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "timestamp", Type: field.TypeTime},
+	}
+	// MXNTable holds the schema information for the "MXN" table.
+	MXNTable = &schema.Table{
+		Name:       "MXN",
+		Columns:    MXNColumns,
+		PrimaryKey: []*schema.Column{MXNColumns[0]},
 	}
 	// NOKColumns holds the columns for the "NOK" table.
 	NOKColumns = []*schema.Column{
@@ -239,8 +311,13 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		ARSTable,
 		AUDTable,
+		BRLTable,
+		BTCTable,
+		CADTable,
 		CHFTable,
+		CLPTable,
 		CNYTable,
 		CZKTable,
 		EUROTable,
@@ -248,6 +325,7 @@ var (
 		HKDTable,
 		HUFTable,
 		INRTable,
+		MXNTable,
 		NOKTable,
 		NZDTable,
 		PKRTable,
@@ -262,11 +340,26 @@ var (
 )
 
 func init() {
+	ARSTable.Annotation = &entsql.Annotation{
+		Table: "ARS",
+	}
 	AUDTable.Annotation = &entsql.Annotation{
 		Table: "AUD",
 	}
+	BRLTable.Annotation = &entsql.Annotation{
+		Table: "BRL",
+	}
+	BTCTable.Annotation = &entsql.Annotation{
+		Table: "BTC",
+	}
+	CADTable.Annotation = &entsql.Annotation{
+		Table: "CAD",
+	}
 	CHFTable.Annotation = &entsql.Annotation{
 		Table: "CHF",
+	}
+	CLPTable.Annotation = &entsql.Annotation{
+		Table: "CLP",
 	}
 	CNYTable.Annotation = &entsql.Annotation{
 		Table: "CNY",
@@ -288,6 +381,9 @@ func init() {
 	}
 	INRTable.Annotation = &entsql.Annotation{
 		Table: "INR",
+	}
+	MXNTable.Annotation = &entsql.Annotation{
+		Table: "MXN",
 	}
 	NOKTable.Annotation = &entsql.Annotation{
 		Table: "NOK",

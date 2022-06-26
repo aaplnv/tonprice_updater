@@ -6,11 +6,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// ARSQuote is the predicate function for arsquote builders.
+type ARSQuote func(*sql.Selector)
+
 // AUDQuote is the predicate function for audquote builders.
 type AUDQuote func(*sql.Selector)
 
+// BRLQuote is the predicate function for brlquote builders.
+type BRLQuote func(*sql.Selector)
+
+// BTCQuote is the predicate function for btcquote builders.
+type BTCQuote func(*sql.Selector)
+
+// CADQuote is the predicate function for cadquote builders.
+type CADQuote func(*sql.Selector)
+
 // CHFQuote is the predicate function for chfquote builders.
 type CHFQuote func(*sql.Selector)
+
+// CLPQuote is the predicate function for clpquote builders.
+type CLPQuote func(*sql.Selector)
 
 // CNYQuote is the predicate function for cnyquote builders.
 type CNYQuote func(*sql.Selector)
@@ -32,6 +47,9 @@ type HUFQuote func(*sql.Selector)
 
 // INRQuote is the predicate function for inrquote builders.
 type INRQuote func(*sql.Selector)
+
+// MXNQuote is the predicate function for mxnquote builders.
+type MXNQuote func(*sql.Selector)
 
 // NOKQuote is the predicate function for nokquote builders.
 type NOKQuote func(*sql.Selector)

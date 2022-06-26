@@ -8,6 +8,19 @@ import (
 	"main/ent"
 )
 
+// The ARSQuoteFunc type is an adapter to allow the use of ordinary
+// function as ARSQuote mutator.
+type ARSQuoteFunc func(context.Context, *ent.ARSQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ARSQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ARSQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ARSQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The AUDQuoteFunc type is an adapter to allow the use of ordinary
 // function as AUDQuote mutator.
 type AUDQuoteFunc func(context.Context, *ent.AUDQuoteMutation) (ent.Value, error)
@@ -21,6 +34,45 @@ func (f AUDQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return f(ctx, mv)
 }
 
+// The BRLQuoteFunc type is an adapter to allow the use of ordinary
+// function as BRLQuote mutator.
+type BRLQuoteFunc func(context.Context, *ent.BRLQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BRLQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.BRLQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BRLQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The BTCQuoteFunc type is an adapter to allow the use of ordinary
+// function as BTCQuote mutator.
+type BTCQuoteFunc func(context.Context, *ent.BTCQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f BTCQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.BTCQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.BTCQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The CADQuoteFunc type is an adapter to allow the use of ordinary
+// function as CADQuote mutator.
+type CADQuoteFunc func(context.Context, *ent.CADQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CADQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.CADQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CADQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The CHFQuoteFunc type is an adapter to allow the use of ordinary
 // function as CHFQuote mutator.
 type CHFQuoteFunc func(context.Context, *ent.CHFQuoteMutation) (ent.Value, error)
@@ -30,6 +82,19 @@ func (f CHFQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.CHFQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CHFQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The CLPQuoteFunc type is an adapter to allow the use of ordinary
+// function as CLPQuote mutator.
+type CLPQuoteFunc func(context.Context, *ent.CLPQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CLPQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.CLPQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CLPQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }
@@ -121,6 +186,19 @@ func (f INRQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	mv, ok := m.(*ent.INRQuoteMutation)
 	if !ok {
 		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.INRQuoteMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The MXNQuoteFunc type is an adapter to allow the use of ordinary
+// function as MXNQuote mutator.
+type MXNQuoteFunc func(context.Context, *ent.MXNQuoteMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MXNQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.MXNQuoteMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MXNQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }

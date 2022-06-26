@@ -5,8 +5,13 @@ package ent
 import (
 	"errors"
 	"fmt"
+	"main/ent/arsquote"
 	"main/ent/audquote"
+	"main/ent/brlquote"
+	"main/ent/btcquote"
+	"main/ent/cadquote"
 	"main/ent/chfquote"
+	"main/ent/clpquote"
 	"main/ent/cnyquote"
 	"main/ent/czkquote"
 	"main/ent/euroquote"
@@ -14,6 +19,7 @@ import (
 	"main/ent/hkdquote"
 	"main/ent/hufquote"
 	"main/ent/inrquote"
+	"main/ent/mxnquote"
 	"main/ent/nokquote"
 	"main/ent/nzdquote"
 	"main/ent/pkrquote"
@@ -47,8 +53,13 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
+		arsquote.Table:  arsquote.ValidColumn,
 		audquote.Table:  audquote.ValidColumn,
+		brlquote.Table:  brlquote.ValidColumn,
+		btcquote.Table:  btcquote.ValidColumn,
+		cadquote.Table:  cadquote.ValidColumn,
 		chfquote.Table:  chfquote.ValidColumn,
+		clpquote.Table:  clpquote.ValidColumn,
 		cnyquote.Table:  cnyquote.ValidColumn,
 		czkquote.Table:  czkquote.ValidColumn,
 		euroquote.Table: euroquote.ValidColumn,
@@ -56,6 +67,7 @@ func columnChecker(table string) func(string) error {
 		hkdquote.Table:  hkdquote.ValidColumn,
 		hufquote.Table:  hufquote.ValidColumn,
 		inrquote.Table:  inrquote.ValidColumn,
+		mxnquote.Table:  mxnquote.ValidColumn,
 		nokquote.Table:  nokquote.ValidColumn,
 		nzdquote.Table:  nzdquote.ValidColumn,
 		pkrquote.Table:  pkrquote.ValidColumn,

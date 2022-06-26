@@ -143,5 +143,34 @@ func updater() {
 		fmt.Errorf("Can't save SEK rates: %w", err)
 	}
 
+	_, err = client.ARSQuote.Create().SetPrice(result.CurrentPrice["ars"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save ARS rates: %w", err)
+	}
+
+	_, err = client.BRLQuote.Create().SetPrice(result.CurrentPrice["brl"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save BRL rates: %w", err)
+	}
+
+	_, err = client.BTCQuote.Create().SetPrice(result.CurrentPrice["btc"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save BTC rates: %w", err)
+	}
+
+	_, err = client.CADQuote.Create().SetPrice(result.CurrentPrice["cad"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save CAD rates: %w", err)
+	}
+
+	_, err = client.CLPQuote.Create().SetPrice(result.CurrentPrice["clp"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save CLP rates: %w", err)
+	}
+
+	_, err = client.MXNQuote.Create().SetPrice(result.CurrentPrice["mxn"]).SetTimestamp(time.Now()).Save(context.Background())
+	if err != nil {
+		fmt.Errorf("Can't save MXN rates: %w", err)
+	}
 	log.Info("Rates successfully updated")
 }
