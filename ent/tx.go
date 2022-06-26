@@ -12,10 +12,24 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// AEDQuote is the client for interacting with the AEDQuote builders.
+	AEDQuote *AEDQuoteClient
+	// ARSQuote is the client for interacting with the ARSQuote builders.
+	ARSQuote *ARSQuoteClient
 	// AUDQuote is the client for interacting with the AUDQuote builders.
 	AUDQuote *AUDQuoteClient
+	// BHDQuote is the client for interacting with the BHDQuote builders.
+	BHDQuote *BHDQuoteClient
+	// BRLQuote is the client for interacting with the BRLQuote builders.
+	BRLQuote *BRLQuoteClient
+	// BTCQuote is the client for interacting with the BTCQuote builders.
+	BTCQuote *BTCQuoteClient
+	// CADQuote is the client for interacting with the CADQuote builders.
+	CADQuote *CADQuoteClient
 	// CHFQuote is the client for interacting with the CHFQuote builders.
 	CHFQuote *CHFQuoteClient
+	// CLPQuote is the client for interacting with the CLPQuote builders.
+	CLPQuote *CLPQuoteClient
 	// CNYQuote is the client for interacting with the CNYQuote builders.
 	CNYQuote *CNYQuoteClient
 	// CZKQuote is the client for interacting with the CZKQuote builders.
@@ -28,8 +42,16 @@ type Tx struct {
 	HKDQuote *HKDQuoteClient
 	// HUFQuote is the client for interacting with the HUFQuote builders.
 	HUFQuote *HUFQuoteClient
+	// IDRQuote is the client for interacting with the IDRQuote builders.
+	IDRQuote *IDRQuoteClient
+	// ILSQuote is the client for interacting with the ILSQuote builders.
+	ILSQuote *ILSQuoteClient
 	// INRQuote is the client for interacting with the INRQuote builders.
 	INRQuote *INRQuoteClient
+	// JPYQuote is the client for interacting with the JPYQuote builders.
+	JPYQuote *JPYQuoteClient
+	// MXNQuote is the client for interacting with the MXNQuote builders.
+	MXNQuote *MXNQuoteClient
 	// NOKQuote is the client for interacting with the NOKQuote builders.
 	NOKQuote *NOKQuoteClient
 	// NZDQuote is the client for interacting with the NZDQuote builders.
@@ -40,8 +62,12 @@ type Tx struct {
 	PLNQuote *PLNQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
+	// SARQuote is the client for interacting with the SARQuote builders.
+	SARQuote *SARQuoteClient
 	// SEKQuote is the client for interacting with the SEKQuote builders.
 	SEKQuote *SEKQuoteClient
+	// TRYQuote is the client for interacting with the TRYQuote builders.
+	TRYQuote *TRYQuoteClient
 	// TWDQuote is the client for interacting with the TWDQuote builders.
 	TWDQuote *TWDQuoteClient
 	// UAHQuote is the client for interacting with the UAHQuote builders.
@@ -185,21 +211,34 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.AEDQuote = NewAEDQuoteClient(tx.config)
+	tx.ARSQuote = NewARSQuoteClient(tx.config)
 	tx.AUDQuote = NewAUDQuoteClient(tx.config)
+	tx.BHDQuote = NewBHDQuoteClient(tx.config)
+	tx.BRLQuote = NewBRLQuoteClient(tx.config)
+	tx.BTCQuote = NewBTCQuoteClient(tx.config)
+	tx.CADQuote = NewCADQuoteClient(tx.config)
 	tx.CHFQuote = NewCHFQuoteClient(tx.config)
+	tx.CLPQuote = NewCLPQuoteClient(tx.config)
 	tx.CNYQuote = NewCNYQuoteClient(tx.config)
 	tx.CZKQuote = NewCZKQuoteClient(tx.config)
 	tx.EUROQuote = NewEUROQuoteClient(tx.config)
 	tx.GBPQuote = NewGBPQuoteClient(tx.config)
 	tx.HKDQuote = NewHKDQuoteClient(tx.config)
 	tx.HUFQuote = NewHUFQuoteClient(tx.config)
+	tx.IDRQuote = NewIDRQuoteClient(tx.config)
+	tx.ILSQuote = NewILSQuoteClient(tx.config)
 	tx.INRQuote = NewINRQuoteClient(tx.config)
+	tx.JPYQuote = NewJPYQuoteClient(tx.config)
+	tx.MXNQuote = NewMXNQuoteClient(tx.config)
 	tx.NOKQuote = NewNOKQuoteClient(tx.config)
 	tx.NZDQuote = NewNZDQuoteClient(tx.config)
 	tx.PKRQuote = NewPKRQuoteClient(tx.config)
 	tx.PLNQuote = NewPLNQuoteClient(tx.config)
 	tx.RUBQuote = NewRUBQuoteClient(tx.config)
+	tx.SARQuote = NewSARQuoteClient(tx.config)
 	tx.SEKQuote = NewSEKQuoteClient(tx.config)
+	tx.TRYQuote = NewTRYQuoteClient(tx.config)
 	tx.TWDQuote = NewTWDQuoteClient(tx.config)
 	tx.UAHQuote = NewUAHQuoteClient(tx.config)
 	tx.USDQuote = NewUSDQuoteClient(tx.config)
@@ -213,7 +252,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: AUDQuote.QueryXXX(), the query will be executed
+// applies a query, for example: AEDQuote.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

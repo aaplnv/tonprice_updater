@@ -5,21 +5,34 @@ package ent
 import (
 	"errors"
 	"fmt"
+	"main/ent/aedquote"
+	"main/ent/arsquote"
 	"main/ent/audquote"
+	"main/ent/bhdquote"
+	"main/ent/brlquote"
+	"main/ent/btcquote"
+	"main/ent/cadquote"
 	"main/ent/chfquote"
+	"main/ent/clpquote"
 	"main/ent/cnyquote"
 	"main/ent/czkquote"
 	"main/ent/euroquote"
 	"main/ent/gbpquote"
 	"main/ent/hkdquote"
 	"main/ent/hufquote"
+	"main/ent/idrquote"
+	"main/ent/ilsquote"
 	"main/ent/inrquote"
+	"main/ent/jpyquote"
+	"main/ent/mxnquote"
 	"main/ent/nokquote"
 	"main/ent/nzdquote"
 	"main/ent/pkrquote"
 	"main/ent/plnquote"
 	"main/ent/rubquote"
+	"main/ent/sarquote"
 	"main/ent/sekquote"
+	"main/ent/tryquote"
 	"main/ent/twdquote"
 	"main/ent/uahquote"
 	"main/ent/usdquote"
@@ -47,21 +60,34 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
+		aedquote.Table:  aedquote.ValidColumn,
+		arsquote.Table:  arsquote.ValidColumn,
 		audquote.Table:  audquote.ValidColumn,
+		bhdquote.Table:  bhdquote.ValidColumn,
+		brlquote.Table:  brlquote.ValidColumn,
+		btcquote.Table:  btcquote.ValidColumn,
+		cadquote.Table:  cadquote.ValidColumn,
 		chfquote.Table:  chfquote.ValidColumn,
+		clpquote.Table:  clpquote.ValidColumn,
 		cnyquote.Table:  cnyquote.ValidColumn,
 		czkquote.Table:  czkquote.ValidColumn,
 		euroquote.Table: euroquote.ValidColumn,
 		gbpquote.Table:  gbpquote.ValidColumn,
 		hkdquote.Table:  hkdquote.ValidColumn,
 		hufquote.Table:  hufquote.ValidColumn,
+		idrquote.Table:  idrquote.ValidColumn,
+		ilsquote.Table:  ilsquote.ValidColumn,
 		inrquote.Table:  inrquote.ValidColumn,
+		jpyquote.Table:  jpyquote.ValidColumn,
+		mxnquote.Table:  mxnquote.ValidColumn,
 		nokquote.Table:  nokquote.ValidColumn,
 		nzdquote.Table:  nzdquote.ValidColumn,
 		pkrquote.Table:  pkrquote.ValidColumn,
 		plnquote.Table:  plnquote.ValidColumn,
 		rubquote.Table:  rubquote.ValidColumn,
+		sarquote.Table:  sarquote.ValidColumn,
 		sekquote.Table:  sekquote.ValidColumn,
+		tryquote.Table:  tryquote.ValidColumn,
 		twdquote.Table:  twdquote.ValidColumn,
 		uahquote.Table:  uahquote.ValidColumn,
 		usdquote.Table:  usdquote.ValidColumn,

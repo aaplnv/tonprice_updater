@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-func ChartModel() []ent.Field {
+func Quote() []ent.Field {
 	return []ent.Field{
 		field.Int("id").Unique(),
 		field.Float("price"),

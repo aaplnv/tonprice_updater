@@ -17,7 +17,7 @@ func (PKRQuote) Annotations() []schema.Annotation {
 }
 
 func (PKRQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (PKRQuote) Edges() []ent.Edge {

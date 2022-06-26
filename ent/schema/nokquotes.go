@@ -17,7 +17,7 @@ func (NOKQuote) Annotations() []schema.Annotation {
 }
 
 func (NOKQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (NOKQuote) Edges() []ent.Edge {

@@ -48,100 +48,101 @@ func updater() {
 		return
 	}
 
-	_, err = client.USDQuote.Create().SetPrice(result.CurrentPrice["usd"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save USD rates: %w", err)
-	}
+	// Record quotes for AED (United Arab Emirates Dirham)
+	client.AEDQuote.Create().SetPrice(result.CurrentPrice["aed"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.RUBQuote.Create().SetPrice(result.CurrentPrice["rub"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save RUB rates: %w", err)
-	}
+	// Record quotes for ARS (Argentine Peso)
+	client.ARSQuote.Create().SetPrice(result.CurrentPrice["ars"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.EUROQuote.Create().SetPrice(result.CurrentPrice["eur"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save EUR rates: %w", err)
-	}
+	// Record quotes for AUD (Australian Dollar)
+	client.AUDQuote.Create().SetPrice(result.CurrentPrice["aud"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.UAHQuote.Create().SetPrice(result.CurrentPrice["uah"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save UAH rates: %w", err)
-	}
+	// Record quotes for BHD (Bahraini Dinar)
+	client.BHDQuote.Create().SetPrice(result.CurrentPrice["bhd"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.AUDQuote.Create().SetPrice(result.CurrentPrice["aud"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save AUD rates: %w", err)
-	}
+	// Record quotes for BRL (Brazilian Real)
+	client.BRLQuote.Create().SetPrice(result.CurrentPrice["brl"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.GBPQuote.Create().SetPrice(result.CurrentPrice["gbp"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save GBP rates: %w", err)
-	}
+	// Record quotes for BTC (Bitcoin)
+	client.BTCQuote.Create().SetPrice(result.CurrentPrice["btc"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.INRQuote.Create().SetPrice(result.CurrentPrice["inr"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save INR rates: %w", err)
-	}
+	// Record quotes for CAD (Canadian Dollar)
+	client.CADQuote.Create().SetPrice(result.CurrentPrice["cad"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.NZDQuote.Create().SetPrice(result.CurrentPrice["nzd"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save NZD rates: %w", err)
-	}
+	// Record quotes for CHF (Swiss Franc)
+	client.CHFQuote.Create().SetPrice(result.CurrentPrice["chf"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.ZARQuote.Create().SetPrice(result.CurrentPrice["zar"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save ZAR rates: %w", err)
-	}
+	// Record quotes for CLP (Chilean Peso)
+	client.CLPQuote.Create().SetPrice(result.CurrentPrice["clp"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.PKRQuote.Create().SetPrice(result.CurrentPrice["pkr"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save PKR rates: %w", err)
-	}
+	// Record quotes for CNY (Chinese Yuan)
+	client.CNYQuote.Create().SetPrice(result.CurrentPrice["cny"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.CNYQuote.Create().SetPrice(result.CurrentPrice["cny"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save CNY rates: %w", err)
-	}
+	// Record quotes for CZK (Czech Koruna)
+	client.CZKQuote.Create().SetPrice(result.CurrentPrice["czk"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.HKDQuote.Create().SetPrice(result.CurrentPrice["hkd"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save HKD rates: %w", err)
-	}
+	// Record quotes for EUR (Euro)
+	client.EUROQuote.Create().SetPrice(result.CurrentPrice["eur"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.TWDQuote.Create().SetPrice(result.CurrentPrice["twd"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save TWD rates: %w", err)
-	}
+	// Record quotes for GBP (British Pound)
+	client.GBPQuote.Create().SetPrice(result.CurrentPrice["gbp"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.CHFQuote.Create().SetPrice(result.CurrentPrice["chf"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save CHF rates: %w", err)
-	}
+	// Record quotes for HKD (Hong Kong Dollar)
+	client.HKDQuote.Create().SetPrice(result.CurrentPrice["hkd"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.CZKQuote.Create().SetPrice(result.CurrentPrice["czk"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save CZK rates: %w", err)
-	}
+	// Record quotes for HUF (Hungarian Forint)
+	client.HUFQuote.Create().SetPrice(result.CurrentPrice["huf"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.HUFQuote.Create().SetPrice(result.CurrentPrice["huf"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save HUF rates: %w", err)
-	}
+	// Record quotes for IDR (Indonesian Rupiah)
+	client.IDRQuote.Create().SetPrice(result.CurrentPrice["idr"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.NOKQuote.Create().SetPrice(result.CurrentPrice["nok"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save NOK rates: %w", err)
-	}
+	// Record quotes for ILS (Israel New Shekel)
+	client.ILSQuote.Create().SetPrice(result.CurrentPrice["ils"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.PLNQuote.Create().SetPrice(result.CurrentPrice["pln"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save PLN rates: %w", err)
-	}
+	// Record quotes for INR (Indian Rupee)
+	client.INRQuote.Create().SetPrice(result.CurrentPrice["inr"]).SetTimestamp(time.Now()).Save(context.Background())
 
-	_, err = client.SEKQuote.Create().SetPrice(result.CurrentPrice["sek"]).SetTimestamp(time.Now()).Save(context.Background())
-	if err != nil {
-		fmt.Errorf("Can't save SEK rates: %w", err)
-	}
+	// Record quotes for JPY (Japanese Yen)
+	client.JPYQuote.Create().SetPrice(result.CurrentPrice["jpy"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for MXN (Mexican Peso)
+	client.MXNQuote.Create().SetPrice(result.CurrentPrice["mxn"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for NOK (Norwegian Krone)
+	client.NOKQuote.Create().SetPrice(result.CurrentPrice["nok"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for NZD (New Zealand Dollar)
+	client.NZDQuote.Create().SetPrice(result.CurrentPrice["nzd"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for PKR (Pakistani Rupee)
+	client.PKRQuote.Create().SetPrice(result.CurrentPrice["pkr"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for PLN (Polish Zloty)
+	client.PLNQuote.Create().SetPrice(result.CurrentPrice["pln"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for RUB (Russian Ruble)
+	client.RUBQuote.Create().SetPrice(result.CurrentPrice["rub"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for SAR (Saudi Riyal)
+	client.SARQuote.Create().SetPrice(result.CurrentPrice["sar"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for SEK (Swedish Krona)
+	client.SEKQuote.Create().SetPrice(result.CurrentPrice["sek"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for TRY (Turkish Lira)
+	client.TRYQuote.Create().SetPrice(result.CurrentPrice["try"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for TWD (New Taiwan Dollar)
+	client.TWDQuote.Create().SetPrice(result.CurrentPrice["twd"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for UAH (Ukrainian Hryvnia)
+	client.UAHQuote.Create().SetPrice(result.CurrentPrice["uah"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for USD (United States Dollar)
+	client.USDQuote.Create().SetPrice(result.CurrentPrice["usd"]).SetTimestamp(time.Now()).Save(context.Background())
+
+	// Record quotes for ZAR (South African Rand)
+	client.ZARQuote.Create().SetPrice(result.CurrentPrice["zar"]).SetTimestamp(time.Now()).Save(context.Background())
 
 	log.Info("Rates successfully updated")
 }

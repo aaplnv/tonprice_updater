@@ -24,21 +24,34 @@ type config struct {
 
 // hooks per client, for fast access.
 type hooks struct {
+	AEDQuote  []ent.Hook
+	ARSQuote  []ent.Hook
 	AUDQuote  []ent.Hook
+	BHDQuote  []ent.Hook
+	BRLQuote  []ent.Hook
+	BTCQuote  []ent.Hook
+	CADQuote  []ent.Hook
 	CHFQuote  []ent.Hook
+	CLPQuote  []ent.Hook
 	CNYQuote  []ent.Hook
 	CZKQuote  []ent.Hook
 	EUROQuote []ent.Hook
 	GBPQuote  []ent.Hook
 	HKDQuote  []ent.Hook
 	HUFQuote  []ent.Hook
+	IDRQuote  []ent.Hook
+	ILSQuote  []ent.Hook
 	INRQuote  []ent.Hook
+	JPYQuote  []ent.Hook
+	MXNQuote  []ent.Hook
 	NOKQuote  []ent.Hook
 	NZDQuote  []ent.Hook
 	PKRQuote  []ent.Hook
 	PLNQuote  []ent.Hook
 	RUBQuote  []ent.Hook
+	SARQuote  []ent.Hook
 	SEKQuote  []ent.Hook
+	TRYQuote  []ent.Hook
 	TWDQuote  []ent.Hook
 	UAHQuote  []ent.Hook
 	USDQuote  []ent.Hook

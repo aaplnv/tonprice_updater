@@ -17,7 +17,7 @@ func (CHFQuote) Annotations() []schema.Annotation {
 }
 
 func (CHFQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (CHFQuote) Edges() []ent.Edge {

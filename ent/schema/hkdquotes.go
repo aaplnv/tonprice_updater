@@ -17,7 +17,7 @@ func (HKDQuote) Annotations() []schema.Annotation {
 }
 
 func (HKDQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (HKDQuote) Edges() []ent.Edge {

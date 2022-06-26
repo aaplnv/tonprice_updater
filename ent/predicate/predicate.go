@@ -6,11 +6,32 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// AEDQuote is the predicate function for aedquote builders.
+type AEDQuote func(*sql.Selector)
+
+// ARSQuote is the predicate function for arsquote builders.
+type ARSQuote func(*sql.Selector)
+
 // AUDQuote is the predicate function for audquote builders.
 type AUDQuote func(*sql.Selector)
 
+// BHDQuote is the predicate function for bhdquote builders.
+type BHDQuote func(*sql.Selector)
+
+// BRLQuote is the predicate function for brlquote builders.
+type BRLQuote func(*sql.Selector)
+
+// BTCQuote is the predicate function for btcquote builders.
+type BTCQuote func(*sql.Selector)
+
+// CADQuote is the predicate function for cadquote builders.
+type CADQuote func(*sql.Selector)
+
 // CHFQuote is the predicate function for chfquote builders.
 type CHFQuote func(*sql.Selector)
+
+// CLPQuote is the predicate function for clpquote builders.
+type CLPQuote func(*sql.Selector)
 
 // CNYQuote is the predicate function for cnyquote builders.
 type CNYQuote func(*sql.Selector)
@@ -30,8 +51,20 @@ type HKDQuote func(*sql.Selector)
 // HUFQuote is the predicate function for hufquote builders.
 type HUFQuote func(*sql.Selector)
 
+// IDRQuote is the predicate function for idrquote builders.
+type IDRQuote func(*sql.Selector)
+
+// ILSQuote is the predicate function for ilsquote builders.
+type ILSQuote func(*sql.Selector)
+
 // INRQuote is the predicate function for inrquote builders.
 type INRQuote func(*sql.Selector)
+
+// JPYQuote is the predicate function for jpyquote builders.
+type JPYQuote func(*sql.Selector)
+
+// MXNQuote is the predicate function for mxnquote builders.
+type MXNQuote func(*sql.Selector)
 
 // NOKQuote is the predicate function for nokquote builders.
 type NOKQuote func(*sql.Selector)
@@ -48,8 +81,14 @@ type PLNQuote func(*sql.Selector)
 // RUBQuote is the predicate function for rubquote builders.
 type RUBQuote func(*sql.Selector)
 
+// SARQuote is the predicate function for sarquote builders.
+type SARQuote func(*sql.Selector)
+
 // SEKQuote is the predicate function for sekquote builders.
 type SEKQuote func(*sql.Selector)
+
+// TRYQuote is the predicate function for tryquote builders.
+type TRYQuote func(*sql.Selector)
 
 // TWDQuote is the predicate function for twdquote builders.
 type TWDQuote func(*sql.Selector)
