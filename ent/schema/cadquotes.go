@@ -17,7 +17,7 @@ func (CADQuote) Annotations() []schema.Annotation {
 }
 
 func (CADQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (CADQuote) Edges() []ent.Edge {

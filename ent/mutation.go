@@ -32,7 +32,7 @@ import (
 	"main/ent/plnquote"
 	"main/ent/predicate"
 	"main/ent/rubquote"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"main/ent/sekquote"
 	"main/ent/tryquote"
 	"main/ent/twdquote"
@@ -79,7 +79,7 @@ const (
 	TypePKRQuote  = "PKRQuote"
 	TypePLNQuote  = "PLNQuote"
 	TypeRUBQuote  = "RUBQuote"
-	TypeSADQuote  = "SADQuote"
+	TypeSARQuote  = "SARQuote"
 	TypeSEKQuote  = "SEKQuote"
 	TypeTRYQuote  = "TRYQuote"
 	TypeTWDQuote  = "TWDQuote"
@@ -10263,8 +10263,8 @@ func (m *RUBQuoteMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown RUBQuote edge %s", name)
 }
 
-// SADQuoteMutation represents an operation that mutates the SADQuote nodes in the graph.
-type SADQuoteMutation struct {
+// SARQuoteMutation represents an operation that mutates the SARQuote nodes in the graph.
+type SARQuoteMutation struct {
 	config
 	op            Op
 	typ           string
@@ -10274,21 +10274,21 @@ type SADQuoteMutation struct {
 	_Timestamp    *time.Time
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*SADQuote, error)
-	predicates    []predicate.SADQuote
+	oldValue      func(context.Context) (*SARQuote, error)
+	predicates    []predicate.SARQuote
 }
 
-var _ ent.Mutation = (*SADQuoteMutation)(nil)
+var _ ent.Mutation = (*SARQuoteMutation)(nil)
 
-// sadquoteOption allows management of the mutation configuration using functional options.
-type sadquoteOption func(*SADQuoteMutation)
+// sarquoteOption allows management of the mutation configuration using functional options.
+type sarquoteOption func(*SARQuoteMutation)
 
-// newSADQuoteMutation creates new mutation for the SADQuote entity.
-func newSADQuoteMutation(c config, op Op, opts ...sadquoteOption) *SADQuoteMutation {
-	m := &SADQuoteMutation{
+// newSARQuoteMutation creates new mutation for the SARQuote entity.
+func newSARQuoteMutation(c config, op Op, opts ...sarquoteOption) *SARQuoteMutation {
+	m := &SARQuoteMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeSADQuote,
+		typ:           TypeSARQuote,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -10297,20 +10297,20 @@ func newSADQuoteMutation(c config, op Op, opts ...sadquoteOption) *SADQuoteMutat
 	return m
 }
 
-// withSADQuoteID sets the ID field of the mutation.
-func withSADQuoteID(id int) sadquoteOption {
-	return func(m *SADQuoteMutation) {
+// withSARQuoteID sets the ID field of the mutation.
+func withSARQuoteID(id int) sarquoteOption {
+	return func(m *SARQuoteMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *SADQuote
+			value *SARQuote
 		)
-		m.oldValue = func(ctx context.Context) (*SADQuote, error) {
+		m.oldValue = func(ctx context.Context) (*SARQuote, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().SADQuote.Get(ctx, id)
+					value, err = m.Client().SARQuote.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -10319,10 +10319,10 @@ func withSADQuoteID(id int) sadquoteOption {
 	}
 }
 
-// withSADQuote sets the old SADQuote of the mutation.
-func withSADQuote(node *SADQuote) sadquoteOption {
-	return func(m *SADQuoteMutation) {
-		m.oldValue = func(context.Context) (*SADQuote, error) {
+// withSARQuote sets the old SARQuote of the mutation.
+func withSARQuote(node *SARQuote) sarquoteOption {
+	return func(m *SARQuoteMutation) {
+		m.oldValue = func(context.Context) (*SARQuote, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -10331,7 +10331,7 @@ func withSADQuote(node *SADQuote) sadquoteOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m SADQuoteMutation) Client() *Client {
+func (m SARQuoteMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -10339,7 +10339,7 @@ func (m SADQuoteMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m SADQuoteMutation) Tx() (*Tx, error) {
+func (m SARQuoteMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -10349,14 +10349,14 @@ func (m SADQuoteMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of SADQuote entities.
-func (m *SADQuoteMutation) SetID(id int) {
+// operation is only accepted on creation of SARQuote entities.
+func (m *SARQuoteMutation) SetID(id int) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *SADQuoteMutation) ID() (id int, exists bool) {
+func (m *SARQuoteMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -10367,7 +10367,7 @@ func (m *SADQuoteMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *SADQuoteMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *SARQuoteMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -10376,20 +10376,20 @@ func (m *SADQuoteMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().SADQuote.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().SARQuote.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetPrice sets the "price" field.
-func (m *SADQuoteMutation) SetPrice(f float64) {
+func (m *SARQuoteMutation) SetPrice(f float64) {
 	m.price = &f
 	m.addprice = nil
 }
 
 // Price returns the value of the "price" field in the mutation.
-func (m *SADQuoteMutation) Price() (r float64, exists bool) {
+func (m *SARQuoteMutation) Price() (r float64, exists bool) {
 	v := m.price
 	if v == nil {
 		return
@@ -10397,10 +10397,10 @@ func (m *SADQuoteMutation) Price() (r float64, exists bool) {
 	return *v, true
 }
 
-// OldPrice returns the old "price" field's value of the SADQuote entity.
-// If the SADQuote object wasn't provided to the builder, the object is fetched from the database.
+// OldPrice returns the old "price" field's value of the SARQuote entity.
+// If the SARQuote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SADQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
+func (m *SARQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
 	}
@@ -10415,7 +10415,7 @@ func (m *SADQuoteMutation) OldPrice(ctx context.Context) (v float64, err error) 
 }
 
 // AddPrice adds f to the "price" field.
-func (m *SADQuoteMutation) AddPrice(f float64) {
+func (m *SARQuoteMutation) AddPrice(f float64) {
 	if m.addprice != nil {
 		*m.addprice += f
 	} else {
@@ -10424,7 +10424,7 @@ func (m *SADQuoteMutation) AddPrice(f float64) {
 }
 
 // AddedPrice returns the value that was added to the "price" field in this mutation.
-func (m *SADQuoteMutation) AddedPrice() (r float64, exists bool) {
+func (m *SARQuoteMutation) AddedPrice() (r float64, exists bool) {
 	v := m.addprice
 	if v == nil {
 		return
@@ -10433,18 +10433,18 @@ func (m *SADQuoteMutation) AddedPrice() (r float64, exists bool) {
 }
 
 // ResetPrice resets all changes to the "price" field.
-func (m *SADQuoteMutation) ResetPrice() {
+func (m *SARQuoteMutation) ResetPrice() {
 	m.price = nil
 	m.addprice = nil
 }
 
 // SetTimestamp sets the "Timestamp" field.
-func (m *SADQuoteMutation) SetTimestamp(t time.Time) {
+func (m *SARQuoteMutation) SetTimestamp(t time.Time) {
 	m._Timestamp = &t
 }
 
 // Timestamp returns the value of the "Timestamp" field in the mutation.
-func (m *SADQuoteMutation) Timestamp() (r time.Time, exists bool) {
+func (m *SARQuoteMutation) Timestamp() (r time.Time, exists bool) {
 	v := m._Timestamp
 	if v == nil {
 		return
@@ -10452,10 +10452,10 @@ func (m *SADQuoteMutation) Timestamp() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldTimestamp returns the old "Timestamp" field's value of the SADQuote entity.
-// If the SADQuote object wasn't provided to the builder, the object is fetched from the database.
+// OldTimestamp returns the old "Timestamp" field's value of the SARQuote entity.
+// If the SARQuote object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SADQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+func (m *SARQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
 	}
@@ -10470,35 +10470,35 @@ func (m *SADQuoteMutation) OldTimestamp(ctx context.Context) (v time.Time, err e
 }
 
 // ResetTimestamp resets all changes to the "Timestamp" field.
-func (m *SADQuoteMutation) ResetTimestamp() {
+func (m *SARQuoteMutation) ResetTimestamp() {
 	m._Timestamp = nil
 }
 
-// Where appends a list predicates to the SADQuoteMutation builder.
-func (m *SADQuoteMutation) Where(ps ...predicate.SADQuote) {
+// Where appends a list predicates to the SARQuoteMutation builder.
+func (m *SARQuoteMutation) Where(ps ...predicate.SARQuote) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // Op returns the operation name.
-func (m *SADQuoteMutation) Op() Op {
+func (m *SARQuoteMutation) Op() Op {
 	return m.op
 }
 
-// Type returns the node type of this mutation (SADQuote).
-func (m *SADQuoteMutation) Type() string {
+// Type returns the node type of this mutation (SARQuote).
+func (m *SARQuoteMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *SADQuoteMutation) Fields() []string {
+func (m *SARQuoteMutation) Fields() []string {
 	fields := make([]string, 0, 2)
 	if m.price != nil {
-		fields = append(fields, sadquote.FieldPrice)
+		fields = append(fields, sarquote.FieldPrice)
 	}
 	if m._Timestamp != nil {
-		fields = append(fields, sadquote.FieldTimestamp)
+		fields = append(fields, sarquote.FieldTimestamp)
 	}
 	return fields
 }
@@ -10506,11 +10506,11 @@ func (m *SADQuoteMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *SADQuoteMutation) Field(name string) (ent.Value, bool) {
+func (m *SARQuoteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case sadquote.FieldPrice:
+	case sarquote.FieldPrice:
 		return m.Price()
-	case sadquote.FieldTimestamp:
+	case sarquote.FieldTimestamp:
 		return m.Timestamp()
 	}
 	return nil, false
@@ -10519,29 +10519,29 @@ func (m *SADQuoteMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *SADQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *SARQuoteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case sadquote.FieldPrice:
+	case sarquote.FieldPrice:
 		return m.OldPrice(ctx)
-	case sadquote.FieldTimestamp:
+	case sarquote.FieldTimestamp:
 		return m.OldTimestamp(ctx)
 	}
-	return nil, fmt.Errorf("unknown SADQuote field %s", name)
+	return nil, fmt.Errorf("unknown SARQuote field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *SADQuoteMutation) SetField(name string, value ent.Value) error {
+func (m *SARQuoteMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case sadquote.FieldPrice:
+	case sarquote.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPrice(v)
 		return nil
-	case sadquote.FieldTimestamp:
+	case sarquote.FieldTimestamp:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -10549,15 +10549,15 @@ func (m *SADQuoteMutation) SetField(name string, value ent.Value) error {
 		m.SetTimestamp(v)
 		return nil
 	}
-	return fmt.Errorf("unknown SADQuote field %s", name)
+	return fmt.Errorf("unknown SARQuote field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *SADQuoteMutation) AddedFields() []string {
+func (m *SARQuoteMutation) AddedFields() []string {
 	var fields []string
 	if m.addprice != nil {
-		fields = append(fields, sadquote.FieldPrice)
+		fields = append(fields, sarquote.FieldPrice)
 	}
 	return fields
 }
@@ -10565,9 +10565,9 @@ func (m *SADQuoteMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *SADQuoteMutation) AddedField(name string) (ent.Value, bool) {
+func (m *SARQuoteMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case sadquote.FieldPrice:
+	case sarquote.FieldPrice:
 		return m.AddedPrice()
 	}
 	return nil, false
@@ -10576,9 +10576,9 @@ func (m *SADQuoteMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *SADQuoteMutation) AddField(name string, value ent.Value) error {
+func (m *SARQuoteMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case sadquote.FieldPrice:
+	case sarquote.FieldPrice:
 		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -10586,88 +10586,88 @@ func (m *SADQuoteMutation) AddField(name string, value ent.Value) error {
 		m.AddPrice(v)
 		return nil
 	}
-	return fmt.Errorf("unknown SADQuote numeric field %s", name)
+	return fmt.Errorf("unknown SARQuote numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *SADQuoteMutation) ClearedFields() []string {
+func (m *SARQuoteMutation) ClearedFields() []string {
 	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *SADQuoteMutation) FieldCleared(name string) bool {
+func (m *SARQuoteMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *SADQuoteMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown SADQuote nullable field %s", name)
+func (m *SARQuoteMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown SARQuote nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *SADQuoteMutation) ResetField(name string) error {
+func (m *SARQuoteMutation) ResetField(name string) error {
 	switch name {
-	case sadquote.FieldPrice:
+	case sarquote.FieldPrice:
 		m.ResetPrice()
 		return nil
-	case sadquote.FieldTimestamp:
+	case sarquote.FieldTimestamp:
 		m.ResetTimestamp()
 		return nil
 	}
-	return fmt.Errorf("unknown SADQuote field %s", name)
+	return fmt.Errorf("unknown SARQuote field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *SADQuoteMutation) AddedEdges() []string {
+func (m *SARQuoteMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *SADQuoteMutation) AddedIDs(name string) []ent.Value {
+func (m *SARQuoteMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *SADQuoteMutation) RemovedEdges() []string {
+func (m *SARQuoteMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *SADQuoteMutation) RemovedIDs(name string) []ent.Value {
+func (m *SARQuoteMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *SADQuoteMutation) ClearedEdges() []string {
+func (m *SARQuoteMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *SADQuoteMutation) EdgeCleared(name string) bool {
+func (m *SARQuoteMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *SADQuoteMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown SADQuote unique edge %s", name)
+func (m *SARQuoteMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown SARQuote unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *SADQuoteMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown SADQuote edge %s", name)
+func (m *SARQuoteMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown SARQuote edge %s", name)
 }
 
 // SEKQuoteMutation represents an operation that mutates the SEKQuote nodes in the graph.

@@ -17,7 +17,7 @@ func (CNYQuote) Annotations() []schema.Annotation {
 }
 
 func (CNYQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (CNYQuote) Edges() []ent.Edge {

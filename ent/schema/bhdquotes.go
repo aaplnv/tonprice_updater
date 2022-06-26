@@ -17,7 +17,7 @@ func (BHDQuote) Annotations() []schema.Annotation {
 }
 
 func (BHDQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (BHDQuote) Edges() []ent.Edge {

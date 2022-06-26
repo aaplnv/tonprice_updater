@@ -17,7 +17,7 @@ func (TRYQuote) Annotations() []schema.Annotation {
 }
 
 func (TRYQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (TRYQuote) Edges() []ent.Edge {

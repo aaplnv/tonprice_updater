@@ -49,7 +49,7 @@ type hooks struct {
 	PKRQuote  []ent.Hook
 	PLNQuote  []ent.Hook
 	RUBQuote  []ent.Hook
-	SADQuote  []ent.Hook
+	SARQuote  []ent.Hook
 	SEKQuote  []ent.Hook
 	TRYQuote  []ent.Hook
 	TWDQuote  []ent.Hook

@@ -17,7 +17,7 @@ func (HUFQuote) Annotations() []schema.Annotation {
 }
 
 func (HUFQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (HUFQuote) Edges() []ent.Edge {

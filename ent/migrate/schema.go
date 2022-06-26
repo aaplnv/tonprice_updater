@@ -309,17 +309,17 @@ var (
 		Columns:    RUBColumns,
 		PrimaryKey: []*schema.Column{RUBColumns[0]},
 	}
-	// SADColumns holds the columns for the "SAD" table.
-	SADColumns = []*schema.Column{
+	// SARColumns holds the columns for the "SAR" table.
+	SARColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "price", Type: field.TypeFloat64},
 		{Name: "timestamp", Type: field.TypeTime},
 	}
-	// SADTable holds the schema information for the "SAD" table.
-	SADTable = &schema.Table{
-		Name:       "SAD",
-		Columns:    SADColumns,
-		PrimaryKey: []*schema.Column{SADColumns[0]},
+	// SARTable holds the schema information for the "SAR" table.
+	SARTable = &schema.Table{
+		Name:       "SAR",
+		Columns:    SARColumns,
+		PrimaryKey: []*schema.Column{SARColumns[0]},
 	}
 	// SEKColumns holds the columns for the "SEK" table.
 	SEKColumns = []*schema.Column{
@@ -420,7 +420,7 @@ var (
 		PKRTable,
 		PLNTable,
 		RUBTable,
-		SADTable,
+		SARTable,
 		SEKTable,
 		TRYTable,
 		TWDTable,
@@ -506,8 +506,8 @@ func init() {
 	RUBTable.Annotation = &entsql.Annotation{
 		Table: "RUB",
 	}
-	SADTable.Annotation = &entsql.Annotation{
-		Table: "SAD",
+	SARTable.Annotation = &entsql.Annotation{
+		Table: "SAR",
 	}
 	SEKTable.Annotation = &entsql.Annotation{
 		Table: "SEK",

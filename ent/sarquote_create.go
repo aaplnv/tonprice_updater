@@ -6,48 +6,48 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
 
-// SADQuoteCreate is the builder for creating a SADQuote entity.
-type SADQuoteCreate struct {
+// SARQuoteCreate is the builder for creating a SARQuote entity.
+type SARQuoteCreate struct {
 	config
-	mutation *SADQuoteMutation
+	mutation *SARQuoteMutation
 	hooks    []Hook
 }
 
 // SetPrice sets the "price" field.
-func (sqc *SADQuoteCreate) SetPrice(f float64) *SADQuoteCreate {
+func (sqc *SARQuoteCreate) SetPrice(f float64) *SARQuoteCreate {
 	sqc.mutation.SetPrice(f)
 	return sqc
 }
 
 // SetTimestamp sets the "Timestamp" field.
-func (sqc *SADQuoteCreate) SetTimestamp(t time.Time) *SADQuoteCreate {
+func (sqc *SARQuoteCreate) SetTimestamp(t time.Time) *SARQuoteCreate {
 	sqc.mutation.SetTimestamp(t)
 	return sqc
 }
 
 // SetID sets the "id" field.
-func (sqc *SADQuoteCreate) SetID(i int) *SADQuoteCreate {
+func (sqc *SARQuoteCreate) SetID(i int) *SARQuoteCreate {
 	sqc.mutation.SetID(i)
 	return sqc
 }
 
-// Mutation returns the SADQuoteMutation object of the builder.
-func (sqc *SADQuoteCreate) Mutation() *SADQuoteMutation {
+// Mutation returns the SARQuoteMutation object of the builder.
+func (sqc *SARQuoteCreate) Mutation() *SARQuoteMutation {
 	return sqc.mutation
 }
 
-// Save creates the SADQuote in the database.
-func (sqc *SADQuoteCreate) Save(ctx context.Context) (*SADQuote, error) {
+// Save creates the SARQuote in the database.
+func (sqc *SARQuoteCreate) Save(ctx context.Context) (*SARQuote, error) {
 	var (
 		err  error
-		node *SADQuote
+		node *SARQuote
 	)
 	if len(sqc.hooks) == 0 {
 		if err = sqc.check(); err != nil {
@@ -56,7 +56,7 @@ func (sqc *SADQuoteCreate) Save(ctx context.Context) (*SADQuote, error) {
 		node, err = sqc.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*SADQuoteMutation)
+			mutation, ok := m.(*SARQuoteMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
@@ -85,7 +85,7 @@ func (sqc *SADQuoteCreate) Save(ctx context.Context) (*SADQuote, error) {
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sqc *SADQuoteCreate) SaveX(ctx context.Context) *SADQuote {
+func (sqc *SARQuoteCreate) SaveX(ctx context.Context) *SARQuote {
 	v, err := sqc.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -94,30 +94,30 @@ func (sqc *SADQuoteCreate) SaveX(ctx context.Context) *SADQuote {
 }
 
 // Exec executes the query.
-func (sqc *SADQuoteCreate) Exec(ctx context.Context) error {
+func (sqc *SARQuoteCreate) Exec(ctx context.Context) error {
 	_, err := sqc.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sqc *SADQuoteCreate) ExecX(ctx context.Context) {
+func (sqc *SARQuoteCreate) ExecX(ctx context.Context) {
 	if err := sqc.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sqc *SADQuoteCreate) check() error {
+func (sqc *SARQuoteCreate) check() error {
 	if _, ok := sqc.mutation.Price(); !ok {
-		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "SADQuote.price"`)}
+		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "SARQuote.price"`)}
 	}
 	if _, ok := sqc.mutation.Timestamp(); !ok {
-		return &ValidationError{Name: "Timestamp", err: errors.New(`ent: missing required field "SADQuote.Timestamp"`)}
+		return &ValidationError{Name: "Timestamp", err: errors.New(`ent: missing required field "SARQuote.Timestamp"`)}
 	}
 	return nil
 }
 
-func (sqc *SADQuoteCreate) sqlSave(ctx context.Context) (*SADQuote, error) {
+func (sqc *SARQuoteCreate) sqlSave(ctx context.Context) (*SARQuote, error) {
 	_node, _spec := sqc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, sqc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -132,14 +132,14 @@ func (sqc *SADQuoteCreate) sqlSave(ctx context.Context) (*SADQuote, error) {
 	return _node, nil
 }
 
-func (sqc *SADQuoteCreate) createSpec() (*SADQuote, *sqlgraph.CreateSpec) {
+func (sqc *SARQuoteCreate) createSpec() (*SARQuote, *sqlgraph.CreateSpec) {
 	var (
-		_node = &SADQuote{config: sqc.config}
+		_node = &SARQuote{config: sqc.config}
 		_spec = &sqlgraph.CreateSpec{
-			Table: sadquote.Table,
+			Table: sarquote.Table,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeInt,
-				Column: sadquote.FieldID,
+				Column: sarquote.FieldID,
 			},
 		}
 	)
@@ -151,7 +151,7 @@ func (sqc *SADQuoteCreate) createSpec() (*SADQuote, *sqlgraph.CreateSpec) {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: sadquote.FieldPrice,
+			Column: sarquote.FieldPrice,
 		})
 		_node.Price = value
 	}
@@ -159,29 +159,29 @@ func (sqc *SADQuoteCreate) createSpec() (*SADQuote, *sqlgraph.CreateSpec) {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: sadquote.FieldTimestamp,
+			Column: sarquote.FieldTimestamp,
 		})
 		_node.Timestamp = value
 	}
 	return _node, _spec
 }
 
-// SADQuoteCreateBulk is the builder for creating many SADQuote entities in bulk.
-type SADQuoteCreateBulk struct {
+// SARQuoteCreateBulk is the builder for creating many SARQuote entities in bulk.
+type SARQuoteCreateBulk struct {
 	config
-	builders []*SADQuoteCreate
+	builders []*SARQuoteCreate
 }
 
-// Save creates the SADQuote entities in the database.
-func (sqcb *SADQuoteCreateBulk) Save(ctx context.Context) ([]*SADQuote, error) {
+// Save creates the SARQuote entities in the database.
+func (sqcb *SARQuoteCreateBulk) Save(ctx context.Context) ([]*SARQuote, error) {
 	specs := make([]*sqlgraph.CreateSpec, len(sqcb.builders))
-	nodes := make([]*SADQuote, len(sqcb.builders))
+	nodes := make([]*SARQuote, len(sqcb.builders))
 	mutators := make([]Mutator, len(sqcb.builders))
 	for i := range sqcb.builders {
 		func(i int, root context.Context) {
 			builder := sqcb.builders[i]
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-				mutation, ok := m.(*SADQuoteMutation)
+				mutation, ok := m.(*SARQuoteMutation)
 				if !ok {
 					return nil, fmt.Errorf("unexpected mutation type %T", m)
 				}
@@ -228,7 +228,7 @@ func (sqcb *SADQuoteCreateBulk) Save(ctx context.Context) ([]*SADQuote, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sqcb *SADQuoteCreateBulk) SaveX(ctx context.Context) []*SADQuote {
+func (sqcb *SARQuoteCreateBulk) SaveX(ctx context.Context) []*SARQuote {
 	v, err := sqcb.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -237,13 +237,13 @@ func (sqcb *SADQuoteCreateBulk) SaveX(ctx context.Context) []*SADQuote {
 }
 
 // Exec executes the query.
-func (sqcb *SADQuoteCreateBulk) Exec(ctx context.Context) error {
+func (sqcb *SARQuoteCreateBulk) Exec(ctx context.Context) error {
 	_, err := sqcb.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sqcb *SADQuoteCreateBulk) ExecX(ctx context.Context) {
+func (sqcb *SARQuoteCreateBulk) ExecX(ctx context.Context) {
 	if err := sqcb.Exec(ctx); err != nil {
 		panic(err)
 	}

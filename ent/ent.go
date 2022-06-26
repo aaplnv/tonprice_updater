@@ -30,7 +30,7 @@ import (
 	"main/ent/pkrquote"
 	"main/ent/plnquote"
 	"main/ent/rubquote"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"main/ent/sekquote"
 	"main/ent/tryquote"
 	"main/ent/twdquote"
@@ -85,7 +85,7 @@ func columnChecker(table string) func(string) error {
 		pkrquote.Table:  pkrquote.ValidColumn,
 		plnquote.Table:  plnquote.ValidColumn,
 		rubquote.Table:  rubquote.ValidColumn,
-		sadquote.Table:  sadquote.ValidColumn,
+		sarquote.Table:  sarquote.ValidColumn,
 		sekquote.Table:  sekquote.ValidColumn,
 		tryquote.Table:  tryquote.ValidColumn,
 		twdquote.Table:  twdquote.ValidColumn,

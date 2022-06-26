@@ -16,12 +16,10 @@ func (USDQuote) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the ChartItem.
 func (USDQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
-// Edges of the ChartItem.
 func (USDQuote) Edges() []ent.Edge {
 	return nil
 }

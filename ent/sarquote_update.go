@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"main/ent/predicate"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -15,45 +15,45 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-// SADQuoteUpdate is the builder for updating SADQuote entities.
-type SADQuoteUpdate struct {
+// SARQuoteUpdate is the builder for updating SARQuote entities.
+type SARQuoteUpdate struct {
 	config
 	hooks    []Hook
-	mutation *SADQuoteMutation
+	mutation *SARQuoteMutation
 }
 
-// Where appends a list predicates to the SADQuoteUpdate builder.
-func (squ *SADQuoteUpdate) Where(ps ...predicate.SADQuote) *SADQuoteUpdate {
+// Where appends a list predicates to the SARQuoteUpdate builder.
+func (squ *SARQuoteUpdate) Where(ps ...predicate.SARQuote) *SARQuoteUpdate {
 	squ.mutation.Where(ps...)
 	return squ
 }
 
 // SetPrice sets the "price" field.
-func (squ *SADQuoteUpdate) SetPrice(f float64) *SADQuoteUpdate {
+func (squ *SARQuoteUpdate) SetPrice(f float64) *SARQuoteUpdate {
 	squ.mutation.ResetPrice()
 	squ.mutation.SetPrice(f)
 	return squ
 }
 
 // AddPrice adds f to the "price" field.
-func (squ *SADQuoteUpdate) AddPrice(f float64) *SADQuoteUpdate {
+func (squ *SARQuoteUpdate) AddPrice(f float64) *SARQuoteUpdate {
 	squ.mutation.AddPrice(f)
 	return squ
 }
 
 // SetTimestamp sets the "Timestamp" field.
-func (squ *SADQuoteUpdate) SetTimestamp(t time.Time) *SADQuoteUpdate {
+func (squ *SARQuoteUpdate) SetTimestamp(t time.Time) *SARQuoteUpdate {
 	squ.mutation.SetTimestamp(t)
 	return squ
 }
 
-// Mutation returns the SADQuoteMutation object of the builder.
-func (squ *SADQuoteUpdate) Mutation() *SADQuoteMutation {
+// Mutation returns the SARQuoteMutation object of the builder.
+func (squ *SARQuoteUpdate) Mutation() *SARQuoteMutation {
 	return squ.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (squ *SADQuoteUpdate) Save(ctx context.Context) (int, error) {
+func (squ *SARQuoteUpdate) Save(ctx context.Context) (int, error) {
 	var (
 		err      error
 		affected int
@@ -62,7 +62,7 @@ func (squ *SADQuoteUpdate) Save(ctx context.Context) (int, error) {
 		affected, err = squ.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*SADQuoteMutation)
+			mutation, ok := m.(*SARQuoteMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
@@ -85,7 +85,7 @@ func (squ *SADQuoteUpdate) Save(ctx context.Context) (int, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (squ *SADQuoteUpdate) SaveX(ctx context.Context) int {
+func (squ *SARQuoteUpdate) SaveX(ctx context.Context) int {
 	affected, err := squ.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -94,26 +94,26 @@ func (squ *SADQuoteUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (squ *SADQuoteUpdate) Exec(ctx context.Context) error {
+func (squ *SARQuoteUpdate) Exec(ctx context.Context) error {
 	_, err := squ.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (squ *SADQuoteUpdate) ExecX(ctx context.Context) {
+func (squ *SARQuoteUpdate) ExecX(ctx context.Context) {
 	if err := squ.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (squ *SADQuoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (squ *SARQuoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
-			Table:   sadquote.Table,
-			Columns: sadquote.Columns,
+			Table:   sarquote.Table,
+			Columns: sarquote.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeInt,
-				Column: sadquote.FieldID,
+				Column: sarquote.FieldID,
 			},
 		},
 	}
@@ -128,26 +128,26 @@ func (squ *SADQuoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: sadquote.FieldPrice,
+			Column: sarquote.FieldPrice,
 		})
 	}
 	if value, ok := squ.mutation.AddedPrice(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: sadquote.FieldPrice,
+			Column: sarquote.FieldPrice,
 		})
 	}
 	if value, ok := squ.mutation.Timestamp(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: sadquote.FieldTimestamp,
+			Column: sarquote.FieldTimestamp,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, squ.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
-			err = &NotFoundError{sadquote.Label}
+			err = &NotFoundError{sarquote.Label}
 		} else if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{err.Error(), err}
 		}
@@ -156,56 +156,56 @@ func (squ *SADQuoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	return n, nil
 }
 
-// SADQuoteUpdateOne is the builder for updating a single SADQuote entity.
-type SADQuoteUpdateOne struct {
+// SARQuoteUpdateOne is the builder for updating a single SARQuote entity.
+type SARQuoteUpdateOne struct {
 	config
 	fields   []string
 	hooks    []Hook
-	mutation *SADQuoteMutation
+	mutation *SARQuoteMutation
 }
 
 // SetPrice sets the "price" field.
-func (squo *SADQuoteUpdateOne) SetPrice(f float64) *SADQuoteUpdateOne {
+func (squo *SARQuoteUpdateOne) SetPrice(f float64) *SARQuoteUpdateOne {
 	squo.mutation.ResetPrice()
 	squo.mutation.SetPrice(f)
 	return squo
 }
 
 // AddPrice adds f to the "price" field.
-func (squo *SADQuoteUpdateOne) AddPrice(f float64) *SADQuoteUpdateOne {
+func (squo *SARQuoteUpdateOne) AddPrice(f float64) *SARQuoteUpdateOne {
 	squo.mutation.AddPrice(f)
 	return squo
 }
 
 // SetTimestamp sets the "Timestamp" field.
-func (squo *SADQuoteUpdateOne) SetTimestamp(t time.Time) *SADQuoteUpdateOne {
+func (squo *SARQuoteUpdateOne) SetTimestamp(t time.Time) *SARQuoteUpdateOne {
 	squo.mutation.SetTimestamp(t)
 	return squo
 }
 
-// Mutation returns the SADQuoteMutation object of the builder.
-func (squo *SADQuoteUpdateOne) Mutation() *SADQuoteMutation {
+// Mutation returns the SARQuoteMutation object of the builder.
+func (squo *SARQuoteUpdateOne) Mutation() *SARQuoteMutation {
 	return squo.mutation
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (squo *SADQuoteUpdateOne) Select(field string, fields ...string) *SADQuoteUpdateOne {
+func (squo *SARQuoteUpdateOne) Select(field string, fields ...string) *SARQuoteUpdateOne {
 	squo.fields = append([]string{field}, fields...)
 	return squo
 }
 
-// Save executes the query and returns the updated SADQuote entity.
-func (squo *SADQuoteUpdateOne) Save(ctx context.Context) (*SADQuote, error) {
+// Save executes the query and returns the updated SARQuote entity.
+func (squo *SARQuoteUpdateOne) Save(ctx context.Context) (*SARQuote, error) {
 	var (
 		err  error
-		node *SADQuote
+		node *SARQuote
 	)
 	if len(squo.hooks) == 0 {
 		node, err = squo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*SADQuoteMutation)
+			mutation, ok := m.(*SARQuoteMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
@@ -228,7 +228,7 @@ func (squo *SADQuoteUpdateOne) Save(ctx context.Context) (*SADQuote, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (squo *SADQuoteUpdateOne) SaveX(ctx context.Context) *SADQuote {
+func (squo *SARQuoteUpdateOne) SaveX(ctx context.Context) *SARQuote {
 	node, err := squo.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -237,42 +237,42 @@ func (squo *SADQuoteUpdateOne) SaveX(ctx context.Context) *SADQuote {
 }
 
 // Exec executes the query on the entity.
-func (squo *SADQuoteUpdateOne) Exec(ctx context.Context) error {
+func (squo *SARQuoteUpdateOne) Exec(ctx context.Context) error {
 	_, err := squo.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (squo *SADQuoteUpdateOne) ExecX(ctx context.Context) {
+func (squo *SARQuoteUpdateOne) ExecX(ctx context.Context) {
 	if err := squo.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (squo *SADQuoteUpdateOne) sqlSave(ctx context.Context) (_node *SADQuote, err error) {
+func (squo *SARQuoteUpdateOne) sqlSave(ctx context.Context) (_node *SARQuote, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
-			Table:   sadquote.Table,
-			Columns: sadquote.Columns,
+			Table:   sarquote.Table,
+			Columns: sarquote.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeInt,
-				Column: sadquote.FieldID,
+				Column: sarquote.FieldID,
 			},
 		},
 	}
 	id, ok := squo.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "SADQuote.id" for update`)}
+		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "SARQuote.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
 	if fields := squo.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
-		_spec.Node.Columns = append(_spec.Node.Columns, sadquote.FieldID)
+		_spec.Node.Columns = append(_spec.Node.Columns, sarquote.FieldID)
 		for _, f := range fields {
-			if !sadquote.ValidColumn(f) {
+			if !sarquote.ValidColumn(f) {
 				return nil, &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 			}
-			if f != sadquote.FieldID {
+			if f != sarquote.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, f)
 			}
 		}
@@ -288,29 +288,29 @@ func (squo *SADQuoteUpdateOne) sqlSave(ctx context.Context) (_node *SADQuote, er
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: sadquote.FieldPrice,
+			Column: sarquote.FieldPrice,
 		})
 	}
 	if value, ok := squo.mutation.AddedPrice(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeFloat64,
 			Value:  value,
-			Column: sadquote.FieldPrice,
+			Column: sarquote.FieldPrice,
 		})
 	}
 	if value, ok := squo.mutation.Timestamp(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: sadquote.FieldTimestamp,
+			Column: sarquote.FieldTimestamp,
 		})
 	}
-	_node = &SADQuote{config: squo.config}
+	_node = &SARQuote{config: squo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
 	if err = sqlgraph.UpdateNode(ctx, squo.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
-			err = &NotFoundError{sadquote.Label}
+			err = &NotFoundError{sarquote.Label}
 		} else if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{err.Error(), err}
 		}

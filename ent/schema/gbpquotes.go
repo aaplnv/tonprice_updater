@@ -17,7 +17,7 @@ func (GBPQuote) Annotations() []schema.Annotation {
 }
 
 func (GBPQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (GBPQuote) Edges() []ent.Edge {

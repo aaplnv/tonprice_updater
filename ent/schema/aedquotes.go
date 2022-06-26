@@ -17,7 +17,7 @@ func (AEDQuote) Annotations() []schema.Annotation {
 }
 
 func (AEDQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (AEDQuote) Edges() []ent.Edge {

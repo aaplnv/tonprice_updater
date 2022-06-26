@@ -16,12 +16,10 @@ func (UAHQuote) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the ChartItem.
 func (UAHQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
-// Edges of the ChartItem.
 func (UAHQuote) Edges() []ent.Edge {
 	return nil
 }

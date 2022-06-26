@@ -17,7 +17,7 @@ func (BRLQuote) Annotations() []schema.Annotation {
 }
 
 func (BRLQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (BRLQuote) Edges() []ent.Edge {

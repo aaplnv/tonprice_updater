@@ -17,7 +17,7 @@ func (BTCQuote) Annotations() []schema.Annotation {
 }
 
 func (BTCQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (BTCQuote) Edges() []ent.Edge {

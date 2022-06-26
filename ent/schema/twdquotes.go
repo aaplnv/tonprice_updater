@@ -17,7 +17,7 @@ func (TWDQuote) Annotations() []schema.Annotation {
 }
 
 func (TWDQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (TWDQuote) Edges() []ent.Edge {

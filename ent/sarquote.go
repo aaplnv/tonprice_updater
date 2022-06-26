@@ -4,15 +4,15 @@ package ent
 
 import (
 	"fmt"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
 
-// SADQuote is the model entity for the SADQuote schema.
-type SADQuote struct {
+// SARQuote is the model entity for the SARQuote schema.
+type SARQuote struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -23,44 +23,44 @@ type SADQuote struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*SADQuote) scanValues(columns []string) ([]interface{}, error) {
+func (*SARQuote) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case sadquote.FieldPrice:
+		case sarquote.FieldPrice:
 			values[i] = new(sql.NullFloat64)
-		case sadquote.FieldID:
+		case sarquote.FieldID:
 			values[i] = new(sql.NullInt64)
-		case sadquote.FieldTimestamp:
+		case sarquote.FieldTimestamp:
 			values[i] = new(sql.NullTime)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type SADQuote", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type SARQuote", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the SADQuote fields.
-func (sq *SADQuote) assignValues(columns []string, values []interface{}) error {
+// to the SARQuote fields.
+func (sq *SARQuote) assignValues(columns []string, values []interface{}) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case sadquote.FieldID:
+		case sarquote.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			sq.ID = int(value.Int64)
-		case sadquote.FieldPrice:
+		case sarquote.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
 				sq.Price = value.Float64
 			}
-		case sadquote.FieldTimestamp:
+		case sarquote.FieldTimestamp:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field Timestamp", values[i])
 			} else if value.Valid {
@@ -71,28 +71,28 @@ func (sq *SADQuote) assignValues(columns []string, values []interface{}) error {
 	return nil
 }
 
-// Update returns a builder for updating this SADQuote.
-// Note that you need to call SADQuote.Unwrap() before calling this method if this SADQuote
+// Update returns a builder for updating this SARQuote.
+// Note that you need to call SARQuote.Unwrap() before calling this method if this SARQuote
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sq *SADQuote) Update() *SADQuoteUpdateOne {
-	return (&SADQuoteClient{config: sq.config}).UpdateOne(sq)
+func (sq *SARQuote) Update() *SARQuoteUpdateOne {
+	return (&SARQuoteClient{config: sq.config}).UpdateOne(sq)
 }
 
-// Unwrap unwraps the SADQuote entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the SARQuote entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sq *SADQuote) Unwrap() *SADQuote {
+func (sq *SARQuote) Unwrap() *SARQuote {
 	tx, ok := sq.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: SADQuote is not a transactional entity")
+		panic("ent: SARQuote is not a transactional entity")
 	}
 	sq.config.driver = tx.drv
 	return sq
 }
 
 // String implements the fmt.Stringer.
-func (sq *SADQuote) String() string {
+func (sq *SARQuote) String() string {
 	var builder strings.Builder
-	builder.WriteString("SADQuote(")
+	builder.WriteString("SARQuote(")
 	builder.WriteString(fmt.Sprintf("id=%v", sq.ID))
 	builder.WriteString(", price=")
 	builder.WriteString(fmt.Sprintf("%v", sq.Price))
@@ -102,10 +102,10 @@ func (sq *SADQuote) String() string {
 	return builder.String()
 }
 
-// SADQuotes is a parsable slice of SADQuote.
-type SADQuotes []*SADQuote
+// SARQuotes is a parsable slice of SARQuote.
+type SARQuotes []*SARQuote
 
-func (sq SADQuotes) config(cfg config) {
+func (sq SARQuotes) config(cfg config) {
 	for _i := range sq {
 		sq[_i].config = cfg
 	}

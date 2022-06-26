@@ -6,28 +6,28 @@ import (
 	"context"
 	"fmt"
 	"main/ent/predicate"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
 
-// SADQuoteDelete is the builder for deleting a SADQuote entity.
-type SADQuoteDelete struct {
+// SARQuoteDelete is the builder for deleting a SARQuote entity.
+type SARQuoteDelete struct {
 	config
 	hooks    []Hook
-	mutation *SADQuoteMutation
+	mutation *SARQuoteMutation
 }
 
-// Where appends a list predicates to the SADQuoteDelete builder.
-func (sqd *SADQuoteDelete) Where(ps ...predicate.SADQuote) *SADQuoteDelete {
+// Where appends a list predicates to the SARQuoteDelete builder.
+func (sqd *SARQuoteDelete) Where(ps ...predicate.SARQuote) *SARQuoteDelete {
 	sqd.mutation.Where(ps...)
 	return sqd
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (sqd *SADQuoteDelete) Exec(ctx context.Context) (int, error) {
+func (sqd *SARQuoteDelete) Exec(ctx context.Context) (int, error) {
 	var (
 		err      error
 		affected int
@@ -36,7 +36,7 @@ func (sqd *SADQuoteDelete) Exec(ctx context.Context) (int, error) {
 		affected, err = sqd.sqlExec(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*SADQuoteMutation)
+			mutation, ok := m.(*SARQuoteMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
@@ -59,7 +59,7 @@ func (sqd *SADQuoteDelete) Exec(ctx context.Context) (int, error) {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sqd *SADQuoteDelete) ExecX(ctx context.Context) int {
+func (sqd *SARQuoteDelete) ExecX(ctx context.Context) int {
 	n, err := sqd.Exec(ctx)
 	if err != nil {
 		panic(err)
@@ -67,13 +67,13 @@ func (sqd *SADQuoteDelete) ExecX(ctx context.Context) int {
 	return n
 }
 
-func (sqd *SADQuoteDelete) sqlExec(ctx context.Context) (int, error) {
+func (sqd *SARQuoteDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := &sqlgraph.DeleteSpec{
 		Node: &sqlgraph.NodeSpec{
-			Table: sadquote.Table,
+			Table: sarquote.Table,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeInt,
-				Column: sadquote.FieldID,
+				Column: sarquote.FieldID,
 			},
 		},
 	}
@@ -87,25 +87,25 @@ func (sqd *SADQuoteDelete) sqlExec(ctx context.Context) (int, error) {
 	return sqlgraph.DeleteNodes(ctx, sqd.driver, _spec)
 }
 
-// SADQuoteDeleteOne is the builder for deleting a single SADQuote entity.
-type SADQuoteDeleteOne struct {
-	sqd *SADQuoteDelete
+// SARQuoteDeleteOne is the builder for deleting a single SARQuote entity.
+type SARQuoteDeleteOne struct {
+	sqd *SARQuoteDelete
 }
 
 // Exec executes the deletion query.
-func (sqdo *SADQuoteDeleteOne) Exec(ctx context.Context) error {
+func (sqdo *SARQuoteDeleteOne) Exec(ctx context.Context) error {
 	n, err := sqdo.sqd.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
 	case n == 0:
-		return &NotFoundError{sadquote.Label}
+		return &NotFoundError{sarquote.Label}
 	default:
 		return nil
 	}
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sqdo *SADQuoteDeleteOne) ExecX(ctx context.Context) {
+func (sqdo *SARQuoteDeleteOne) ExecX(ctx context.Context) {
 	sqdo.sqd.ExecX(ctx)
 }

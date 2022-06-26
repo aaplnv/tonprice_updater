@@ -34,7 +34,7 @@ import (
 	"main/ent/pkrquote"
 	"main/ent/plnquote"
 	"main/ent/rubquote"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"main/ent/sekquote"
 	"main/ent/tryquote"
 	"main/ent/twdquote"
@@ -101,8 +101,8 @@ type Client struct {
 	PLNQuote *PLNQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
-	// SADQuote is the client for interacting with the SADQuote builders.
-	SADQuote *SADQuoteClient
+	// SARQuote is the client for interacting with the SARQuote builders.
+	SARQuote *SARQuoteClient
 	// SEKQuote is the client for interacting with the SEKQuote builders.
 	SEKQuote *SEKQuoteClient
 	// TRYQuote is the client for interacting with the TRYQuote builders.
@@ -153,7 +153,7 @@ func (c *Client) init() {
 	c.PKRQuote = NewPKRQuoteClient(c.config)
 	c.PLNQuote = NewPLNQuoteClient(c.config)
 	c.RUBQuote = NewRUBQuoteClient(c.config)
-	c.SADQuote = NewSADQuoteClient(c.config)
+	c.SARQuote = NewSARQuoteClient(c.config)
 	c.SEKQuote = NewSEKQuoteClient(c.config)
 	c.TRYQuote = NewTRYQuoteClient(c.config)
 	c.TWDQuote = NewTWDQuoteClient(c.config)
@@ -218,7 +218,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		PKRQuote:  NewPKRQuoteClient(cfg),
 		PLNQuote:  NewPLNQuoteClient(cfg),
 		RUBQuote:  NewRUBQuoteClient(cfg),
-		SADQuote:  NewSADQuoteClient(cfg),
+		SARQuote:  NewSARQuoteClient(cfg),
 		SEKQuote:  NewSEKQuoteClient(cfg),
 		TRYQuote:  NewTRYQuoteClient(cfg),
 		TWDQuote:  NewTWDQuoteClient(cfg),
@@ -269,7 +269,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		PKRQuote:  NewPKRQuoteClient(cfg),
 		PLNQuote:  NewPLNQuoteClient(cfg),
 		RUBQuote:  NewRUBQuoteClient(cfg),
-		SADQuote:  NewSADQuoteClient(cfg),
+		SARQuote:  NewSARQuoteClient(cfg),
 		SEKQuote:  NewSEKQuoteClient(cfg),
 		TRYQuote:  NewTRYQuoteClient(cfg),
 		TWDQuote:  NewTWDQuoteClient(cfg),
@@ -330,7 +330,7 @@ func (c *Client) Use(hooks ...Hook) {
 	c.PKRQuote.Use(hooks...)
 	c.PLNQuote.Use(hooks...)
 	c.RUBQuote.Use(hooks...)
-	c.SADQuote.Use(hooks...)
+	c.SARQuote.Use(hooks...)
 	c.SEKQuote.Use(hooks...)
 	c.TRYQuote.Use(hooks...)
 	c.TWDQuote.Use(hooks...)
@@ -2589,84 +2589,84 @@ func (c *RUBQuoteClient) Hooks() []Hook {
 	return c.hooks.RUBQuote
 }
 
-// SADQuoteClient is a client for the SADQuote schema.
-type SADQuoteClient struct {
+// SARQuoteClient is a client for the SARQuote schema.
+type SARQuoteClient struct {
 	config
 }
 
-// NewSADQuoteClient returns a client for the SADQuote from the given config.
-func NewSADQuoteClient(c config) *SADQuoteClient {
-	return &SADQuoteClient{config: c}
+// NewSARQuoteClient returns a client for the SARQuote from the given config.
+func NewSARQuoteClient(c config) *SARQuoteClient {
+	return &SARQuoteClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `sadquote.Hooks(f(g(h())))`.
-func (c *SADQuoteClient) Use(hooks ...Hook) {
-	c.hooks.SADQuote = append(c.hooks.SADQuote, hooks...)
+// A call to `Use(f, g, h)` equals to `sarquote.Hooks(f(g(h())))`.
+func (c *SARQuoteClient) Use(hooks ...Hook) {
+	c.hooks.SARQuote = append(c.hooks.SARQuote, hooks...)
 }
 
-// Create returns a create builder for SADQuote.
-func (c *SADQuoteClient) Create() *SADQuoteCreate {
-	mutation := newSADQuoteMutation(c.config, OpCreate)
-	return &SADQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for SARQuote.
+func (c *SARQuoteClient) Create() *SARQuoteCreate {
+	mutation := newSARQuoteMutation(c.config, OpCreate)
+	return &SARQuoteCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of SADQuote entities.
-func (c *SADQuoteClient) CreateBulk(builders ...*SADQuoteCreate) *SADQuoteCreateBulk {
-	return &SADQuoteCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of SARQuote entities.
+func (c *SARQuoteClient) CreateBulk(builders ...*SARQuoteCreate) *SARQuoteCreateBulk {
+	return &SARQuoteCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for SADQuote.
-func (c *SADQuoteClient) Update() *SADQuoteUpdate {
-	mutation := newSADQuoteMutation(c.config, OpUpdate)
-	return &SADQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for SARQuote.
+func (c *SARQuoteClient) Update() *SARQuoteUpdate {
+	mutation := newSARQuoteMutation(c.config, OpUpdate)
+	return &SARQuoteUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SADQuoteClient) UpdateOne(sq *SADQuote) *SADQuoteUpdateOne {
-	mutation := newSADQuoteMutation(c.config, OpUpdateOne, withSADQuote(sq))
-	return &SADQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *SARQuoteClient) UpdateOne(sq *SARQuote) *SARQuoteUpdateOne {
+	mutation := newSARQuoteMutation(c.config, OpUpdateOne, withSARQuote(sq))
+	return &SARQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *SADQuoteClient) UpdateOneID(id int) *SADQuoteUpdateOne {
-	mutation := newSADQuoteMutation(c.config, OpUpdateOne, withSADQuoteID(id))
-	return &SADQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *SARQuoteClient) UpdateOneID(id int) *SARQuoteUpdateOne {
+	mutation := newSARQuoteMutation(c.config, OpUpdateOne, withSARQuoteID(id))
+	return &SARQuoteUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for SADQuote.
-func (c *SADQuoteClient) Delete() *SADQuoteDelete {
-	mutation := newSADQuoteMutation(c.config, OpDelete)
-	return &SADQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for SARQuote.
+func (c *SARQuoteClient) Delete() *SARQuoteDelete {
+	mutation := newSARQuoteMutation(c.config, OpDelete)
+	return &SARQuoteDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *SADQuoteClient) DeleteOne(sq *SADQuote) *SADQuoteDeleteOne {
+func (c *SARQuoteClient) DeleteOne(sq *SARQuote) *SARQuoteDeleteOne {
 	return c.DeleteOneID(sq.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *SADQuoteClient) DeleteOneID(id int) *SADQuoteDeleteOne {
-	builder := c.Delete().Where(sadquote.ID(id))
+func (c *SARQuoteClient) DeleteOneID(id int) *SARQuoteDeleteOne {
+	builder := c.Delete().Where(sarquote.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &SADQuoteDeleteOne{builder}
+	return &SARQuoteDeleteOne{builder}
 }
 
-// Query returns a query builder for SADQuote.
-func (c *SADQuoteClient) Query() *SADQuoteQuery {
-	return &SADQuoteQuery{
+// Query returns a query builder for SARQuote.
+func (c *SARQuoteClient) Query() *SARQuoteQuery {
+	return &SARQuoteQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a SADQuote entity by its id.
-func (c *SADQuoteClient) Get(ctx context.Context, id int) (*SADQuote, error) {
-	return c.Query().Where(sadquote.ID(id)).Only(ctx)
+// Get returns a SARQuote entity by its id.
+func (c *SARQuoteClient) Get(ctx context.Context, id int) (*SARQuote, error) {
+	return c.Query().Where(sarquote.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *SADQuoteClient) GetX(ctx context.Context, id int) *SADQuote {
+func (c *SARQuoteClient) GetX(ctx context.Context, id int) *SARQuote {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -2675,8 +2675,8 @@ func (c *SADQuoteClient) GetX(ctx context.Context, id int) *SADQuote {
 }
 
 // Hooks returns the client hooks.
-func (c *SADQuoteClient) Hooks() []Hook {
-	return c.hooks.SADQuote
+func (c *SARQuoteClient) Hooks() []Hook {
+	return c.hooks.SARQuote
 }
 
 // SEKQuoteClient is a client for the SEKQuote schema.

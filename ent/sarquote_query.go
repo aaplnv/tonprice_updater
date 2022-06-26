@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"main/ent/predicate"
-	"main/ent/sadquote"
+	"main/ent/sarquote"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
@@ -15,66 +15,66 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
-// SADQuoteQuery is the builder for querying SADQuote entities.
-type SADQuoteQuery struct {
+// SARQuoteQuery is the builder for querying SARQuote entities.
+type SARQuoteQuery struct {
 	config
 	limit      *int
 	offset     *int
 	unique     *bool
 	order      []OrderFunc
 	fields     []string
-	predicates []predicate.SADQuote
+	predicates []predicate.SARQuote
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
 }
 
-// Where adds a new predicate for the SADQuoteQuery builder.
-func (sqq *SADQuoteQuery) Where(ps ...predicate.SADQuote) *SADQuoteQuery {
+// Where adds a new predicate for the SARQuoteQuery builder.
+func (sqq *SARQuoteQuery) Where(ps ...predicate.SARQuote) *SARQuoteQuery {
 	sqq.predicates = append(sqq.predicates, ps...)
 	return sqq
 }
 
 // Limit adds a limit step to the query.
-func (sqq *SADQuoteQuery) Limit(limit int) *SADQuoteQuery {
+func (sqq *SARQuoteQuery) Limit(limit int) *SARQuoteQuery {
 	sqq.limit = &limit
 	return sqq
 }
 
 // Offset adds an offset step to the query.
-func (sqq *SADQuoteQuery) Offset(offset int) *SADQuoteQuery {
+func (sqq *SARQuoteQuery) Offset(offset int) *SARQuoteQuery {
 	sqq.offset = &offset
 	return sqq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (sqq *SADQuoteQuery) Unique(unique bool) *SADQuoteQuery {
+func (sqq *SARQuoteQuery) Unique(unique bool) *SARQuoteQuery {
 	sqq.unique = &unique
 	return sqq
 }
 
 // Order adds an order step to the query.
-func (sqq *SADQuoteQuery) Order(o ...OrderFunc) *SADQuoteQuery {
+func (sqq *SARQuoteQuery) Order(o ...OrderFunc) *SARQuoteQuery {
 	sqq.order = append(sqq.order, o...)
 	return sqq
 }
 
-// First returns the first SADQuote entity from the query.
-// Returns a *NotFoundError when no SADQuote was found.
-func (sqq *SADQuoteQuery) First(ctx context.Context) (*SADQuote, error) {
+// First returns the first SARQuote entity from the query.
+// Returns a *NotFoundError when no SARQuote was found.
+func (sqq *SARQuoteQuery) First(ctx context.Context) (*SARQuote, error) {
 	nodes, err := sqq.Limit(1).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
-		return nil, &NotFoundError{sadquote.Label}
+		return nil, &NotFoundError{sarquote.Label}
 	}
 	return nodes[0], nil
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (sqq *SADQuoteQuery) FirstX(ctx context.Context) *SADQuote {
+func (sqq *SARQuoteQuery) FirstX(ctx context.Context) *SARQuote {
 	node, err := sqq.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -82,22 +82,22 @@ func (sqq *SADQuoteQuery) FirstX(ctx context.Context) *SADQuote {
 	return node
 }
 
-// FirstID returns the first SADQuote ID from the query.
-// Returns a *NotFoundError when no SADQuote ID was found.
-func (sqq *SADQuoteQuery) FirstID(ctx context.Context) (id int, err error) {
+// FirstID returns the first SARQuote ID from the query.
+// Returns a *NotFoundError when no SARQuote ID was found.
+func (sqq *SARQuoteQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
 	if ids, err = sqq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
 	if len(ids) == 0 {
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 		return
 	}
 	return ids[0], nil
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (sqq *SADQuoteQuery) FirstIDX(ctx context.Context) int {
+func (sqq *SARQuoteQuery) FirstIDX(ctx context.Context) int {
 	id, err := sqq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -105,10 +105,10 @@ func (sqq *SADQuoteQuery) FirstIDX(ctx context.Context) int {
 	return id
 }
 
-// Only returns a single SADQuote entity found by the query, ensuring it only returns one.
-// Returns a *NotSingularError when more than one SADQuote entity is found.
-// Returns a *NotFoundError when no SADQuote entities are found.
-func (sqq *SADQuoteQuery) Only(ctx context.Context) (*SADQuote, error) {
+// Only returns a single SARQuote entity found by the query, ensuring it only returns one.
+// Returns a *NotSingularError when more than one SARQuote entity is found.
+// Returns a *NotFoundError when no SARQuote entities are found.
+func (sqq *SARQuoteQuery) Only(ctx context.Context) (*SARQuote, error) {
 	nodes, err := sqq.Limit(2).All(ctx)
 	if err != nil {
 		return nil, err
@@ -117,14 +117,14 @@ func (sqq *SADQuoteQuery) Only(ctx context.Context) (*SADQuote, error) {
 	case 1:
 		return nodes[0], nil
 	case 0:
-		return nil, &NotFoundError{sadquote.Label}
+		return nil, &NotFoundError{sarquote.Label}
 	default:
-		return nil, &NotSingularError{sadquote.Label}
+		return nil, &NotSingularError{sarquote.Label}
 	}
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (sqq *SADQuoteQuery) OnlyX(ctx context.Context) *SADQuote {
+func (sqq *SARQuoteQuery) OnlyX(ctx context.Context) *SARQuote {
 	node, err := sqq.Only(ctx)
 	if err != nil {
 		panic(err)
@@ -132,10 +132,10 @@ func (sqq *SADQuoteQuery) OnlyX(ctx context.Context) *SADQuote {
 	return node
 }
 
-// OnlyID is like Only, but returns the only SADQuote ID in the query.
-// Returns a *NotSingularError when more than one SADQuote ID is found.
+// OnlyID is like Only, but returns the only SARQuote ID in the query.
+// Returns a *NotSingularError when more than one SARQuote ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (sqq *SADQuoteQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (sqq *SARQuoteQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
 	if ids, err = sqq.Limit(2).IDs(ctx); err != nil {
 		return
@@ -144,15 +144,15 @@ func (sqq *SADQuoteQuery) OnlyID(ctx context.Context) (id int, err error) {
 	case 1:
 		id = ids[0]
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = &NotSingularError{sadquote.Label}
+		err = &NotSingularError{sarquote.Label}
 	}
 	return
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (sqq *SADQuoteQuery) OnlyIDX(ctx context.Context) int {
+func (sqq *SARQuoteQuery) OnlyIDX(ctx context.Context) int {
 	id, err := sqq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -160,8 +160,8 @@ func (sqq *SADQuoteQuery) OnlyIDX(ctx context.Context) int {
 	return id
 }
 
-// All executes the query and returns a list of SADQuotes.
-func (sqq *SADQuoteQuery) All(ctx context.Context) ([]*SADQuote, error) {
+// All executes the query and returns a list of SARQuotes.
+func (sqq *SARQuoteQuery) All(ctx context.Context) ([]*SARQuote, error) {
 	if err := sqq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func (sqq *SADQuoteQuery) All(ctx context.Context) ([]*SADQuote, error) {
 }
 
 // AllX is like All, but panics if an error occurs.
-func (sqq *SADQuoteQuery) AllX(ctx context.Context) []*SADQuote {
+func (sqq *SARQuoteQuery) AllX(ctx context.Context) []*SARQuote {
 	nodes, err := sqq.All(ctx)
 	if err != nil {
 		panic(err)
@@ -177,17 +177,17 @@ func (sqq *SADQuoteQuery) AllX(ctx context.Context) []*SADQuote {
 	return nodes
 }
 
-// IDs executes the query and returns a list of SADQuote IDs.
-func (sqq *SADQuoteQuery) IDs(ctx context.Context) ([]int, error) {
+// IDs executes the query and returns a list of SARQuote IDs.
+func (sqq *SARQuoteQuery) IDs(ctx context.Context) ([]int, error) {
 	var ids []int
-	if err := sqq.Select(sadquote.FieldID).Scan(ctx, &ids); err != nil {
+	if err := sqq.Select(sarquote.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (sqq *SADQuoteQuery) IDsX(ctx context.Context) []int {
+func (sqq *SARQuoteQuery) IDsX(ctx context.Context) []int {
 	ids, err := sqq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -196,7 +196,7 @@ func (sqq *SADQuoteQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (sqq *SADQuoteQuery) Count(ctx context.Context) (int, error) {
+func (sqq *SARQuoteQuery) Count(ctx context.Context) (int, error) {
 	if err := sqq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -204,7 +204,7 @@ func (sqq *SADQuoteQuery) Count(ctx context.Context) (int, error) {
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (sqq *SADQuoteQuery) CountX(ctx context.Context) int {
+func (sqq *SARQuoteQuery) CountX(ctx context.Context) int {
 	count, err := sqq.Count(ctx)
 	if err != nil {
 		panic(err)
@@ -213,7 +213,7 @@ func (sqq *SADQuoteQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (sqq *SADQuoteQuery) Exist(ctx context.Context) (bool, error) {
+func (sqq *SARQuoteQuery) Exist(ctx context.Context) (bool, error) {
 	if err := sqq.prepareQuery(ctx); err != nil {
 		return false, err
 	}
@@ -221,7 +221,7 @@ func (sqq *SADQuoteQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (sqq *SADQuoteQuery) ExistX(ctx context.Context) bool {
+func (sqq *SARQuoteQuery) ExistX(ctx context.Context) bool {
 	exist, err := sqq.Exist(ctx)
 	if err != nil {
 		panic(err)
@@ -229,18 +229,18 @@ func (sqq *SADQuoteQuery) ExistX(ctx context.Context) bool {
 	return exist
 }
 
-// Clone returns a duplicate of the SADQuoteQuery builder, including all associated steps. It can be
+// Clone returns a duplicate of the SARQuoteQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (sqq *SADQuoteQuery) Clone() *SADQuoteQuery {
+func (sqq *SARQuoteQuery) Clone() *SARQuoteQuery {
 	if sqq == nil {
 		return nil
 	}
-	return &SADQuoteQuery{
+	return &SARQuoteQuery{
 		config:     sqq.config,
 		limit:      sqq.limit,
 		offset:     sqq.offset,
 		order:      append([]OrderFunc{}, sqq.order...),
-		predicates: append([]predicate.SADQuote{}, sqq.predicates...),
+		predicates: append([]predicate.SARQuote{}, sqq.predicates...),
 		// clone intermediate query.
 		sql:    sqq.sql.Clone(),
 		path:   sqq.path,
@@ -258,13 +258,13 @@ func (sqq *SADQuoteQuery) Clone() *SADQuoteQuery {
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.SADQuote.Query().
-//		GroupBy(sadquote.FieldPrice).
+//	client.SARQuote.Query().
+//		GroupBy(sarquote.FieldPrice).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
-func (sqq *SADQuoteQuery) GroupBy(field string, fields ...string) *SADQuoteGroupBy {
-	group := &SADQuoteGroupBy{config: sqq.config}
+func (sqq *SARQuoteQuery) GroupBy(field string, fields ...string) *SARQuoteGroupBy {
+	group := &SARQuoteGroupBy{config: sqq.config}
 	group.fields = append([]string{field}, fields...)
 	group.path = func(ctx context.Context) (prev *sql.Selector, err error) {
 		if err := sqq.prepareQuery(ctx); err != nil {
@@ -284,18 +284,18 @@ func (sqq *SADQuoteQuery) GroupBy(field string, fields ...string) *SADQuoteGroup
 //		Price float64 `json:"price,omitempty"`
 //	}
 //
-//	client.SADQuote.Query().
-//		Select(sadquote.FieldPrice).
+//	client.SARQuote.Query().
+//		Select(sarquote.FieldPrice).
 //		Scan(ctx, &v)
 //
-func (sqq *SADQuoteQuery) Select(fields ...string) *SADQuoteSelect {
+func (sqq *SARQuoteQuery) Select(fields ...string) *SARQuoteSelect {
 	sqq.fields = append(sqq.fields, fields...)
-	return &SADQuoteSelect{SADQuoteQuery: sqq}
+	return &SARQuoteSelect{SARQuoteQuery: sqq}
 }
 
-func (sqq *SADQuoteQuery) prepareQuery(ctx context.Context) error {
+func (sqq *SARQuoteQuery) prepareQuery(ctx context.Context) error {
 	for _, f := range sqq.fields {
-		if !sadquote.ValidColumn(f) {
+		if !sarquote.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
@@ -309,13 +309,13 @@ func (sqq *SADQuoteQuery) prepareQuery(ctx context.Context) error {
 	return nil
 }
 
-func (sqq *SADQuoteQuery) sqlAll(ctx context.Context) ([]*SADQuote, error) {
+func (sqq *SARQuoteQuery) sqlAll(ctx context.Context) ([]*SARQuote, error) {
 	var (
-		nodes = []*SADQuote{}
+		nodes = []*SARQuote{}
 		_spec = sqq.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
-		node := &SADQuote{config: sqq.config}
+		node := &SARQuote{config: sqq.config}
 		nodes = append(nodes, node)
 		return node.scanValues(columns)
 	}
@@ -335,7 +335,7 @@ func (sqq *SADQuoteQuery) sqlAll(ctx context.Context) ([]*SADQuote, error) {
 	return nodes, nil
 }
 
-func (sqq *SADQuoteQuery) sqlCount(ctx context.Context) (int, error) {
+func (sqq *SARQuoteQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := sqq.querySpec()
 	_spec.Node.Columns = sqq.fields
 	if len(sqq.fields) > 0 {
@@ -344,7 +344,7 @@ func (sqq *SADQuoteQuery) sqlCount(ctx context.Context) (int, error) {
 	return sqlgraph.CountNodes(ctx, sqq.driver, _spec)
 }
 
-func (sqq *SADQuoteQuery) sqlExist(ctx context.Context) (bool, error) {
+func (sqq *SARQuoteQuery) sqlExist(ctx context.Context) (bool, error) {
 	n, err := sqq.sqlCount(ctx)
 	if err != nil {
 		return false, fmt.Errorf("ent: check existence: %w", err)
@@ -352,14 +352,14 @@ func (sqq *SADQuoteQuery) sqlExist(ctx context.Context) (bool, error) {
 	return n > 0, nil
 }
 
-func (sqq *SADQuoteQuery) querySpec() *sqlgraph.QuerySpec {
+func (sqq *SARQuoteQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := &sqlgraph.QuerySpec{
 		Node: &sqlgraph.NodeSpec{
-			Table:   sadquote.Table,
-			Columns: sadquote.Columns,
+			Table:   sarquote.Table,
+			Columns: sarquote.Columns,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeInt,
-				Column: sadquote.FieldID,
+				Column: sarquote.FieldID,
 			},
 		},
 		From:   sqq.sql,
@@ -370,9 +370,9 @@ func (sqq *SADQuoteQuery) querySpec() *sqlgraph.QuerySpec {
 	}
 	if fields := sqq.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
-		_spec.Node.Columns = append(_spec.Node.Columns, sadquote.FieldID)
+		_spec.Node.Columns = append(_spec.Node.Columns, sarquote.FieldID)
 		for i := range fields {
-			if fields[i] != sadquote.FieldID {
+			if fields[i] != sarquote.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
@@ -400,12 +400,12 @@ func (sqq *SADQuoteQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (sqq *SADQuoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
+func (sqq *SARQuoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(sqq.driver.Dialect())
-	t1 := builder.Table(sadquote.Table)
+	t1 := builder.Table(sarquote.Table)
 	columns := sqq.fields
 	if len(columns) == 0 {
-		columns = sadquote.Columns
+		columns = sarquote.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
 	if sqq.sql != nil {
@@ -432,8 +432,8 @@ func (sqq *SADQuoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// SADQuoteGroupBy is the group-by builder for SADQuote entities.
-type SADQuoteGroupBy struct {
+// SARQuoteGroupBy is the group-by builder for SARQuote entities.
+type SARQuoteGroupBy struct {
 	config
 	fields []string
 	fns    []AggregateFunc
@@ -443,13 +443,13 @@ type SADQuoteGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sqgb *SADQuoteGroupBy) Aggregate(fns ...AggregateFunc) *SADQuoteGroupBy {
+func (sqgb *SARQuoteGroupBy) Aggregate(fns ...AggregateFunc) *SARQuoteGroupBy {
 	sqgb.fns = append(sqgb.fns, fns...)
 	return sqgb
 }
 
 // Scan applies the group-by query and scans the result into the given value.
-func (sqgb *SADQuoteGroupBy) Scan(ctx context.Context, v interface{}) error {
+func (sqgb *SARQuoteGroupBy) Scan(ctx context.Context, v interface{}) error {
 	query, err := sqgb.path(ctx)
 	if err != nil {
 		return err
@@ -459,7 +459,7 @@ func (sqgb *SADQuoteGroupBy) Scan(ctx context.Context, v interface{}) error {
 }
 
 // ScanX is like Scan, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) ScanX(ctx context.Context, v interface{}) {
+func (sqgb *SARQuoteGroupBy) ScanX(ctx context.Context, v interface{}) {
 	if err := sqgb.Scan(ctx, v); err != nil {
 		panic(err)
 	}
@@ -467,9 +467,9 @@ func (sqgb *SADQuoteGroupBy) ScanX(ctx context.Context, v interface{}) {
 
 // Strings returns list of strings from group-by.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Strings(ctx context.Context) ([]string, error) {
+func (sqgb *SARQuoteGroupBy) Strings(ctx context.Context) ([]string, error) {
 	if len(sqgb.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteGroupBy.Strings is not achievable when grouping more than 1 field")
+		return nil, errors.New("ent: SARQuoteGroupBy.Strings is not achievable when grouping more than 1 field")
 	}
 	var v []string
 	if err := sqgb.Scan(ctx, &v); err != nil {
@@ -479,7 +479,7 @@ func (sqgb *SADQuoteGroupBy) Strings(ctx context.Context) ([]string, error) {
 }
 
 // StringsX is like Strings, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) StringsX(ctx context.Context) []string {
+func (sqgb *SARQuoteGroupBy) StringsX(ctx context.Context) []string {
 	v, err := sqgb.Strings(ctx)
 	if err != nil {
 		panic(err)
@@ -489,7 +489,7 @@ func (sqgb *SADQuoteGroupBy) StringsX(ctx context.Context) []string {
 
 // String returns a single string from a group-by query.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) String(ctx context.Context) (_ string, err error) {
+func (sqgb *SARQuoteGroupBy) String(ctx context.Context) (_ string, err error) {
 	var v []string
 	if v, err = sqgb.Strings(ctx); err != nil {
 		return
@@ -498,15 +498,15 @@ func (sqgb *SADQuoteGroupBy) String(ctx context.Context) (_ string, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteGroupBy.Strings returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteGroupBy.Strings returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // StringX is like String, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) StringX(ctx context.Context) string {
+func (sqgb *SARQuoteGroupBy) StringX(ctx context.Context) string {
 	v, err := sqgb.String(ctx)
 	if err != nil {
 		panic(err)
@@ -516,9 +516,9 @@ func (sqgb *SADQuoteGroupBy) StringX(ctx context.Context) string {
 
 // Ints returns list of ints from group-by.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Ints(ctx context.Context) ([]int, error) {
+func (sqgb *SARQuoteGroupBy) Ints(ctx context.Context) ([]int, error) {
 	if len(sqgb.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteGroupBy.Ints is not achievable when grouping more than 1 field")
+		return nil, errors.New("ent: SARQuoteGroupBy.Ints is not achievable when grouping more than 1 field")
 	}
 	var v []int
 	if err := sqgb.Scan(ctx, &v); err != nil {
@@ -528,7 +528,7 @@ func (sqgb *SADQuoteGroupBy) Ints(ctx context.Context) ([]int, error) {
 }
 
 // IntsX is like Ints, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) IntsX(ctx context.Context) []int {
+func (sqgb *SARQuoteGroupBy) IntsX(ctx context.Context) []int {
 	v, err := sqgb.Ints(ctx)
 	if err != nil {
 		panic(err)
@@ -538,7 +538,7 @@ func (sqgb *SADQuoteGroupBy) IntsX(ctx context.Context) []int {
 
 // Int returns a single int from a group-by query.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Int(ctx context.Context) (_ int, err error) {
+func (sqgb *SARQuoteGroupBy) Int(ctx context.Context) (_ int, err error) {
 	var v []int
 	if v, err = sqgb.Ints(ctx); err != nil {
 		return
@@ -547,15 +547,15 @@ func (sqgb *SADQuoteGroupBy) Int(ctx context.Context) (_ int, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteGroupBy.Ints returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteGroupBy.Ints returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // IntX is like Int, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) IntX(ctx context.Context) int {
+func (sqgb *SARQuoteGroupBy) IntX(ctx context.Context) int {
 	v, err := sqgb.Int(ctx)
 	if err != nil {
 		panic(err)
@@ -565,9 +565,9 @@ func (sqgb *SADQuoteGroupBy) IntX(ctx context.Context) int {
 
 // Float64s returns list of float64s from group-by.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Float64s(ctx context.Context) ([]float64, error) {
+func (sqgb *SARQuoteGroupBy) Float64s(ctx context.Context) ([]float64, error) {
 	if len(sqgb.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteGroupBy.Float64s is not achievable when grouping more than 1 field")
+		return nil, errors.New("ent: SARQuoteGroupBy.Float64s is not achievable when grouping more than 1 field")
 	}
 	var v []float64
 	if err := sqgb.Scan(ctx, &v); err != nil {
@@ -577,7 +577,7 @@ func (sqgb *SADQuoteGroupBy) Float64s(ctx context.Context) ([]float64, error) {
 }
 
 // Float64sX is like Float64s, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) Float64sX(ctx context.Context) []float64 {
+func (sqgb *SARQuoteGroupBy) Float64sX(ctx context.Context) []float64 {
 	v, err := sqgb.Float64s(ctx)
 	if err != nil {
 		panic(err)
@@ -587,7 +587,7 @@ func (sqgb *SADQuoteGroupBy) Float64sX(ctx context.Context) []float64 {
 
 // Float64 returns a single float64 from a group-by query.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Float64(ctx context.Context) (_ float64, err error) {
+func (sqgb *SARQuoteGroupBy) Float64(ctx context.Context) (_ float64, err error) {
 	var v []float64
 	if v, err = sqgb.Float64s(ctx); err != nil {
 		return
@@ -596,15 +596,15 @@ func (sqgb *SADQuoteGroupBy) Float64(ctx context.Context) (_ float64, err error)
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteGroupBy.Float64s returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteGroupBy.Float64s returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // Float64X is like Float64, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) Float64X(ctx context.Context) float64 {
+func (sqgb *SARQuoteGroupBy) Float64X(ctx context.Context) float64 {
 	v, err := sqgb.Float64(ctx)
 	if err != nil {
 		panic(err)
@@ -614,9 +614,9 @@ func (sqgb *SADQuoteGroupBy) Float64X(ctx context.Context) float64 {
 
 // Bools returns list of bools from group-by.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Bools(ctx context.Context) ([]bool, error) {
+func (sqgb *SARQuoteGroupBy) Bools(ctx context.Context) ([]bool, error) {
 	if len(sqgb.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteGroupBy.Bools is not achievable when grouping more than 1 field")
+		return nil, errors.New("ent: SARQuoteGroupBy.Bools is not achievable when grouping more than 1 field")
 	}
 	var v []bool
 	if err := sqgb.Scan(ctx, &v); err != nil {
@@ -626,7 +626,7 @@ func (sqgb *SADQuoteGroupBy) Bools(ctx context.Context) ([]bool, error) {
 }
 
 // BoolsX is like Bools, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) BoolsX(ctx context.Context) []bool {
+func (sqgb *SARQuoteGroupBy) BoolsX(ctx context.Context) []bool {
 	v, err := sqgb.Bools(ctx)
 	if err != nil {
 		panic(err)
@@ -636,7 +636,7 @@ func (sqgb *SADQuoteGroupBy) BoolsX(ctx context.Context) []bool {
 
 // Bool returns a single bool from a group-by query.
 // It is only allowed when executing a group-by query with one field.
-func (sqgb *SADQuoteGroupBy) Bool(ctx context.Context) (_ bool, err error) {
+func (sqgb *SARQuoteGroupBy) Bool(ctx context.Context) (_ bool, err error) {
 	var v []bool
 	if v, err = sqgb.Bools(ctx); err != nil {
 		return
@@ -645,15 +645,15 @@ func (sqgb *SADQuoteGroupBy) Bool(ctx context.Context) (_ bool, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteGroupBy.Bools returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteGroupBy.Bools returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // BoolX is like Bool, but panics if an error occurs.
-func (sqgb *SADQuoteGroupBy) BoolX(ctx context.Context) bool {
+func (sqgb *SARQuoteGroupBy) BoolX(ctx context.Context) bool {
 	v, err := sqgb.Bool(ctx)
 	if err != nil {
 		panic(err)
@@ -661,9 +661,9 @@ func (sqgb *SADQuoteGroupBy) BoolX(ctx context.Context) bool {
 	return v
 }
 
-func (sqgb *SADQuoteGroupBy) sqlScan(ctx context.Context, v interface{}) error {
+func (sqgb *SARQuoteGroupBy) sqlScan(ctx context.Context, v interface{}) error {
 	for _, f := range sqgb.fields {
-		if !sadquote.ValidColumn(f) {
+		if !sarquote.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
 		}
 	}
@@ -680,7 +680,7 @@ func (sqgb *SADQuoteGroupBy) sqlScan(ctx context.Context, v interface{}) error {
 	return sql.ScanSlice(rows, v)
 }
 
-func (sqgb *SADQuoteGroupBy) sqlQuery() *sql.Selector {
+func (sqgb *SARQuoteGroupBy) sqlQuery() *sql.Selector {
 	selector := sqgb.sql.Select()
 	aggregation := make([]string, 0, len(sqgb.fns))
 	for _, fn := range sqgb.fns {
@@ -699,33 +699,33 @@ func (sqgb *SADQuoteGroupBy) sqlQuery() *sql.Selector {
 	return selector.GroupBy(selector.Columns(sqgb.fields...)...)
 }
 
-// SADQuoteSelect is the builder for selecting fields of SADQuote entities.
-type SADQuoteSelect struct {
-	*SADQuoteQuery
+// SARQuoteSelect is the builder for selecting fields of SARQuote entities.
+type SARQuoteSelect struct {
+	*SARQuoteQuery
 	// intermediate query (i.e. traversal path).
 	sql *sql.Selector
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sqs *SADQuoteSelect) Scan(ctx context.Context, v interface{}) error {
+func (sqs *SARQuoteSelect) Scan(ctx context.Context, v interface{}) error {
 	if err := sqs.prepareQuery(ctx); err != nil {
 		return err
 	}
-	sqs.sql = sqs.SADQuoteQuery.sqlQuery(ctx)
+	sqs.sql = sqs.SARQuoteQuery.sqlQuery(ctx)
 	return sqs.sqlScan(ctx, v)
 }
 
 // ScanX is like Scan, but panics if an error occurs.
-func (sqs *SADQuoteSelect) ScanX(ctx context.Context, v interface{}) {
+func (sqs *SARQuoteSelect) ScanX(ctx context.Context, v interface{}) {
 	if err := sqs.Scan(ctx, v); err != nil {
 		panic(err)
 	}
 }
 
 // Strings returns list of strings from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Strings(ctx context.Context) ([]string, error) {
+func (sqs *SARQuoteSelect) Strings(ctx context.Context) ([]string, error) {
 	if len(sqs.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteSelect.Strings is not achievable when selecting more than 1 field")
+		return nil, errors.New("ent: SARQuoteSelect.Strings is not achievable when selecting more than 1 field")
 	}
 	var v []string
 	if err := sqs.Scan(ctx, &v); err != nil {
@@ -735,7 +735,7 @@ func (sqs *SADQuoteSelect) Strings(ctx context.Context) ([]string, error) {
 }
 
 // StringsX is like Strings, but panics if an error occurs.
-func (sqs *SADQuoteSelect) StringsX(ctx context.Context) []string {
+func (sqs *SARQuoteSelect) StringsX(ctx context.Context) []string {
 	v, err := sqs.Strings(ctx)
 	if err != nil {
 		panic(err)
@@ -744,7 +744,7 @@ func (sqs *SADQuoteSelect) StringsX(ctx context.Context) []string {
 }
 
 // String returns a single string from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) String(ctx context.Context) (_ string, err error) {
+func (sqs *SARQuoteSelect) String(ctx context.Context) (_ string, err error) {
 	var v []string
 	if v, err = sqs.Strings(ctx); err != nil {
 		return
@@ -753,15 +753,15 @@ func (sqs *SADQuoteSelect) String(ctx context.Context) (_ string, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteSelect.Strings returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteSelect.Strings returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // StringX is like String, but panics if an error occurs.
-func (sqs *SADQuoteSelect) StringX(ctx context.Context) string {
+func (sqs *SARQuoteSelect) StringX(ctx context.Context) string {
 	v, err := sqs.String(ctx)
 	if err != nil {
 		panic(err)
@@ -770,9 +770,9 @@ func (sqs *SADQuoteSelect) StringX(ctx context.Context) string {
 }
 
 // Ints returns list of ints from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Ints(ctx context.Context) ([]int, error) {
+func (sqs *SARQuoteSelect) Ints(ctx context.Context) ([]int, error) {
 	if len(sqs.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteSelect.Ints is not achievable when selecting more than 1 field")
+		return nil, errors.New("ent: SARQuoteSelect.Ints is not achievable when selecting more than 1 field")
 	}
 	var v []int
 	if err := sqs.Scan(ctx, &v); err != nil {
@@ -782,7 +782,7 @@ func (sqs *SADQuoteSelect) Ints(ctx context.Context) ([]int, error) {
 }
 
 // IntsX is like Ints, but panics if an error occurs.
-func (sqs *SADQuoteSelect) IntsX(ctx context.Context) []int {
+func (sqs *SARQuoteSelect) IntsX(ctx context.Context) []int {
 	v, err := sqs.Ints(ctx)
 	if err != nil {
 		panic(err)
@@ -791,7 +791,7 @@ func (sqs *SADQuoteSelect) IntsX(ctx context.Context) []int {
 }
 
 // Int returns a single int from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Int(ctx context.Context) (_ int, err error) {
+func (sqs *SARQuoteSelect) Int(ctx context.Context) (_ int, err error) {
 	var v []int
 	if v, err = sqs.Ints(ctx); err != nil {
 		return
@@ -800,15 +800,15 @@ func (sqs *SADQuoteSelect) Int(ctx context.Context) (_ int, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteSelect.Ints returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteSelect.Ints returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // IntX is like Int, but panics if an error occurs.
-func (sqs *SADQuoteSelect) IntX(ctx context.Context) int {
+func (sqs *SARQuoteSelect) IntX(ctx context.Context) int {
 	v, err := sqs.Int(ctx)
 	if err != nil {
 		panic(err)
@@ -817,9 +817,9 @@ func (sqs *SADQuoteSelect) IntX(ctx context.Context) int {
 }
 
 // Float64s returns list of float64s from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Float64s(ctx context.Context) ([]float64, error) {
+func (sqs *SARQuoteSelect) Float64s(ctx context.Context) ([]float64, error) {
 	if len(sqs.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteSelect.Float64s is not achievable when selecting more than 1 field")
+		return nil, errors.New("ent: SARQuoteSelect.Float64s is not achievable when selecting more than 1 field")
 	}
 	var v []float64
 	if err := sqs.Scan(ctx, &v); err != nil {
@@ -829,7 +829,7 @@ func (sqs *SADQuoteSelect) Float64s(ctx context.Context) ([]float64, error) {
 }
 
 // Float64sX is like Float64s, but panics if an error occurs.
-func (sqs *SADQuoteSelect) Float64sX(ctx context.Context) []float64 {
+func (sqs *SARQuoteSelect) Float64sX(ctx context.Context) []float64 {
 	v, err := sqs.Float64s(ctx)
 	if err != nil {
 		panic(err)
@@ -838,7 +838,7 @@ func (sqs *SADQuoteSelect) Float64sX(ctx context.Context) []float64 {
 }
 
 // Float64 returns a single float64 from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Float64(ctx context.Context) (_ float64, err error) {
+func (sqs *SARQuoteSelect) Float64(ctx context.Context) (_ float64, err error) {
 	var v []float64
 	if v, err = sqs.Float64s(ctx); err != nil {
 		return
@@ -847,15 +847,15 @@ func (sqs *SADQuoteSelect) Float64(ctx context.Context) (_ float64, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteSelect.Float64s returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteSelect.Float64s returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // Float64X is like Float64, but panics if an error occurs.
-func (sqs *SADQuoteSelect) Float64X(ctx context.Context) float64 {
+func (sqs *SARQuoteSelect) Float64X(ctx context.Context) float64 {
 	v, err := sqs.Float64(ctx)
 	if err != nil {
 		panic(err)
@@ -864,9 +864,9 @@ func (sqs *SADQuoteSelect) Float64X(ctx context.Context) float64 {
 }
 
 // Bools returns list of bools from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Bools(ctx context.Context) ([]bool, error) {
+func (sqs *SARQuoteSelect) Bools(ctx context.Context) ([]bool, error) {
 	if len(sqs.fields) > 1 {
-		return nil, errors.New("ent: SADQuoteSelect.Bools is not achievable when selecting more than 1 field")
+		return nil, errors.New("ent: SARQuoteSelect.Bools is not achievable when selecting more than 1 field")
 	}
 	var v []bool
 	if err := sqs.Scan(ctx, &v); err != nil {
@@ -876,7 +876,7 @@ func (sqs *SADQuoteSelect) Bools(ctx context.Context) ([]bool, error) {
 }
 
 // BoolsX is like Bools, but panics if an error occurs.
-func (sqs *SADQuoteSelect) BoolsX(ctx context.Context) []bool {
+func (sqs *SARQuoteSelect) BoolsX(ctx context.Context) []bool {
 	v, err := sqs.Bools(ctx)
 	if err != nil {
 		panic(err)
@@ -885,7 +885,7 @@ func (sqs *SADQuoteSelect) BoolsX(ctx context.Context) []bool {
 }
 
 // Bool returns a single bool from a selector. It is only allowed when selecting one field.
-func (sqs *SADQuoteSelect) Bool(ctx context.Context) (_ bool, err error) {
+func (sqs *SARQuoteSelect) Bool(ctx context.Context) (_ bool, err error) {
 	var v []bool
 	if v, err = sqs.Bools(ctx); err != nil {
 		return
@@ -894,15 +894,15 @@ func (sqs *SADQuoteSelect) Bool(ctx context.Context) (_ bool, err error) {
 	case 1:
 		return v[0], nil
 	case 0:
-		err = &NotFoundError{sadquote.Label}
+		err = &NotFoundError{sarquote.Label}
 	default:
-		err = fmt.Errorf("ent: SADQuoteSelect.Bools returned %d results when one was expected", len(v))
+		err = fmt.Errorf("ent: SARQuoteSelect.Bools returned %d results when one was expected", len(v))
 	}
 	return
 }
 
 // BoolX is like Bool, but panics if an error occurs.
-func (sqs *SADQuoteSelect) BoolX(ctx context.Context) bool {
+func (sqs *SARQuoteSelect) BoolX(ctx context.Context) bool {
 	v, err := sqs.Bool(ctx)
 	if err != nil {
 		panic(err)
@@ -910,7 +910,7 @@ func (sqs *SADQuoteSelect) BoolX(ctx context.Context) bool {
 	return v
 }
 
-func (sqs *SADQuoteSelect) sqlScan(ctx context.Context, v interface{}) error {
+func (sqs *SARQuoteSelect) sqlScan(ctx context.Context, v interface{}) error {
 	rows := &sql.Rows{}
 	query, args := sqs.sql.Query()
 	if err := sqs.driver.Query(ctx, query, args, rows); err != nil {

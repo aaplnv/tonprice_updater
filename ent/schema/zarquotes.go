@@ -17,7 +17,7 @@ func (ZARQuote) Annotations() []schema.Annotation {
 }
 
 func (ZARQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (ZARQuote) Edges() []ent.Edge {

@@ -17,7 +17,7 @@ func (JPYQuote) Annotations() []schema.Annotation {
 }
 
 func (JPYQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (JPYQuote) Edges() []ent.Edge {

@@ -17,7 +17,7 @@ func (ARSQuote) Annotations() []schema.Annotation {
 }
 
 func (ARSQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (ARSQuote) Edges() []ent.Edge {

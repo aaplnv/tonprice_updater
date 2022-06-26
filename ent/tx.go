@@ -62,8 +62,8 @@ type Tx struct {
 	PLNQuote *PLNQuoteClient
 	// RUBQuote is the client for interacting with the RUBQuote builders.
 	RUBQuote *RUBQuoteClient
-	// SADQuote is the client for interacting with the SADQuote builders.
-	SADQuote *SADQuoteClient
+	// SARQuote is the client for interacting with the SARQuote builders.
+	SARQuote *SARQuoteClient
 	// SEKQuote is the client for interacting with the SEKQuote builders.
 	SEKQuote *SEKQuoteClient
 	// TRYQuote is the client for interacting with the TRYQuote builders.
@@ -236,7 +236,7 @@ func (tx *Tx) init() {
 	tx.PKRQuote = NewPKRQuoteClient(tx.config)
 	tx.PLNQuote = NewPLNQuoteClient(tx.config)
 	tx.RUBQuote = NewRUBQuoteClient(tx.config)
-	tx.SADQuote = NewSADQuoteClient(tx.config)
+	tx.SARQuote = NewSARQuoteClient(tx.config)
 	tx.SEKQuote = NewSEKQuoteClient(tx.config)
 	tx.TRYQuote = NewTRYQuoteClient(tx.config)
 	tx.TWDQuote = NewTWDQuoteClient(tx.config)

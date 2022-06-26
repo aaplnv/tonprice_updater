@@ -333,15 +333,15 @@ func (f RUBQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return f(ctx, mv)
 }
 
-// The SADQuoteFunc type is an adapter to allow the use of ordinary
-// function as SADQuote mutator.
-type SADQuoteFunc func(context.Context, *ent.SADQuoteMutation) (ent.Value, error)
+// The SARQuoteFunc type is an adapter to allow the use of ordinary
+// function as SARQuote mutator.
+type SARQuoteFunc func(context.Context, *ent.SARQuoteMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f SADQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.SADQuoteMutation)
+func (f SARQuoteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.SARQuoteMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SADQuoteMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SARQuoteMutation", m)
 	}
 	return f(ctx, mv)
 }

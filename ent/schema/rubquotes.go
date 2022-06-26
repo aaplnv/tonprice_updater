@@ -16,12 +16,10 @@ func (RUBQuote) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the ChartItem.
 func (RUBQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
-// Edges of the ChartItem.
 func (RUBQuote) Edges() []ent.Edge {
 	return nil
 }

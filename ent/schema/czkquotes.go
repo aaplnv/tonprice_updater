@@ -17,7 +17,7 @@ func (CZKQuote) Annotations() []schema.Annotation {
 }
 
 func (CZKQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (CZKQuote) Edges() []ent.Edge {

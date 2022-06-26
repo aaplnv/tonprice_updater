@@ -17,7 +17,7 @@ func (MXNQuote) Annotations() []schema.Annotation {
 }
 
 func (MXNQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (MXNQuote) Edges() []ent.Edge {

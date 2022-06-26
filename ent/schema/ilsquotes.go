@@ -17,7 +17,7 @@ func (ILSQuote) Annotations() []schema.Annotation {
 }
 
 func (ILSQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (ILSQuote) Edges() []ent.Edge {

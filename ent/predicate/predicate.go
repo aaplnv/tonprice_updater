@@ -81,8 +81,8 @@ type PLNQuote func(*sql.Selector)
 // RUBQuote is the predicate function for rubquote builders.
 type RUBQuote func(*sql.Selector)
 
-// SADQuote is the predicate function for sadquote builders.
-type SADQuote func(*sql.Selector)
+// SARQuote is the predicate function for sarquote builders.
+type SARQuote func(*sql.Selector)
 
 // SEKQuote is the predicate function for sekquote builders.
 type SEKQuote func(*sql.Selector)

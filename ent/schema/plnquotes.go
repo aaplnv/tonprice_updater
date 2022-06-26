@@ -17,7 +17,7 @@ func (PLNQuote) Annotations() []schema.Annotation {
 }
 
 func (PLNQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (PLNQuote) Edges() []ent.Edge {

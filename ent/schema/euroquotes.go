@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema"
 )
 
-// ChartItem holds the schema definition for the ChartItem entity.
 type EUROQuote struct {
 	ent.Schema
 }
@@ -17,12 +16,10 @@ func (EUROQuote) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the ChartItem.
 func (EUROQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
-// Edges of the ChartItem.
 func (EUROQuote) Edges() []ent.Edge {
 	return nil
 }

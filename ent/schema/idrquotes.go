@@ -17,7 +17,7 @@ func (IDRQuote) Annotations() []schema.Annotation {
 }
 
 func (IDRQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (IDRQuote) Edges() []ent.Edge {

@@ -17,7 +17,7 @@ func (NZDQuote) Annotations() []schema.Annotation {
 }
 
 func (NZDQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (NZDQuote) Edges() []ent.Edge {

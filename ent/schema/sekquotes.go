@@ -17,7 +17,7 @@ func (SEKQuote) Annotations() []schema.Annotation {
 }
 
 func (SEKQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (SEKQuote) Edges() []ent.Edge {

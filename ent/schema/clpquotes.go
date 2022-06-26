@@ -17,7 +17,7 @@ func (CLPQuote) Annotations() []schema.Annotation {
 }
 
 func (CLPQuote) Fields() []ent.Field {
-	return ChartModel()
+	return Quote()
 }
 
 func (CLPQuote) Edges() []ent.Edge {
